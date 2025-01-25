@@ -1,4 +1,5 @@
 //* Import the functions you need from the SDKs you need
+import { getFirestore } from "@firebase/firestore";
 import { initializeApp, getApps } from "firebase/app";
 import {
   getAuth,
@@ -39,6 +40,6 @@ setPersistence(auth, browserLocalPersistence)
   .catch((error) => {
     console.error("Failed to set session persistence:", error);
   });
-
-export { auth };
+const db = getFirestore(firebase_app);
+export { auth, db };
 export default firebase_app;

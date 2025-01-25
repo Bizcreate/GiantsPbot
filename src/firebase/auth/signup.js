@@ -8,13 +8,19 @@ const auth = getAuth(firebase_app);
 const db = getFirestore(firebase_app);
 
 //* Sign up (create user)
-export default async function signUp(email, password, fullName, phoneNumber, selectedCourse) {
+export default async function signUp(
+  email,
+  password,
+  fullName,
+  phoneNumber,
+  selectedCourse
+) {
   let result = null,
     error = null;
   try {
     //* Create user with email and password (sign up)
     result = await createUserWithEmailAndPassword(auth, email, password);
-    
+
     //* Get user details
     const user = result.user;
 
@@ -25,12 +31,7 @@ export default async function signUp(email, password, fullName, phoneNumber, sel
       full_name: fullName,
       phone_number: phoneNumber,
       selected_course: selectedCourse,
-
     });
-
-
-
-
   } catch (e) {
     //! Handle errors here
     error = e;

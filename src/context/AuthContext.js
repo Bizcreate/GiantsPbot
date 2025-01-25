@@ -1,11 +1,8 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
-import { onAuthStateChanged, getAuth } from "firebase/auth";
-import { getFirestore, doc, getDoc } from "firebase/firestore";
-import firebase_app from "../firebase/config";
+import { onAuthStateChanged } from "@firebase/auth";
+import { doc, getDoc } from "@firebase/firestore";
+import firebase_app, { auth, db } from "../firebase/config";
 import logout from "../firebase/auth/logout";
-
-const auth = getAuth(firebase_app);
-const db = getFirestore(firebase_app);
 
 const AuthContext = createContext();
 
@@ -14,23 +11,34 @@ export const useAuthContext = () => useContext(AuthContext);
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [role, setRole] = useState('');
+  const [role, setRole] = useState("");
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        if (userDoc.exists()) {
-          const userData = userDoc.data();
-          setUser({ ...user, ...userData });
-          setRole(userData.role || ''); // Set the role if it exists
+        console.log("user", user);
+        // First check admin collection
+        const adminDoc = await getDoc(doc(db, "admin", user.uid));
+        console.log("adminDoc", adminDoc.data());
+        if (adminDoc.exists()) {
+          const adminData = adminDoc.data();
+          setUser({ ...user, ...adminData });
+          setRole("admin");
         } else {
-          setUser(user);
-          setRole(''); // Set default role if user document does not exist
+          // If not admin, check regular users collection
+          const userDoc = await getDoc(doc(db, "users", user.uid));
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            setUser({ ...user, ...userData });
+            setRole(userData.role || "");
+          } else {
+            setUser(user);
+            setRole("");
+          }
         }
       } else {
         setUser(null);
-        setRole(''); // Reset role when no user is authenticated
+        setRole("");
       }
       setLoading(false);
     });
