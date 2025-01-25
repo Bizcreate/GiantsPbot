@@ -1,13 +1,8 @@
-import React from 'react'
-import ExternalTasks from '../../Components/ExternalTasks'
+import React from "react";
+import ExternalTasks from "../../Components/ExternalTasks";
 
 const ExtrenalTasks = () => {
-  return (
+  return <ExternalTasks />;
+};
 
-
-      <ExternalTasks/>
- 
-  )
-}
-
-export default ExtrenalTasks
+export default ExtrenalTasks;

@@ -1,13 +1,8 @@
-import React from 'react'
-import AdminAdverts from '../../Components/AdminAdverts'
+import React from "react";
+import AdminAdverts from "../../Components/AdminAdverts";
 
 const AdminAdvertTasks = () => {
-  return (
+  return <AdminAdverts />;
+};
 
-
-      <AdminAdverts/>
- 
-  )
-}
-
-export default AdminAdvertTasks
+export default AdminAdvertTasks;

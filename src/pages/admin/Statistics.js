@@ -1,10 +1,8 @@
-import React from 'react'
-import StatisticsPanel from '../../Components/StatisticsPanel'
+import React from "react";
+import StatisticsPanel from "../../Components/StatisticsPanel";
 
 const Statistics = () => {
-  return (
-    <StatisticsPanel/>
-  )
-}
+  return <StatisticsPanel />;
+};
 
-export default Statistics
+export default Statistics;

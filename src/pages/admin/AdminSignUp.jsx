@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, serverTimestamp, setDoc } from "@firebase/firestore";
 import { auth, db } from "../../firebase/config";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const AdminSignUp = () => {
   const [email, setEmail] = useState("");
@@ -27,9 +28,11 @@ const AdminSignUp = () => {
         createdAt: serverTimestamp(),
         lastLogin: serverTimestamp(),
       });
+
+      toast.success("Admin account created successfully!");
       navigate("/dashboardAdx");
     } catch (err) {
-      setError(err.message);
+      toast.error(err.message);
     }
   };
 
@@ -87,6 +90,16 @@ const AdminSignUp = () => {
           >
             Sign Up
           </button>
+
+          <p className="text-center text-secondary mt-4">
+            Already have an admin account?{" "}
+            <Link
+              to="/dashboardAdx/signin"
+              className="text-accent hover:text-accent/90"
+            >
+              Login
+            </Link>
+          </p>
         </form>
       </div>
     </div>

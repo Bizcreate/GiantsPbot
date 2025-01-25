@@ -56,7 +56,7 @@ const router = createBrowserRouter([
         element: <CryptoFarming />,
       },
       {
-        path: "/dashboardlogin",
+        path: "/dashboardAdx/signin",
         element: <NotAdmin236 />,
       },
       {
@@ -71,7 +71,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorCom />,
     children: [
       {
-        path: "/dashboardAdx/settings",
+        path: "/dashboardAdx/announcements",
         element: <Settings />,
       },
       {
