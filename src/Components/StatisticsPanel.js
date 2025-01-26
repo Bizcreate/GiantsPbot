@@ -4,6 +4,7 @@ import { collection, getDocs, query } from "firebase/firestore";
 import moment from "moment";
 import { NavLink } from "react-router-dom";
 import { PiArrowRight } from "react-icons/pi";
+import { motion } from "framer-motion";
 import Spinner from "./Spinner";
 
 const linksTo = [
@@ -56,6 +57,25 @@ const StatisticsPanel = () => {
   const [activeUsersLast1Minute, setActiveUsersLast1Minute] = useState(0); // New state for last 1 minute
   const [loading, setLoading] = useState(true);
 
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+    },
+  };
+
   useEffect(() => {
     fetchStatistics();
   }, []);
@@ -69,7 +89,7 @@ const StatisticsPanel = () => {
     console.log("Last 24 Hours:", last24Hours);
     console.log("Last 1 Hour:", last1Hour);
 
-    const usersQuery = query(collection(db, "telegramUsers"));
+    const usersQuery = query(collection(db, "users"));
     const querySnapshot = await getDocs(usersQuery);
     const usersData = querySnapshot.docs.map((doc) => doc.data());
 
@@ -93,13 +113,13 @@ const StatisticsPanel = () => {
 
     // Active users in the last 24 hours and last 1 hour
     const activeUsers24Hours = usersData.filter(
-      (user) => user.lastActive && user.lastActive.toDate() > last24Hours
+      (user) => user.lastLoginAt && user.lastLoginAt.toDate() > last24Hours
     ).length;
     const activeUsers1Hour = usersData.filter(
-      (user) => user.lastActive && user.lastActive.toDate() > last1Hour
+      (user) => user.lastLoginAt && user.lastLoginAt.toDate() > last1Hour
     ).length;
     const activeUsers1Minute = usersData.filter(
-      (user) => user.lastActive && user.lastActive.toDate() > last1Minute
+      (user) => user.lastLoginAt && user.lastLoginAt.toDate() > last1Minute
     ).length; // New filter for last 1 minute
 
     setActiveUsersLast24Hours(activeUsers24Hours);
@@ -151,43 +171,78 @@ const StatisticsPanel = () => {
       {loading ? (
         <Spinner />
       ) : (
-        <div className="w-full flex flex-col space-y-4 h-[100vh] scroller pt-4 overflow-y-auto pb-[150px]">
-          <div className="w-full flex justify-start items-start flex-wrap gap-4">
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={containerVariants}
+          className="w-full min-h-screen bg-gradient-to-b from-cards to-cards2 px-4 sm:px-6 md:px-8 py-6 space-y-6"
+        >
+          {/* Stats Grid */}
+          <motion.div
+            variants={containerVariants}
+            className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-4 md:gap-6"
+          >
             {statista.map((stats, index) => (
-              <div
+              <motion.div
                 key={index}
-                className={`bg-cards p-4 rounded-[10px] w-[47%] sm:w-[32%] h-[120px] flex flex-col justify-center space-y-3 ${
-                  statista.length === 5 ? "last:w-full sm:last:w-[64%]" : ""
-                }`}
+                variants={itemVariants}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className={`bg-gradient-to-br from-cards3 to-cards2 p-6 rounded-xl shadow-lg backdrop-blur-sm border border-borders2/10
+                  ${
+                    index === statista.length - 1
+                      ? "xs:col-span-2 sm:col-span-1"
+                      : ""
+                  }
+                  hover:border-accent/20 transition-all duration-300`}
               >
-                <h2 className="text-[16px] sm:text-[18px] font-semibold text-[#bdbdbd]">
+                <h2 className="text-secondary text-sm font-medium mb-2">
                   {stats.title}
                 </h2>
-                <span className="text-[20px] sm:text-[24px] text-[#fff] font-bold">
+                <span className="text-2xl md:text-3xl text-primary font-bold tracking-tight">
                   {stats.count}
                 </span>
-              </div>
+              </motion.div>
             ))}
-          </div>
-          <h2 className="font-semibold text-[17px] pt-3">
-            Admin Control Items
-          </h2>
+          </motion.div>
 
-          <div className="flex flex-col space-y-4 w-full">
-            {linksTo.map((menu, index) => (
-              <NavLink
-                to={menu.link}
-                key={index}
-                className={`bg-cards px-4 py-4 flex rounded-[6px] justify-between items-center space-x-1 font-medium`}
-              >
-                <span className="">{menu.title}</span>
-                <span className="">
-                  <PiArrowRight size={16} className="" />
-                </span>
-              </NavLink>
-            ))}
+          {/* Admin Controls Section */}
+          <div className="mt-10">
+            <h2 className="font-semibold text-xl text-primary mb-6">
+              Admin Control Items
+            </h2>
+
+            <motion.div
+              variants={containerVariants}
+              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
+            >
+              {linksTo.map((menu, index) => (
+                <motion.div key={index} variants={itemVariants}>
+                  <NavLink
+                    to={menu.link}
+                    className={({ isActive }) => `
+                      bg-cards3 hover:bg-cards2 p-4 rounded-lg flex justify-between items-center
+                      border border-borders2/10 hover:border-accent/20
+                      transition-all duration-300 ${
+                        isActive ? "border-accent" : ""
+                      }
+                    `}
+                  >
+                    <span className="text-primary font-medium">
+                      {menu.title}
+                    </span>
+                    <motion.span
+                      whileHover={{ x: 5 }}
+                      className="text-secondary"
+                    >
+                      <PiArrowRight size={20} />
+                    </motion.span>
+                  </NavLink>
+                </motion.div>
+              ))}
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       )}
     </>
   );
