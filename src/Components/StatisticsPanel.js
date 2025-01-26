@@ -153,16 +153,12 @@ const StatisticsPanel = () => {
       count: formatNumber(totalBalance),
     },
     {
-      title: "Total Mining",
-      count: formatNumber(totalTapBalance),
-    },
-    {
       title: "Last 24hours",
       count: activeUsersLast24Hours,
     },
     {
       title: "Online Users",
-      count: activeUsersLast1Minute, // New entry for last 1 minute
+      count: activeUsersLast1Minute,
     },
   ];
 
