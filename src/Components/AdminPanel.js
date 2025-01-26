@@ -153,14 +153,14 @@ const AdminPanel = () => {
       ) : (
         <div
           id="refer"
-          className="w-full flex flex-col space-y-4 h-[100vh] scroller pt-4 overflow-y-auto pb-[150px]"
+          className="w-full flex flex-col space-y-4 h-[100vh] scroller pt-4 overflow-y-auto pb-[150px] bg-cards text-cardtext"
         >
           <div className="w-fit">
             <button
               onClick={() => setShowTaskInputs(!showTaskInputs)}
               className={`${
                 showTaskInputs ? "hidden" : "block"
-              } bg-[#f5bb5f] font-semibold text-[15px] rounded-[6px] w-fit px-4 py-3 text-[#000] mb-4`}
+              } bg-accent hover:bg-accent/90 font-semibold text-[15px] rounded-[6px] w-fit px-4 py-3 text-primary mb-4`}
             >
               {showTaskInputs ? "Cancel" : "Add new task"}
             </button>
@@ -170,7 +170,7 @@ const AdminPanel = () => {
             <>
               <div className="flex w-full flex-wrap gap-3">
                 <div className="flex flex-col w-full sm:w-[49%] gap-1">
-                  <label className="text-[13px] pl-1 pb-[2px] font-medium">
+                  <label className="text-[13px] pl-1 pb-[2px] font-medium text-secondary">
                     Task title
                   </label>
 
@@ -180,12 +180,12 @@ const AdminPanel = () => {
                     value={taskData.title}
                     onChange={handleInputChange}
                     placeholder="Title"
-                    className="bg-[#4b4b4b] w-full placeholder:text-[#b9b9b9] text-[#e0e0e0] placeholder:text-[12px] text-[13px] placeholder:font-light h-[55px] border-none outline-none rounded-[10px] flex items-center px-6"
+                    className="bg-cards2 w-full placeholder:text-dimtext text-cardtext placeholder:text-[12px] text-[13px] placeholder:font-light h-[55px] border border-borders2 outline-none rounded-[10px] flex items-center px-6"
                   />
                 </div>
 
                 <div className="flex flex-col w-full sm:w-[49%] gap-1">
-                  <label className="text-[13px] pl-1 pb-[2px] font-medium">
+                  <label className="text-[13px] pl-1 pb-[2px] font-medium text-secondary">
                     Task bonus amount
                   </label>
 
@@ -195,11 +195,11 @@ const AdminPanel = () => {
                     value={taskData.bonus}
                     onChange={handleInputChange}
                     placeholder="Bonus"
-                    className="bg-[#4b4b4b] placeholder:text-[#b9b9b9] text-[#e0e0e0] placeholder:text-[12px] text-[13px] placeholder:font-light h-[55px] border-none outline-none rounded-[10px] flex items-center px-6"
+                    className="bg-cards2 w-full placeholder:text-dimtext text-cardtext placeholder:text-[12px] text-[13px] placeholder:font-light h-[55px] border border-borders2 outline-none rounded-[10px] flex items-center px-6"
                   />
                 </div>
                 <div className="flex flex-col w-full sm:w-[49%] gap-1">
-                  <label className="text-[13px] pl-1 pb-[2px] font-medium">
+                  <label className="text-[13px] pl-1 pb-[2px] font-medium text-secondary">
                     Task link
                   </label>
 
@@ -209,11 +209,11 @@ const AdminPanel = () => {
                     value={taskData.link}
                     onChange={handleInputChange}
                     placeholder="Link"
-                    className="bg-[#4b4b4b] placeholder:text-[#b9b9b9] text-[#e0e0e0] placeholder:text-[12px] text-[13px] placeholder:font-light h-[55px] border-none outline-none rounded-[10px] flex items-center px-6"
+                    className="bg-cards2 w-full placeholder:text-dimtext text-cardtext placeholder:text-[12px] text-[13px] placeholder:font-light h-[55px] border border-borders2 outline-none rounded-[10px] flex items-center px-6"
                   />
                 </div>
                 <div className="flex flex-col w-full sm:w-[49%] gap-1">
-                  <label className="text-[13px] pl-1 pb-[2px] font-medium">
+                  <label className="text-[13px] pl-1 pb-[2px] font-medium text-secondary">
                     Task icon url
                   </label>
 
@@ -223,11 +223,11 @@ const AdminPanel = () => {
                     value={taskData.icon}
                     onChange={handleInputChange}
                     placeholder="Icon"
-                    className="bg-[#4b4b4b] placeholder:text-[#b9b9b9] text-[#e0e0e0] placeholder:text-[12px] text-[13px] placeholder:font-light h-[55px] border-none outline-none rounded-[10px] flex items-center px-6"
+                    className="bg-cards2 w-full placeholder:text-dimtext text-cardtext placeholder:text-[12px] text-[13px] placeholder:font-light h-[55px] border border-borders2 outline-none rounded-[10px] flex items-center px-6"
                   />
                 </div>
                 <div className="flex flex-col w-full sm:w-[49%] gap-1">
-                  <label className="text-[13px] pl-1 pb-[2px] font-medium">
+                  <label className="text-[13px] pl-1 pb-[2px] font-medium text-secondary">
                     Telegram Channel/Group ID
                   </label>
 
@@ -237,7 +237,7 @@ const AdminPanel = () => {
                     value={taskData.chatId}
                     onChange={handleInputChange}
                     placeholder="Chat ID"
-                    className="bg-[#4b4b4b] placeholder:text-[#b9b9b9] text-[#e0e0e0] placeholder:text-[12px] text-[13px] placeholder:font-light h-[55px] border-none outline-none rounded-[10px] flex items-center px-6"
+                    className="bg-cards2 w-full placeholder:text-dimtext text-cardtext placeholder:text-[12px] text-[13px] placeholder:font-light h-[55px] border border-borders2 outline-none rounded-[10px] flex items-center px-6"
                   />
                 </div>
               </div>
@@ -246,13 +246,13 @@ const AdminPanel = () => {
                   <>
                     <button
                       onClick={handleUpdateTask}
-                      className="bg-green-500 font-semibold text-[15px] rounded-[6px] w-full sm:w-[200px] h-fit px-4 py-3 text-[#fff]"
+                      className="bg-accent hover:bg-accent/90 font-semibold text-[15px] rounded-[6px] w-full sm:w-[200px] h-fit px-4 py-3 text-primary"
                     >
                       Update Task
                     </button>
                     <button
                       onClick={cancelEdits}
-                      className="bg-[#4a3a3a] font-semibold text-[15px] rounded-[6px] w-full sm:w-[200px] h-fit px-4 py-3 text-[#fff]"
+                      className="bg-cards2 hover:bg-cards2/90 font-semibold text-[15px] rounded-[6px] w-full sm:w-[200px] h-fit px-4 py-3 text-primary"
                     >
                       Cancel
                     </button>
@@ -261,13 +261,13 @@ const AdminPanel = () => {
                   <>
                     <button
                       onClick={handleAddTask}
-                      className="bg-[#f5bb5f] font-semibold text-[15px] rounded-[6px] w-full sm:w-[200px] h-fit px-4 py-3 text-[#000]"
+                      className="bg-accent hover:bg-accent/90 font-semibold text-[15px] rounded-[6px] w-full sm:w-[200px] h-fit px-4 py-3 text-primary"
                     >
                       Add Task
                     </button>
                     <button
                       onClick={cancelEdits}
-                      className="bg-[#4a3a3a] font-semibold text-[15px] rounded-[6px] w-full sm:w-[200px] h-fit px-4 py-3 text-[#fff]"
+                      className="bg-cards2 hover:bg-cards2/90 font-semibold text-[15px] rounded-[6px] w-full sm:w-[200px] h-fit px-4 py-3 text-primary"
                     >
                       Cancel
                     </button>
@@ -279,8 +279,8 @@ const AdminPanel = () => {
 
           {successMessage && (
             <div className="modal fixed w-full h-full top-0 left-0 flex items-center justify-center">
-              <div className="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
-              <div className="modal-container bg-[#595D65] w-11/12 md:max-w-md mx-auto rounded-[10px] shadow-lg z-50 overflow-y-auto">
+              <div className="modal-overlay absolute w-full h-full bg-cards3 opacity-50"></div>
+              <div className="modal-container bg-modal w-11/12 md:max-w-md mx-auto rounded-[10px] shadow-lg z-50 overflow-y-auto text-cardtext">
                 <div className="modal-content py-4 text-left px-6">
                   <div className="flex justify-end items-center pb-3">
                     <div
@@ -313,9 +313,9 @@ const AdminPanel = () => {
             {tasks.map((task) => (
               <div
                 key={task.id}
-                className="p-4 rounded-[10px] bg-cards w-full sm:w-[49%] flex flex-col space-y-4"
+                className="p-4 rounded-[10px] bg-cards2 border border-borders2 w-full sm:w-[49%] flex flex-col space-y-4"
               >
-                <span className="flex items-start gap-2 font-medium">
+                <span className="flex items-start gap-2 font-medium text-cardtext">
                   <span className="">
                     <img
                       src={task.icon || "/telegram.svg"}
@@ -331,13 +331,13 @@ const AdminPanel = () => {
                 <div className="flex items-center justify-start text-[13px] gap-3">
                   <button
                     onClick={() => handleEditTask(task)}
-                    className="bg-green-500 rounded-[6px] text-white px-2 py-[6px]"
+                    className="bg-accent hover:bg-accent/90 rounded-[6px] text-primary px-2 py-[6px]"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => handleDeleteTask(task.id)}
-                    className="bg-red-500 rounded-[6px] text-white px-2 py-[6px]"
+                    className="bg-cards3 hover:bg-cards3/90 rounded-[6px] text-primary px-2 py-[6px]"
                   >
                     Delete {task.id}
                   </button>

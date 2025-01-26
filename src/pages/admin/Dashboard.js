@@ -116,87 +116,81 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="w-full flex justify-center">
-      <div className="flex flex-col pt-5 space-y-3 w-full">
-        <div className="w-full flex justify-center flex-col -mt-5">
-          <div className="w-full flex justify-between gap-2 items-center bg-[#3e3e3e] p-4 fixed top-0 left-0 right-0">
-            <div className="flex sm:w-[18%] items-center">
-              <NavLink to="/dashboardAdx/stats" className="">
-                <img src="/loader.svg" alt="not" className="w-[20px]" />
-              </NavLink>
-            </div>
-
-            <div className="sm:w-[82%] flex flex-1 justify-between items-center sm:px-4">
-              <h1 className="text-[16px] sm:text-[18px] font-bold text-nowrap">
-                {pageTitle}
-              </h1>
-
-              <div className="relative flex justify-end w-[60%]">
-                {showMenu ? (
-                  <button
-                    onClick={() => setShowMenu(false)}
-                    className="h-[35px] w-[35px] rounded-full bg-[#606060] flex items-center justify-center text-[#fff]"
-                  >
-                    <IoCloseCircle size={18} className="" />
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => setShowMenu(true)}
-                    className="h-[35px] w-[35px] rounded-full bg-[#606060] flex items-center justify-center text-[#fff]"
-                  >
-                    <HiMenuAlt1 size={18} className="" />
-                  </button>
-                )}
-              </div>
-            </div>
+    <div className="w-full min-h-screen bg-cards">
+      {/* Header */}
+      <div className="fixed top-0 left-0 right-0 bg-[#3e3e3e] p-4 z-30">
+        <div className="flex items-center justify-between max-w-screen-2xl mx-auto">
+          <div className="flex items-center w-[18%]">
+            <NavLink to="/dashboardAdx/stats">
+              <img src="/loader.svg" alt="logo" className="w-[20px]" />
+            </NavLink>
           </div>
-          <div className="w-full flex justify-between">
-            <div
-              className={`${
-                showMenu === true
-                  ? "visible opacity-100 pointer-events-auto left-0 right-0 bottom-0"
-                  : "invisible opacity-0 sm:opacity-100 sm:visible pointer-events-none sm:pointer-events-auto left-[-100%] sm:left-0"
-              } backdrop-blur-[1px] w-full ease-in duration-200 bg-[#2424243f] z-20 sm:w-[18%] flex flex-col top-0 fixed sm:relative`}
-            >
-              <div
-                ref={infoRefTwo}
-                className={`w-[70%] sm:w-full bg-[#282828] h-screen absolute left-0 top-0 flex flex-col space-y-5 p-4`}
+
+          <div className="flex-1 flex justify-between items-center">
+            <h1 className="text-[16px] sm:text-[18px] font-bold text-center">
+              {pageTitle}
+            </h1>
+
+            <div className="relative">
+              <button
+                onClick={() => setShowMenu(!showMenu)}
+                className="h-[35px] w-[35px] rounded-full bg-[#606060] flex items-center justify-center text-white"
               >
-                <div className="flex items-center flex-row sm:flex-col w-full gap-2">
-                  <img
-                    src="/loader.svg"
-                    alt="not"
-                    className="w-[18px] sm:w-[24px]"
-                  />
-                  <span className="text-[13px]">{user && user.email}</span>
-                </div>
-
-                <div className="flex flex-col space-y-3 w-full pt-8">
-                  {linksTo.map((menu, index) => (
-                    <NavLink
-                      to={menu.link}
-                      onClick={() => setShowMenu(false)}
-                      key={index}
-                      className={`${
-                        pageRoute.pathname === `${menu.link}`
-                          ? "bg-[#424242]"
-                          : ""
-                      } px-2 py-3 flex rounded-[6px] items-center space-x-1 font-medium`}
-                    >
-                      <span className=""></span>
-                      <span className="">{menu.title}</span>
-                    </NavLink>
-                  ))}
-
-                  <LogoutButton />
-                </div>
-              </div>
-            </div>
-
-            <div className="w-full sm:w-[82%] flex px-4 sm:px-6 flex-col pt-[70px]">
-              <Outlet />
+                {showMenu ? (
+                  <IoCloseCircle size={18} />
+                ) : (
+                  <HiMenuAlt1 size={18} />
+                )}
+              </button>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex pt-[64px]">
+        {/* Sidebar */}
+        <div
+          className={`${
+            showMenu
+              ? "fixed inset-0 bg-[#2424243f] backdrop-blur-[1px] z-20"
+              : "hidden sm:block"
+          } sm:static sm:w-[18%]`}
+        >
+          <div
+            ref={infoRefTwo}
+            className={`w-[70%] sm:w-full bg-[#282828] h-svh fixed sm:sticky top-0 left-0 p-4`}
+          >
+            <div className="flex items-center sm:flex-col gap-2 mb-8">
+              <img
+                src="/loader.svg"
+                alt="logo"
+                className="w-[18px] sm:w-[24px]"
+              />
+              <span className="text-[13px] text-cardtext">{user?.email}</span>
+            </div>
+
+            <nav className="flex flex-col space-y-2">
+              {linksTo.map((menu, index) => (
+                <NavLink
+                  to={menu.link}
+                  onClick={() => setShowMenu(false)}
+                  key={index}
+                  className={`${
+                    pageRoute.pathname === menu.link ? "bg-[#424242]" : ""
+                  } px-3 py-2.5 rounded-[6px] font-medium text-cardtext hover:text-accent transition-colors truncate `}
+                >
+                  {menu.title}
+                </NavLink>
+              ))}
+              <LogoutButton />
+            </nav>
+          </div>
+        </div>
+
+        {/* Page Content */}
+        <div className="flex-1 min-h-screen p-6 text-cardtext">
+          <Outlet />
         </div>
       </div>
     </div>

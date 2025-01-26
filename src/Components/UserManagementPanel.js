@@ -1,114 +1,94 @@
-import React, { useState, useEffect } from 'react';
-import { db } from '../firebase/firestore'; // adjust the path as needed
-import { collection, doc, getDoc, updateDoc, deleteDoc, query, where, getDocs, orderBy, limit, startAfter } from "firebase/firestore";
+import React, { useState, useEffect } from "react";
+import { db } from "../firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  orderBy,
+  limit,
+  startAfter,
+} from "firebase/firestore";
+
+import { motion } from "framer-motion";
+import { FiSearch, FiLoader } from "react-icons/fi";
+import toast from "react-hot-toast";
+import UserCard from "./UserCard";
 
 const UserManagementPanel = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [user, setUser] = useState(null);
-  const [editUserData, setEditUserData] = useState(null);
-  const [successMessage, setSuccessMessage] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-  const [isEditing, setIsEditing] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [searchResults, setSearchResults] = useState(null);
   const [users, setUsers] = useState([]);
   const [lastVisible, setLastVisible] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [dropdownVisible, setDropdownVisible] = useState({}); // Add state for dropdown visibility
 
-  const handleSearch = async () => {
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    if (!searchTerm.trim()) {
+      setSearchResults(null);
+      return;
+    }
+
+    setSearchLoading(true);
+
     try {
-      let userFound = false;
-
-      // Search by username
-      const usernameQuery = query(
-        collection(db, "telegramUsers"),
-        where("username", "==", searchTerm)
+      const usersRef = collection(db, "users");
+      const searchTermLower = searchTerm.toLowerCase();
+      const q = query(
+        usersRef,
+        where("fullName", ">=", searchTermLower),
+        where("fullName", "<=", searchTermLower + "\uf8ff"),
+        limit(10)
       );
-      const usernameSnapshot = await getDocs(usernameQuery);
-      if (!usernameSnapshot.empty) {
-        const userData = usernameSnapshot.docs[0].data();
-        setUser({ id: usernameSnapshot.docs[0].id, ...userData });
-        setEditUserData({ ...userData });
-        userFound = true;
-      }
 
-      // Search by userId if not found by username
-      if (!userFound) {
-        const userDoc = await getDoc(doc(db, "telegramUsers", searchTerm));
-        if (userDoc.exists()) {
-          const userData = userDoc.data();
-          setUser({ id: userDoc.id, ...userData });
-          setEditUserData({ ...userData });
-          userFound = true;
-        }
-      }
-
-      if (!userFound) {
-        setUser(null);
-        setEditUserData(null);
-        setErrorMessage('No user found');
-      } else {
-        setErrorMessage('');
-      }
+      const querySnapshot = await getDocs(q);
+      const results = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setSearchResults(results);
     } catch (error) {
-      console.error("Error searching user: ", error);
-      setErrorMessage('Error searching user');
+      console.error("Error searching users:", error);
+      toast.error("Error searching users");
+    } finally {
+      setSearchLoading(false);
     }
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setEditUserData({
-      ...editUserData,
-      [name]: name === 'balance' || name === 'tapBalance' ? Number(value) : value
-    });
-  };
-
-  const handleUpdateUser = async () => {
-    try {
-      const userDoc = doc(db, "telegramUsers", user.id);
-      await updateDoc(userDoc, editUserData);
-      setSuccessMessage('User successfully updated!');
-      setUser({ id: user.id, ...editUserData });
-      setIsEditing(false);
-    } catch (error) {
-      console.error("Error updating user: ", error);
-      setErrorMessage('Error updating user');
+  useEffect(() => {
+    if (!searchTerm.trim()) {
+      setSearchResults(null);
     }
-  };
-
-  const handleDeleteUser = async (userId) => {
-    try {
-      const userDoc = doc(db, "telegramUsers", userId);
-      await deleteDoc(userDoc);
-      setUsers(users.filter(user => user.id !== userId));
-      setSuccessMessage('User successfully deleted!');
-    } catch (error) {
-      console.error("Error deleting user: ", error);
-      setErrorMessage('Error deleting user');
-    }
-  };
+  }, [searchTerm]);
 
   const fetchUsers = async (loadMore = false) => {
     setLoading(true);
     try {
-      const usersRef = collection(db, "telegramUsers");
-      const usersQuery = loadMore && lastVisible
-        ? query(usersRef, orderBy("balance", "desc"), startAfter(lastVisible), limit(50))
-        : query(usersRef, orderBy("balance", "desc"), limit(50));
+      const usersRef = collection(db, "users");
+      const usersQuery =
+        loadMore && lastVisible
+          ? query(
+              usersRef,
+              orderBy("balance", "desc"),
+              startAfter(lastVisible),
+              limit(50)
+            )
+          : query(usersRef, orderBy("balance", "desc"), limit(50));
 
       const userSnapshot = await getDocs(usersQuery);
       const lastVisibleDoc = userSnapshot.docs[userSnapshot.docs.length - 1];
       setLastVisible(lastVisibleDoc);
 
-      const fetchedUsers = userSnapshot.docs.map(doc => ({
+      const fetchedUsers = userSnapshot.docs.map((doc) => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       }));
 
       setUsers(loadMore ? [...users, ...fetchedUsers] : fetchedUsers);
     } catch (error) {
       console.error("Error fetching users: ", error);
-      setErrorMessage('Error fetching users');
+      toast.error("Error fetching users");
     } finally {
       setLoading(false);
     }
@@ -116,15 +96,7 @@ const UserManagementPanel = () => {
 
   useEffect(() => {
     fetchUsers();
-    // eslint-disable-next-line 
   }, []);
-
-  const toggleDropdown = (userId) => {
-    setDropdownVisible(prevState => ({
-      ...prevState,
-      [userId]: !prevState[userId]
-    }));
-  };
 
   const formatNumber = (num) => {
     if (num < 100000) {
@@ -136,143 +108,123 @@ const UserManagementPanel = () => {
     }
   };
 
+  const handleUserUpdate = (updatedUser) => {
+    setUsers(users.map((u) => (u.id === updatedUser.id ? updatedUser : u)));
+  };
 
   return (
-    <div className="w-full flex flex-col space-y-4 h-[100vh] scroller pt-4 overflow-y-auto pb-[150px]">
-      <div className='w-full sm:w-[50%] flex flex-col gap-3'>
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Search by username or userId"
-          className="bg-[#4b4b4b] w-full placeholder:text-[#b9b9b9] text-[#e0e0e0] placeholder:text-[12px] text-[13px] placeholder:font-light h-[55px] border-none outline-none rounded-[10px] flex items-center px-6"
-        />
-        <button onClick={handleSearch} 
-         className="bg-[#f5bb5f] font-semibold text-[15px] rounded-[6px] w-full sm:w-[200px] h-fit px-4 py-3 text-[#000]">          
-          Search
-        </button>
-
-        {errorMessage && <p className="text-red-500">{errorMessage}</p>}
-        {successMessage && <p className="text-green-500">{successMessage}</p>}
-
-        {user && (
-          <div className='w-full flex flex-col space-y-3 bg-cards p-4 rounded-[10px] text-[13px]'>
-
-            {isEditing && (
-                <>
-                  <div className="flex w-full flex-wrap gap-3">
-                    <div className='flex flex-col w-full gap-1'>
-                      <label className='text-[13px] pl-1 pb-[2px] font-medium'>
-                        User Balance
-                      </label>
-                      <input
-                        type="number"
-                        name="balance"
-                        value={editUserData.balance}
-                        onChange={handleInputChange}
-                        placeholder="Balance"
-                        className="bg-[#4b4b4b] placeholder:text-[#b9b9b9] text-[#e0e0e0] placeholder:text-[12px] text-[13px] placeholder:font-light h-[55px] border-none outline-none rounded-[10px] flex items-center px-6"
-                      />
-                    </div>
-
-                    <div className='flex flex-col w-full gap-1'>
-                      <label className='text-[13px] pl-1 pb-[2px] font-medium'>
-                        User mining balance
-                      </label>
-                      <input
-                        type="number"
-                        name="tapBalance"
-                        value={editUserData.miningTotal}
-                        onChange={handleInputChange}
-                        placeholder="Tap Balance"
-                        className="bg-[#4b4b4b] placeholder:text-[#b9b9b9] text-[#e0e0e0] placeholder:text-[12px] text-[13px] placeholder:font-light h-[55px] border-none outline-none rounded-[10px] flex items-center px-6"
-                      />
-                    </div>
-                  </div>
-                  <button 
-                    onClick={handleUpdateUser} 
-                    className="bg-green-500 rounded-[6px] text-white px-2 py-[12px]">
-                    Update User
-                  </button>
-                </>
-            )}
-
-            <p><strong>Username:</strong> {user.username}</p>
-            <p><strong>User Id:</strong> {user.id}</p>
-            <p><strong>User balance:</strong> {formatNumber(user.balance)}</p>
-            <p className='text-wrap break-all'><strong>walletAddress:</strong> {user.address}</p>
-            <div className={`${dropdownVisible[user.id] ? 'hidden' : 'flex'} w-full items-center justify-start gap-4`}>
-              <button 
-                onClick={() => setIsEditing(true)} 
-                className="bg-blue-500 rounded-[6px] text-white px-2 py-[6px]">
-                Edit User Details
-              </button>
-
-              <button 
-                onClick={handleDeleteUser} 
-                className="bg-red-500 rounded-[6px] text-white px-2 py-[6px]">
-                Delete User
-              </button>
-            </div>
+    <div className="w-full p-4 md:p-6 space-y-6">
+      {/* Search Section */}
+      <div className="relative w-full max-w-xl mx-auto">
+        <form
+          onSubmit={handleSearch}
+          className="relative flex items-center gap-2"
+        >
+          <div className="relative flex-1">
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search users by name..."
+              className="w-full bg-[#2b2b2b] text-white placeholder-gray-400 rounded-lg px-4 py-3 pl-12 focus:outline-none focus:ring-2 focus:ring-[#f5bb5f]"
+            />
+            <FiSearch
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"
+              size={18}
+            />
           </div>
+
+          <motion.button
+            type="submit"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="bg-[#f5bb5f] text-black px-6 py-3 rounded-lg font-medium flex items-center gap-2 min-w-[120px] justify-center"
+            disabled={searchLoading}
+          >
+            {searchLoading ? (
+              <>
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                >
+                  <FiLoader size={18} />
+                </motion.div>
+                <span>Searching</span>
+              </>
+            ) : (
+              <>
+                <FiSearch size={18} />
+                <span>Search</span>
+              </>
+            )}
+          </motion.button>
+        </form>
+      </div>
+
+      {/* Results Section */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+        {searchLoading ? (
+          <div className="col-span-full text-center py-8 text-gray-400">
+            Searching...
+          </div>
+        ) : searchResults ? (
+          searchResults.length > 0 ? (
+            searchResults.map((user) => (
+              <UserCard key={user.id} user={user} onUpdate={handleUserUpdate} />
+            ))
+          ) : (
+            <div className="col-span-full text-center py-8 text-gray-400">
+              No users found
+            </div>
+          )
+        ) : (
+          users.map((user) => (
+            <UserCard key={user.id} user={user} onUpdate={handleUserUpdate} />
+          ))
         )}
       </div>
 
-      <div className="w-full sm:w-[50%] flex flex-col space-y-3">
-        <h2 className="text-[20px] font-semibold">Users List</h2>
-        {users.map((user, index) => (
-          <div key={user.id} className="bg-[#4b4b4b] p-4 rounded-[10px] text-[13px] relative flex flex-col w-full space-y-2">
-            <span className='flex w-full items-center space-x-1'>
-              <span className='w-[16px] h-[16px] flex justify-center items-center rounded-full bg-cards3'>
-             <strong>{index +1}</strong>
-             </span> <span className='line-clamp-1 font-semibold'>{user.username} | {user.id}</span> </span>
-
-
-            <span className='flex items-center gap-1 psl-1'>
-              <img src='/coin.webp' alt="balance" className="w-[14px] h-[14px] rounded-full" />
-              <p><span className='font-semibold text-accent'> {formatNumber(user.balance)}</span></p>
-            </span>
-                  
-
-            <button 
-              onClick={() => toggleDropdown(user.id)} 
-              className="absolute top-2 right-2 bg-gray-700 text-white rounded-full p-2 h-[28px] w-[28px] flex items-center justify-center"
-            >
-              ⋮
-            </button>
-
-            {dropdownVisible[user.id] && (
-              <div className="absolute z-10 top-8 right-2 bg-[#2e2e2e] text-primary rounded-md shadow-lg w-40">
-                <button 
-                  onClick={() => {
-                    setUser(user);
-                    setEditUserData(user);
-                    setIsEditing(true);
-                  }} 
-                  className="block w-full text-left px-4 py-2 hover:bg-[#7a7a7a33]"
-                >
-                  Edit
-                </button>
-                <button 
-                  onClick={() => handleDeleteUser(user.id)} 
-                  className="block w-full text-left px-4 py-2 hover:bg-[#7a7a7a33]"
-                >
-                  Delete
-                </button>
-              </div>
-            )}
-          </div>
-        ))}
-        <button 
-          onClick={() => fetchUsers(true)}
-          disabled={loading}
-          className="bg-[#f5bb5f] font-semibold text-[15px] rounded-[6px] w-full sm:w-[200px] h-fit px-4 py-3 text-[#000] mt-4"
+      {/* Load More Button */}
+      {!searchResults && (
+        <motion.div
+          className="flex justify-center mt-6"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
         >
-          {loading ? 'Loading...' : 'Load More Users'}
-        </button>
-      </div>
+          <button
+            onClick={() => fetchUsers(true)}
+            disabled={loading}
+            className="bg-[#f5bb5f] font-semibold text-[15px] rounded-[6px] px-6 py-3 text-[#000]"
+          >
+            {loading ? "Loading..." : "Load More Users"}
+          </button>
+        </motion.div>
+      )}
     </div>
   );
 };
+
+// Add this CSS to your styles
+const styles = `
+  .highlight-card {
+    @apply ring-2 ring-[#f5bb5f] ring-opacity-50;
+    animation: highlight 2s ease-out;
+  }
+
+  @keyframes highlight {
+    0% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(245, 187, 95, 0.7);
+    }
+    70% {
+      transform: scale(1.02);
+      box-shadow: 0 0 0 10px rgba(245, 187, 95, 0);
+    }
+    100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(245, 187, 95, 0);
+    }
+  }
+`;
 
 export default UserManagementPanel;

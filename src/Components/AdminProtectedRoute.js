@@ -7,7 +7,6 @@ import { db } from "../firebase/config";
 
 const AdminProtectedRoute = ({ children }) => {
   const { user, loading } = useAuthContext();
-  console.log(user);
   const [isAdmin, setIsAdmin] = useState(false);
   const [checkingAdmin, setCheckingAdmin] = useState(true);
 

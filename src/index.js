@@ -34,6 +34,7 @@ import "slick-carousel/slick/slick-theme.css";
 import AdminProtectedRoute from "./Components/AdminProtectedRoute";
 import NotAdmin236 from "./pages/NotAdmin236";
 import AdminSignUp from "./pages/admin/AdminSignUp";
+import AdminPanel from "./Components/AdminPanel";
 
 const router = createBrowserRouter([
   {
@@ -110,7 +111,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/dashboardAdx/managetasks",
-        element: <EditTasks />,
+        element: <AdminPanel />,
       },
       {
         path: "/dashboardAdx/externaltasks",
