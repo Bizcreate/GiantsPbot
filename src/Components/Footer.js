@@ -1,65 +1,70 @@
 import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
-
-
-
+import { RiHome5Line, RiHome5Fill } from "react-icons/ri";
+import { HiOutlineUsers, HiUsers } from "react-icons/hi2";
+import { BiTrophy } from "react-icons/bi";
+import { FaTrophy } from "react-icons/fa";
+import { CgProfile } from "react-icons/cg";
+import { RiUserFill } from "react-icons/ri";
 
 const Footer = () => {
   const location = useLocation();
 
-const footerLinks = [
-  {
-    title: "Home",
-    link: "/",
-    icon: <img id="reels2" alt='dfd' src='/home.svg' className={location.pathname === "/" ? "w-[22px] h-[22px] brightness-[0.1]" : "w-[22px] h-[22px]"} />
-},
-{
-  title: "Mine",
-  link: "/earn",
-  icon: <img alt='dfd' src='/earn.svg' className={location.pathname === "/earn" ? "w-[22px] h-[22px] brightness-[0.1]" : "w-[22px] h-[22px]"} />
-},
-  {
+  const footerLinks = [
+    {
+      title: "Home",
+      link: "/app",
+      icon: RiHome5Line,
+      activeIcon: RiHome5Fill,
+      exact: true,
+    },
+    {
       title: "Friends",
-      link: "/ref",
-      icon: <img alt='dfd' src='/ref.svg' className={location.pathname === "/ref" ? "w-[22px] h-[22px] brightness-[0.1]" : "w-[22px] h-[22px]"}/>
-  },
-
-  {
+      link: "/app/ref",
+      icon: HiOutlineUsers,
+      activeIcon: HiUsers,
+    },
+    {
       title: "Leaders",
-      link: "/leaderboard",
-      icon: <img alt='dfd' src='/leaders.svg' className={location.pathname === "/leaderboard" ? "w-[22px] h-[22px] brightness-[0.1]" : "w-[22px] h-[22px]"} />
-  },
-]
+      link: "/app/leaderboard",
+      icon: BiTrophy,
+      activeIcon: FaTrophy,
+    },
+    {
+      title: "Dashboard",
+      link: "/app/dashboard",
+      icon: CgProfile,
+      activeIcon: RiUserFill,
+    },
+  ];
+
+  // Custom function to check if link is active
+  const isLinkActive = (path, exact = false) => {
+    if (exact) {
+      return location.pathname === path;
+    }
+    return location.pathname.startsWith(path);
+  };
 
   return (
-    <div className="w-full flex z-30 relative items-center justify-center space-x-2">
-
-      {footerLinks.map((footer, index) => (
-      <NavLink 
-      key={index}
-      to={footer.link}
-      className={({ isActive }) => {
-        return `
-
-${
-isActive
-  ? "w-[25%] flex flex-col rounded-[10px] items-center justify-center text-primary text-[13px]"
-  : "w-[25%] flex flex-col space-y-[2px] rounded-[10px] items-center justify-center text-[13px]"
-}
-  `;
-      }}
-    >
-              <span id="reels" className={location.pathname === `${footer.link}` ? 
-  `w-[60px] h-[34px] bg-btn mb-[6px] flex flex-col rounded-[24px] items-center justify-center text-[13px]`
-  : "w-[60px] h-[34px] flex flex-col space-y-[2px] rounded-[10px] items-center justify-center text-primary text-[13px]"}>
-                {footer.icon}
-              </span>
-        <span className="font-medium">{footer.title}</span>
+    <nav className="footer-nav">
+      {footerLinks.map((item, index) => (
+        <NavLink
+          key={index}
+          to={item.link}
+          className={({ isActive }) =>
+            `nav-link ${isLinkActive(item.link, item.exact) ? "active" : ""}`
+          }
+        >
+          {isLinkActive(item.link, item.exact) ? (
+            <item.activeIcon className="nav-icon" />
+          ) : (
+            <item.icon className="nav-icon" />
+          )}
+          <span className="nav-text">{item.title}</span>
         </NavLink>
       ))}
-
-
-    </div>
+    </nav>
   );
 };
 

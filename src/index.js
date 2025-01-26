@@ -5,7 +5,6 @@ import Ref from "./pages/Ref";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home";
 import ErrorCom from "./Components/ErrorCom";
-import NotAdmin236 from "./pages/NotAdmin236";
 import { AuthContextProvider } from "./context/AuthContext";
 import Leaderboard from "./pages/Leaderboard";
 import DailyCheckIn from "./pages/Checkin";
@@ -23,92 +22,154 @@ import AdminRanks from "./pages/admin/AdminRanks";
 import AdminYoutube from "./pages/admin/AdminYoutube";
 import AlphaDogs from "./pages/AlphaDogs";
 import BroadcastMessage from "./Components/BroadcastMessage";
-import AdminSignUp from "./pages/admin/AdminSignUp";
+import SignIn from "./pages/auth/SignIn";
+import SignUp from "./pages/auth/SignUp";
+import ProtectedRoute from "./Components/ProtectedRoute";
+import { UserAuthContextProvider } from "./context/UserAuthContext";
+import AuthLayout from "./layouts/AuthLayout";
+import UserDashboard from "./pages/user/UserDashboard";
+import { Toaster } from "react-hot-toast";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Home />,
     errorElement: <ErrorCom />,
+  },
+  {
+    path: "/signin",
+    element: <SignIn />,
+  },
+  {
+    path: "/signup",
+    element: <SignUp />,
+  },
+  {
+    path: "/app",
+    element: (
+      <ProtectedRoute>
+        <AuthLayout />
+      </ProtectedRoute>
+    ),
     children: [
       {
-        path: "/",
+        path: "/app",
         element: <AlphaDogs />,
       },
       {
-        path: "/ref",
+        path: "/app/ref",
         element: <Ref />,
       },
       {
-        path: "/airdrop",
+        path: "/app/airdrop",
         element: <Airdrop />,
       },
       {
-        path: "/leaderboard",
+        path: "/app/leaderboard",
         element: <Leaderboard />,
       },
       {
-        path: "/checkin",
+        path: "/app/checkin",
         element: <DailyCheckIn />,
       },
       {
-        path: "/earn",
+        path: "/app/earn",
         element: <CryptoFarming />,
       },
       {
-        path: "/dashboardAdx/signin",
-        element: <NotAdmin236 />,
-      },
-      {
-        path: "/dashboardAdx/signup",
-        element: <AdminSignUp />,
+        path: "/app/dashboard",
+        element: <UserDashboard />,
       },
     ],
   },
   {
     path: "/dashboardAdx",
-    element: <Dashboard />,
+    element: (
+      <ProtectedRoute>
+        <Dashboard />
+      </ProtectedRoute>
+    ),
     errorElement: <ErrorCom />,
     children: [
       {
         path: "/dashboardAdx/announcements",
-        element: <Settings />,
+        element: (
+          <ProtectedRoute>
+            <Settings />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/dashboardAdx/managetasks",
-        element: <EditTasks />,
+        element: (
+          <ProtectedRoute>
+            <EditTasks />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/dashboardAdx/externaltasks",
-        element: <ExtrenalTasks />,
+        element: (
+          <ProtectedRoute>
+            <ExtrenalTasks />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/dashboardAdx/promo",
-        element: <AdminAdvertTasks />,
+        element: (
+          <ProtectedRoute>
+            <AdminAdvertTasks />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/dashboardAdx/youtube",
-        element: <AdminYoutube />,
+        element: (
+          <ProtectedRoute>
+            <AdminYoutube />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/dashboardAdx/airdroplist",
-        element: <AirdropWallets />,
+        element: (
+          <ProtectedRoute>
+            <AirdropWallets />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/dashboardAdx/ranks",
-        element: <AdminRanks />,
+        element: (
+          <ProtectedRoute>
+            <AdminRanks />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/dashboardAdx/search",
-        element: <Search />,
+        element: (
+          <ProtectedRoute>
+            <Search />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/dashboardAdx/stats",
-        element: <Statistics />,
+        element: (
+          <ProtectedRoute>
+            <Statistics />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/dashboardAdx/Broadcast",
-        element: <BroadcastMessage />,
+        element: (
+          <ProtectedRoute>
+            <BroadcastMessage />
+          </ProtectedRoute>
+        ),
       },
     ],
   },
@@ -117,8 +178,11 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <AuthContextProvider>
-    <React.StrictMode>
-      <RouterProvider router={router} />
-    </React.StrictMode>
+    <UserAuthContextProvider>
+      <React.StrictMode>
+        <RouterProvider router={router} />
+        <Toaster position="top-right" reverseOrder={false} />
+      </React.StrictMode>
+    </UserAuthContextProvider>
   </AuthContextProvider>
 );

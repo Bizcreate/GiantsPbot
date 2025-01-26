@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
 import { onAuthStateChanged } from "@firebase/auth";
 import { doc, getDoc } from "@firebase/firestore";
-import firebase_app, { auth, db } from "../firebase/config";
+import { auth, db } from "../firebase/config";
 import logout from "../firebase/auth/logout";
 
 const AuthContext = createContext();
@@ -16,10 +16,8 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        console.log("user", user);
         // First check admin collection
         const adminDoc = await getDoc(doc(db, "admin", user.uid));
-        console.log("adminDoc", adminDoc.data());
         if (adminDoc.exists()) {
           const adminData = adminDoc.data();
           setUser({ ...user, ...adminData });
