@@ -29,6 +29,8 @@ import { UserAuthContextProvider } from "./context/UserAuthContext";
 import AuthLayout from "./layouts/AuthLayout";
 import UserDashboard from "./pages/user/UserDashboard";
 import { Toaster } from "react-hot-toast";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const router = createBrowserRouter([
   {

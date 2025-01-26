@@ -47,7 +47,7 @@ const Footer = () => {
   };
 
   return (
-    <nav className="footer-nav">
+    <nav className="footer-nav z-50">
       {footerLinks.map((item, index) => (
         <NavLink
           key={index}

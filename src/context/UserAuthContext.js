@@ -17,6 +17,7 @@ import {
 import { auth, db } from "../firebase/config";
 import toast from "react-hot-toast";
 import PageSpinner from "../Components/Spinner";
+import { uploadFile } from "../utils/fileUpload";
 
 const UserAuthContext = createContext();
 
@@ -88,6 +89,7 @@ export function UserAuthContextProvider({ children }) {
       fullName: "fullName",
       username: "username",
       wallet: "walletAddress",
+      avatar: "avatarUrl",
     };
 
     const dbField = fieldMapping[field];
@@ -100,6 +102,12 @@ export function UserAuthContextProvider({ children }) {
           throw new Error("Username is already taken");
         }
         value = value.toLowerCase();
+      }
+
+      // Handle file upload for avatar
+      if (field === "avatar" && value instanceof File) {
+        const uploadResult = await uploadFile(value, `avatars/${user.uid}`);
+        value = uploadResult.url;
       }
 
       const userRef = doc(db, "users", user.uid);

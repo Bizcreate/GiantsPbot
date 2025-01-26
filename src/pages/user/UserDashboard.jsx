@@ -8,6 +8,7 @@ import { db } from "../../firebase/config";
 import toast from "react-hot-toast";
 import LoadingSpinner from "../../Components/Spinner";
 import { useNavigate } from "react-router-dom";
+import { validateFile } from "../../utils/fileUpload";
 
 const UserDashboard = () => {
   const { user, userDetails, updateUserProfile, setUserDetails, logOut } =
@@ -128,6 +129,29 @@ const UserDashboard = () => {
     }
   };
 
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+
+    // Validate file
+    const validation = validateFile(file);
+    if (!validation.isValid) {
+      toast.error(validation.error);
+      return;
+    }
+
+    try {
+      setUpdateLoading(true);
+      console.log(file);
+      await updateUserProfile("avatar", file);
+      setIsEditingPicture(false);
+    } catch (error) {
+      console.error("Error updating profile picture:", error);
+      toast.error("Failed to update profile picture");
+    } finally {
+      setUpdateLoading(false);
+    }
+  };
+
   const statsCards = [
     {
       icon: RiTaskLine,
@@ -183,9 +207,7 @@ const UserDashboard = () => {
         >
           <div className="relative group">
             <img
-              src={
-                userDetails?.profilePicture || "https://via.placeholder.com/150"
-              }
+              src={userDetails?.avatarUrl || "https://via.placeholder.com/150"}
               alt="Profile"
               className="w-32 h-32 rounded-full object-cover border-4 border-accent shadow-lg"
             />
@@ -214,33 +236,24 @@ const UserDashboard = () => {
                 <h3 className="text-lg font-semibold text-primary mb-4">
                   Update Profile Picture
                 </h3>
-                <input
-                  type="text"
-                  value={tempData.profilePicture}
-                  onChange={(e) =>
-                    setTempData({ ...tempData, profilePicture: e.target.value })
-                  }
-                  placeholder="Enter image URL"
-                  className="w-full bg-cards2 text-primary px-3 py-2 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-accent"
-                />
-                <div className="flex justify-end gap-2">
+                <div className="space-y-4">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileUpload}
+                    className="w-full bg-cards2 text-primary px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-accent"
+                  />
+                  <p className="text-sm text-secondary">
+                    Supported formats: JPG, PNG, GIF, WebP (Max size: 5MB)
+                  </p>
+                </div>
+                <div className="flex justify-end gap-2 mt-4">
                   <button
                     onClick={() => setIsEditingPicture(false)}
                     className="px-4 py-2 text-secondary hover:text-primary transition-colors"
                     disabled={updateLoading}
                   >
                     Cancel
-                  </button>
-                  <button
-                    onClick={handleProfilePictureUpdate}
-                    className="px-4 py-2 bg-accent text-white rounded-md hover:bg-accent2 transition-colors disabled:opacity-50"
-                    disabled={updateLoading}
-                  >
-                    {updateLoading ? (
-                      <LoadingSpinner size="sm" className="inline" />
-                    ) : (
-                      "Save"
-                    )}
                   </button>
                 </div>
               </div>

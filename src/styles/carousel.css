@@ -1,0 +1,44 @@
+.carousel-container .slick-slide {
+  padding: 10px;
+  transition: all 0.3s ease;
+}
+
+.carousel-container .slick-center {
+  transform: scale(1.05);
+}
+
+.carousel-container .slick-dots li button:before {
+  color: #ffffff;
+}
+
+.carousel-container .slick-dots li.slick-active button:before {
+  color: #ffffff;
+}
+
+.carousel-container .slick-prev,
+.carousel-container .slick-next {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
+.carousel-container .slick-prev:hover,
+.carousel-container .slick-next:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.carousel-container .slick-prev {
+  left: -50px;
+}
+
+.carousel-container .slick-next {
+  right: -50px;
+}
+
+.carousel-container .slick-prev:before,
+.carousel-container .slick-next:before {
+  font-size: 24px;
+}

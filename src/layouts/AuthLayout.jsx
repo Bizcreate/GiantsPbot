@@ -8,7 +8,7 @@ const AuthLayout = () => {
       <main className="flex-1  pb-16">
         <Outlet />
       </main>
-      <footer className="fixed bottom-0 left-0 right-0 bg-cards3 py-4">
+      <footer className="fixed bottom-0 z-50 left-0 right-0 bg-cards3 py-4">
         <Footer />
       </footer>
     </div>
