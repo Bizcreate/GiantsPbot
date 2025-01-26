@@ -31,6 +31,9 @@ import UserDashboard from "./pages/user/UserDashboard";
 import { Toaster } from "react-hot-toast";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import AdminProtectedRoute from "./Components/AdminProtectedRoute";
+import NotAdmin236 from "./pages/NotAdmin236";
+import AdminSignUp from "./pages/admin/AdminSignUp";
 
 const router = createBrowserRouter([
   {
@@ -85,93 +88,61 @@ const router = createBrowserRouter([
     ],
   },
   {
+    path: "/dashboardlogin",
+    element: <NotAdmin236 />,
+  },
+  {
+    path: "/dashboardAdx/signup",
+    element: <AdminSignUp />,
+  },
+  {
     path: "/dashboardAdx",
     element: (
-      <ProtectedRoute>
+      <AdminProtectedRoute>
         <Dashboard />
-      </ProtectedRoute>
+      </AdminProtectedRoute>
     ),
     errorElement: <ErrorCom />,
     children: [
       {
         path: "/dashboardAdx/announcements",
-        element: (
-          <ProtectedRoute>
-            <Settings />
-          </ProtectedRoute>
-        ),
+        element: <Settings />,
       },
       {
         path: "/dashboardAdx/managetasks",
-        element: (
-          <ProtectedRoute>
-            <EditTasks />
-          </ProtectedRoute>
-        ),
+        element: <EditTasks />,
       },
       {
         path: "/dashboardAdx/externaltasks",
-        element: (
-          <ProtectedRoute>
-            <ExtrenalTasks />
-          </ProtectedRoute>
-        ),
+        element: <ExtrenalTasks />,
       },
       {
         path: "/dashboardAdx/promo",
-        element: (
-          <ProtectedRoute>
-            <AdminAdvertTasks />
-          </ProtectedRoute>
-        ),
+        element: <AdminAdvertTasks />,
       },
       {
         path: "/dashboardAdx/youtube",
-        element: (
-          <ProtectedRoute>
-            <AdminYoutube />
-          </ProtectedRoute>
-        ),
+        element: <AdminYoutube />,
       },
       {
         path: "/dashboardAdx/airdroplist",
-        element: (
-          <ProtectedRoute>
-            <AirdropWallets />
-          </ProtectedRoute>
-        ),
+        element: <AirdropWallets />,
       },
       {
         path: "/dashboardAdx/ranks",
-        element: (
-          <ProtectedRoute>
-            <AdminRanks />
-          </ProtectedRoute>
-        ),
+        element: <AdminRanks />,
       },
       {
         path: "/dashboardAdx/search",
-        element: (
-          <ProtectedRoute>
-            <Search />
-          </ProtectedRoute>
-        ),
+        element: <Search />,
       },
       {
         path: "/dashboardAdx/stats",
-        element: (
-          <ProtectedRoute>
-            <Statistics />
-          </ProtectedRoute>
-        ),
+        element: <Statistics />,
       },
       {
         path: "/dashboardAdx/Broadcast",
-        element: (
-          <ProtectedRoute>
-            <BroadcastMessage />
-          </ProtectedRoute>
-        ),
+        element: <BroadcastMessage />,
       },
     ],
   },

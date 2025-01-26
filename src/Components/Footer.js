@@ -3,7 +3,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import { RiHome5Line, RiHome5Fill } from "react-icons/ri";
 import { HiOutlineUsers, HiUsers } from "react-icons/hi2";
 import { BiTrophy } from "react-icons/bi";
-import { FaTrophy } from "react-icons/fa";
+import { FaTasks, FaTrophy } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 import { RiUserFill } from "react-icons/ri";
 
@@ -29,6 +29,12 @@ const Footer = () => {
       link: "/app/leaderboard",
       icon: BiTrophy,
       activeIcon: FaTrophy,
+    },
+    {
+      title: "Tasks",
+      link: "/app/tasks",
+      icon: FaTasks,
+      activeIcon: FaTasks,
     },
     {
       title: "Dashboard",

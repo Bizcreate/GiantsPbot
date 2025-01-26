@@ -64,6 +64,25 @@ code {
          transition-all duration-300;
 }
 
+/* Custom Scrollbar Styles */
+::-webkit-scrollbar {
+  @apply w-2;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-black;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-neutral-800 rounded-full hover:bg-accent transition-colors duration-300;
+}
+
+/* Firefox scrollbar styles */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #262626 #000000; /* neutral-800 black */
+}
+
 /* Add responsive adjustments */
 @media (min-width: 768px) {
   .footer-nav {

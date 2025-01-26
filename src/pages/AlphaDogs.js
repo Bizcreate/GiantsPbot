@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaUsers, FaCoins, FaRocket } from "react-icons/fa";
-import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
-import { db } from "../firebase/config";
+
 import InfoCard from "../Components/InfoCard";
-import TaskList from "../Components/TaskList";
 import SocialLinks from "../Components/SocialLinks";
 import Header from "../Components/Header";
 import Announcement from "../Components/Announcement";
 import Slider from "react-slick";
 import { fetchAnnouncements } from "../utils/fetchAnnouncements";
+import { fetchPartners } from "../utils/fetchPartners";
+import PartnerCard from "../Components/PartnerCard";
 
 const AlphaDogs = () => {
   const [announcements, setAnnouncements] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [partners, setPartners] = useState([]);
+  const [partnersLoading, setPartnersLoading] = useState(true);
 
   useEffect(() => {
     const fetchAnnouncementsData = async () => {
@@ -27,6 +29,20 @@ const AlphaDogs = () => {
     };
 
     fetchAnnouncementsData();
+  }, []);
+
+  useEffect(() => {
+    const fetchPartnersData = async () => {
+      const { data, error } = await fetchPartners();
+      if (error) {
+        console.error("Error fetching partners:", error);
+      } else {
+        setPartners(data);
+      }
+      setPartnersLoading(false);
+    };
+
+    fetchPartnersData();
   }, []);
 
   const infoCards = [
@@ -62,21 +78,6 @@ const AlphaDogs = () => {
     },
   ];
 
-  const tasks = [
-    {
-      title: "Complete KYC",
-      description: "Verify your identity to participate in exclusive events",
-    },
-    {
-      title: "Join Discord",
-      description: "Join our community on Discord for latest updates",
-    },
-    {
-      title: "Follow Twitter",
-      description: "Follow and engage with our Twitter account",
-    },
-  ];
-
   const sliderSettings = {
     infinite: true,
     speed: 500,
@@ -99,6 +100,36 @@ const AlphaDogs = () => {
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
+        },
+      },
+    ],
+  };
+
+  const partnersSliderSettings = {
+    infinite: true,
+    speed: 1000,
+    slidesToShow: 2.5,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 4000,
+    pauseOnHover: true,
+    centerMode: true,
+    centerPadding: "0px",
+    arrows: false,
+    responsive: [
+      {
+        breakpoint: 1280,
+        settings: {
+          slidesToShow: 2,
+          centerMode: false,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 1,
+          centerMode: true,
+          centerPadding: "40px",
         },
       },
     ],
@@ -171,9 +202,34 @@ const AlphaDogs = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="py-8"
+          className="space-y-8"
         >
-          <TaskList tasks={tasks} />
+          <h2 className="text-primary text-3xl font-semibold mb-8">
+            Our Partners
+          </h2>
+
+          {partnersLoading ? (
+            <div className="flex justify-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+            </div>
+          ) : partners.length > 0 ? (
+            <div className="carousel-container py-16 -mx-8">
+              <Slider {...partnersSliderSettings}>
+                {partners.map((partner) => (
+                  <div key={partner.id} className="px-4">
+                    <PartnerCard
+                      companyImage={partner.companyImage}
+                      name={partner.name}
+                      description={partner.description}
+                      projectLink={partner.projectLink}
+                    />
+                  </div>
+                ))}
+              </Slider>
+            </div>
+          ) : (
+            <p className="text-gray-400 text-center">No partners available</p>
+          )}
         </motion.div>
 
         <motion.div
