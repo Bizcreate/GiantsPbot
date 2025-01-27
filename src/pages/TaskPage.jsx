@@ -141,54 +141,55 @@ const TaskPage = () => {
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-3xl font-Syne font-bold mb-6 text-primary"
+          className="text-3xl font-Cerebri font-bold text-primary mb-6"
         >
           Available Tasks
         </motion.h1>
 
-        {/* Twitter handle info */}
+        {/* Twitter handle info - Keep Twitter theme */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-cards3 p-5 rounded-xl mb-8 shadow-lg hover:shadow-xl transition-all duration-300"
+          className="border-[#1D9BF0] border p-5 rounded-2xl mb-8 shadow-sm hover:shadow-md transition-all duration-300"
         >
           <div className="flex items-center space-x-3">
-            <FiTwitter className="w-5 h-5 text-accent" />
-            <p className="text-cardtext font-PublicSans">
+            <FiTwitter className="w-5 h-5 text-[#1D9BF0]" />
+            <p className="text-[#536471] font-PublicSans">
               Connected as{" "}
-              <span className="font-semibold text-accent">
+              <span className="font-semibold text-[#1D9BF0]">
                 @{userDetails.twitterHandle}
               </span>
             </p>
           </div>
         </motion.div>
 
-        <div className="grid gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
           {tasks.map((task, index) => (
             <motion.div
               key={task.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="bg-cards3 border border-borders2 p-6 rounded-xl shadow-lg hover:shadow-xl transform hover:translate-y-[-2px] transition-all duration-300"
+              className="bg-cards3 p-6 rounded-xl shadow-lg 
+                       hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
             >
-              <div className="flex justify-between items-start mb-4">
-                <h2 className="text-xl font-Syne font-semibold text-primary">
+              <div className="flex justify-between items-start mb-4 flex-wrap gap-2">
+                <h2 className="text-xl font-Cerebri font-semibold text-primary">
                   {task.title}
                 </h2>
-                <span className="px-3 py-1 bg-cards rounded-full text-sm font-medium text-accent">
+                <span className="px-3 py-1 bg-[#1D9BF0]  rounded-full text-sm font-medium">
                   {task.type}
                 </span>
               </div>
 
-              <p className="text-dimtext font-PublicSans mb-4">
+              <p className="text-secondary font-PublicSans mb-4 line-clamp-2">
                 {task.description}
               </p>
 
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
                 <div className="flex items-center space-x-2">
-                  <RiCoinsLine className="w-5 h-5 text-accent" />
-                  <span className="text-accent font-semibold">
+                  <RiCoinsLine className="w-5 h-5 text-[#FFD700]" />
+                  <span className="text-yellow-500/90 font-semibold">
                     {task.reward} points
                   </span>
                 </div>
@@ -199,10 +200,11 @@ const TaskPage = () => {
                   href={task.tweetLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-accent hover:text-accent2 transition-colors duration-200 flex items-center space-x-1"
+                  className="text-[#1D9BF0] hover:text-[#1871CA] transition-colors duration-200 
+                           flex items-center space-x-1 group"
                 >
                   <span>View Tweet</span>
-                  <FiExternalLink className="w-4 h-4" />
+                  <FiExternalLink className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
                 </motion.a>
               </div>
 
@@ -211,15 +213,14 @@ const TaskPage = () => {
                 whileTap={{ scale: 0.98 }}
                 onClick={() => handleSubmitTask(task)}
                 disabled={loading}
-                className={`w-full bg-accent text-white px-6 py-3 rounded-lg font-medium
-                  flex items-center justify-center space-x-2
-                  transform transition-all duration-200
-                  ${
-                    loading
-                      ? "opacity-50 cursor-not-allowed"
-                      : "hover:bg-accent/90 hover:shadow-md"
-                  }
-                `}
+                className={`w-full border border-accent text-white px-6 py-3 rounded-xl font-medium
+                           flex items-center justify-center space-x-2
+                           transform transition-all duration-200
+                           ${
+                             loading
+                               ? "opacity-50 cursor-not-allowed"
+                               : "hover:shadow-md"
+                           }`}
               >
                 {loading ? (
                   <>

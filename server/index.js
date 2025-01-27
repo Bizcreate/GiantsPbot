@@ -8,10 +8,10 @@ app.use(cors());
 app.use(express.json());
 
 const client = new TwitterApi({
-  appKey: "aKk1u2oMXrrsCTHDYPHBUnKJr",
-  appSecret: "z2HpQcY6U6KU1AMiO39UgP3tN4MggaZ6DLYLN4C08MQTuuMZk7",
-  accessToken: "1859991371257450496-YFPBb6BqQ0Xr5v2o34jgADmcKAvfSA",
-  accessSecret: "dqpXznyvvBDolAH158Z2tT1f7R7n1KqPzoWTI0yFMxTm8",
+  appKey: "HaYwHxrPAJ7x6PGn5IqB4iZ9s",
+  appSecret: "XQojinWY1S1HwpvrsF0nvxYYoNYWHx1FlEYJV17AsHxIsce5E2",
+  accessToken: "1859991371257450496-rWPshznzgep2BA8JlyzoNG3cmKIH2C",
+  accessSecret: "ZNgbrPgOub7KIV3GpMKieC2kKvsb98qqsj3zLuLoHXkhc",
 });
 
 app.post("/api/verify-twitter-action", async (req, res) => {
@@ -32,14 +32,31 @@ app.post("/api/verify-twitter-action", async (req, res) => {
     switch (actionType) {
       case "like":
         try {
-          // Get likes with pagination to handle large numbers of likes
-          const likes = await client.v2.tweetLikedBy(tweetId);
+          const likes = await client.v2.tweetLikedBy(tweetId, {
+            max_results: 100,
+            "user.fields": ["username"],
+          });
 
-          // Check current page
+          // Check first page
           verified = likes.data?.some(
             (likeUser) =>
               likeUser.username.toLowerCase() === userHandle.toLowerCase()
           );
+
+          // Check subsequent pages if necessary
+          let paginationToken = likes.meta?.next_token;
+          while (!verified && paginationToken) {
+            const nextPage = await client.v2.tweetLikedBy(tweetId, {
+              max_results: 100,
+              pagination_token: paginationToken,
+              "user.fields": ["username"],
+            });
+            verified = nextPage.data?.some(
+              (likeUser) =>
+                likeUser.username.toLowerCase() === userHandle.toLowerCase()
+            );
+            paginationToken = nextPage.meta?.next_token;
+          }
         } catch (error) {
           console.error("Error fetching likes:", error);
           verified = false;
@@ -48,24 +65,9 @@ app.post("/api/verify-twitter-action", async (req, res) => {
 
       case "comment":
         try {
-          // Get tweet author for proper reply checking
-          const tweet = await client.v2.singleTweet(tweetId, {
-            expansions: ["author_id"],
-          });
-
-          // Search for replies using conversation_id and author
-          const query = `conversation_id:${tweetId} from:${userHandle}`;
-          const replies = await client.v2.search(query, {
-            "tweet.fields": ["in_reply_to_user_id", "referenced_tweets"],
-            max_results: 100,
-          });
-
-          // Verify that at least one tweet is a direct reply to our target tweet
-          verified = replies.data?.some((reply) =>
-            reply.referenced_tweets?.some(
-              (ref) => ref.type === "replied_to" && ref.id === tweetId
-            )
-          );
+          const query = `in_reply_to_tweet_id:${tweetId} from:${userHandle}`;
+          const replies = await client.v2.search(query);
+          verified = replies.data?.length > 0;
         } catch (error) {
           console.error("Error fetching comments:", error);
           verified = false;
@@ -80,29 +82,27 @@ app.post("/api/verify-twitter-action", async (req, res) => {
           });
           const authorId = tweet.data.author_id;
 
-          // Check if user follows author using Friendship lookup
-          const followingResponse = await client.v2.followers(authorId, {
+          // Check if user follows author
+          const following = await client.v2.following(userId, {
             max_results: 1000,
             "user.fields": ["username"],
           });
 
-          // Check current page
-          verified = followingResponse.data?.some(
-            (follower) =>
-              follower.username.toLowerCase() === userHandle.toLowerCase()
+          // Check if author is in the user's following list
+          verified = following.data?.some(
+            (followedUser) => followedUser.id === authorId
           );
 
-          // If not found and there are more pages, check next pages
-          let paginationToken = followingResponse.meta?.next_token;
+          // Check subsequent pages if necessary
+          let paginationToken = following.meta?.next_token;
           while (!verified && paginationToken) {
-            const nextPage = await client.v2.followers(authorId, {
+            const nextPage = await client.v2.following(userId, {
               max_results: 1000,
               pagination_token: paginationToken,
               "user.fields": ["username"],
             });
             verified = nextPage.data?.some(
-              (follower) =>
-                follower.username.toLowerCase() === userHandle.toLowerCase()
+              (followedUser) => followedUser.id === authorId
             );
             paginationToken = nextPage.meta?.next_token;
           }
