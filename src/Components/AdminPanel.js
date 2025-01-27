@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { db } from "../firebase/firestore"; // adjust the path as needed
+import { db } from "../firebase/config";
 import {
   collection,
   setDoc,
@@ -14,22 +14,35 @@ import { IoCloseCircleSharp } from "react-icons/io5";
 import { motion } from "framer-motion";
 import { FiPlus } from "react-icons/fi";
 import { RiEditLine, RiDeleteBinLine } from "react-icons/ri";
+import { FaTwitter } from "react-icons/fa";
 
 const AdminPanel = () => {
   const [tasks, setTasks] = useState([]);
   const [taskData, setTaskData] = useState({
     title: "",
-    bonus: 0,
-    id: "",
-    link: "",
-    icon: "",
-    chatId: "",
+    description: "",
+    tweetLink: "",
+    type: "retweet", // Default type
+    reward: 0,
+    status: "active",
   });
   const [showTaskInputs, setShowTaskInputs] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [currentTaskId, setCurrentTaskId] = useState("");
   const [loading, setLoading] = useState(true);
+
+  // Extract Tweet ID from tweet URL
+  const extractTweetId = (tweetUrl) => {
+    try {
+      const url = new URL(tweetUrl);
+      const pathParts = url.pathname.split("/");
+      return pathParts[pathParts.length - 1];
+    } catch (error) {
+      console.error("Invalid Tweet URL:", error);
+      return null;
+    }
+  };
 
   useEffect(() => {
     fetchTasks();
@@ -45,49 +58,52 @@ const AdminPanel = () => {
     setLoading(false);
   };
 
-  const fetchCounter = async () => {
-    const counterDoc = await getDoc(doc(db, "counters", "taskCounter"));
-    if (counterDoc.exists()) {
-      return counterDoc.data().currentId;
-    } else {
-      await setDoc(doc(db, "counters", "taskCounter"), { currentId: 0 });
-      return 0;
-    }
-  };
-
-  const incrementCounter = async () => {
-    const currentId = await fetchCounter();
-    const newId = currentId + 1;
-    await setDoc(doc(db, "counters", "taskCounter"), { currentId: newId });
-    return newId;
-  };
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setTaskData({
       ...taskData,
-      [name]: name === "bonus" ? (value === "" ? "" : Number(value)) : value,
+      [name]: name === "reward" ? (value === "" ? 0 : Number(value)) : value,
     });
+  };
+
+  const validateTaskData = () => {
+    if (!taskData.title || !taskData.description || !taskData.tweetLink) {
+      throw new Error("Please fill in all required fields");
+    }
+
+    const tweetId = extractTweetId(taskData.tweetLink);
+    if (!tweetId) {
+      throw new Error("Invalid Tweet URL");
+    }
+
+    return tweetId;
   };
 
   const handleAddTask = async () => {
     try {
-      const newId = await incrementCounter();
-      const taskDoc = doc(db, "tasks", newId.toString());
-      await setDoc(taskDoc, { ...taskData, id: newId });
+      const tweetId = validateTaskData();
+
+      const taskRef = doc(collection(db, "tasks"));
+      await setDoc(taskRef, {
+        ...taskData,
+        tweetId,
+        createdAt: new Date().toISOString(),
+        status: "active",
+      });
+
       setSuccessMessage("Task successfully added!");
       setShowTaskInputs(false);
       setTaskData({
         title: "",
-        bonus: 0,
-        id: "",
-        link: "",
-        icon: "",
-        chatId: "",
+        description: "",
+        tweetLink: "",
+        type: "retweet",
+        reward: 0,
+        status: "active",
       });
       fetchTasks();
-    } catch (e) {
-      console.error("Error adding document: ", e);
+    } catch (error) {
+      setSuccessMessage(error.message);
     }
   };
 
@@ -103,20 +119,21 @@ const AdminPanel = () => {
     try {
       await updateDoc(taskDoc, {
         title: taskData.title,
-        bonus: taskData.bonus,
-        link: taskData.link,
-        icon: taskData.icon,
-        chatId: taskData.chatId,
+        description: taskData.description,
+        tweetLink: taskData.tweetLink,
+        type: taskData.type,
+        reward: taskData.reward,
+        status: taskData.status,
       });
       setSuccessMessage("Task successfully updated!");
       setShowTaskInputs(false);
       setTaskData({
         title: "",
-        bonus: 0,
-        id: "",
-        link: "",
-        icon: "",
-        chatId: "",
+        description: "",
+        tweetLink: "",
+        type: "retweet",
+        reward: 0,
+        status: "active",
       });
       setIsEditing(false);
       setCurrentTaskId("");
@@ -136,19 +153,6 @@ const AdminPanel = () => {
     }
   };
 
-  const cancelEdits = () => {
-    setIsEditing(false);
-    setShowTaskInputs(!showTaskInputs);
-    setTaskData({
-      title: "",
-      bonus: 0,
-      id: "",
-      link: "",
-      icon: "",
-      chatId: "",
-    });
-  };
-
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -165,87 +169,88 @@ const AdminPanel = () => {
             onClick={() => setShowTaskInputs(!showTaskInputs)}
             className={`${
               showTaskInputs ? "hidden" : "block"
-            } bg-accent hover:bg-accent/90 font-medium text-[15px] rounded-lg px-6 py-3 text-primary flex items-center gap-2 transition-all duration-200 shadow-lg`}
+            } bg-accent hover:bg-accent/90 font-medium text-[15px] rounded-lg px-6 py-3 text-primary flex items-center gap-2`}
           >
             <FiPlus className="text-lg" />
-            Add new task
+            Add new Twitter task
           </motion.button>
 
           {showTaskInputs && (
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-cards2/50 p-6 rounded-xl border border-borders2/50 backdrop-blur-sm shadow-xl"
+              className="bg-cards2/50 p-6 rounded-xl border border-borders2/50"
             >
               <div className="flex w-full flex-wrap gap-4">
                 <div className="flex flex-col w-full sm:w-[calc(50%-8px)] gap-1">
-                  <label className="text-[13px] pl-1 pb-[2px] font-medium text-secondary">
-                    Task title
+                  <label className="text-[13px] pl-1 font-medium text-secondary">
+                    Task Title
                   </label>
                   <motion.input
-                    whileFocus={{ scale: 1.01 }}
                     type="text"
                     name="title"
                     value={taskData.title}
                     onChange={handleInputChange}
-                    placeholder="Title"
-                    className="bg-cards3/40 w-full placeholder:text-dimtext text-cardtext placeholder:text-[12px] text-[13px] h-[55px] border border-borders2/30 outline-none rounded-lg px-6 transition-all duration-200 focus:border-accent/50 focus:bg-cards3/60"
+                    placeholder="Enter task title"
+                    className="bg-cards3/40 w-full text-cardtext text-[13px] h-[55px] border rounded-lg px-6"
                   />
                 </div>
+
                 <div className="flex flex-col w-full sm:w-[calc(50%-8px)] gap-1">
-                  <label className="text-[13px] pl-1 pb-[2px] font-medium text-secondary">
-                    Task bonus amount
+                  <label className="text-[13px] pl-1 font-medium text-secondary">
+                    Description
+                  </label>
+                  <motion.textarea
+                    name="description"
+                    value={taskData.description}
+                    onChange={handleInputChange}
+                    placeholder="Enter task description"
+                    className="bg-cards3/40 w-full text-cardtext text-[13px] h-[55px] border rounded-lg px-6"
+                  />
+                </div>
+
+                <div className="flex flex-col w-full sm:w-[calc(50%-8px)] gap-1">
+                  <label className="text-[13px] pl-1 font-medium text-secondary">
+                    Tweet Link
                   </label>
                   <motion.input
-                    whileFocus={{ scale: 1.01 }}
+                    type="url"
+                    name="tweetLink"
+                    value={taskData.tweetLink}
+                    onChange={handleInputChange}
+                    placeholder="https://twitter.com/user/status/123456789"
+                    className="bg-cards3/40 w-full text-cardtext text-[13px] h-[55px] border rounded-lg px-6"
+                  />
+                </div>
+
+                <div className="flex flex-col w-full sm:w-[calc(50%-8px)] gap-1">
+                  <label className="text-[13px] pl-1 font-medium text-secondary">
+                    Task Type
+                  </label>
+                  <motion.select
+                    name="type"
+                    value={taskData.type}
+                    onChange={handleInputChange}
+                    className="bg-cards3/40 w-full text-cardtext text-[13px] h-[55px] border rounded-lg px-6"
+                  >
+                    <option value="retweet">Retweet</option>
+                    <option value="like">Like</option>
+                    <option value="follow">Follow</option>
+                    <option value="comment">Comment</option>
+                  </motion.select>
+                </div>
+
+                <div className="flex flex-col w-full sm:w-[calc(50%-8px)] gap-1">
+                  <label className="text-[13px] pl-1 font-medium text-secondary">
+                    Reward Points
+                  </label>
+                  <motion.input
                     type="number"
-                    name="bonus"
-                    value={taskData.bonus}
+                    name="reward"
+                    value={taskData.reward}
                     onChange={handleInputChange}
-                    placeholder="Bonus"
-                    className="bg-cards3/40 w-full placeholder:text-dimtext text-cardtext placeholder:text-[12px] text-[13px] h-[55px] border border-borders2/30 outline-none rounded-lg px-6 transition-all duration-200 focus:border-accent/50 focus:bg-cards3/60"
-                  />
-                </div>
-                <div className="flex flex-col w-full sm:w-[calc(50%-8px)] gap-1">
-                  <label className="text-[13px] pl-1 pb-[2px] font-medium text-secondary">
-                    Task link
-                  </label>
-                  <motion.input
-                    whileFocus={{ scale: 1.01 }}
-                    type="text"
-                    name="link"
-                    value={taskData.link}
-                    onChange={handleInputChange}
-                    placeholder="Link"
-                    className="bg-cards3/40 w-full placeholder:text-dimtext text-cardtext placeholder:text-[12px] text-[13px] h-[55px] border border-borders2/30 outline-none rounded-lg px-6 transition-all duration-200 focus:border-accent/50 focus:bg-cards3/60"
-                  />
-                </div>
-                <div className="flex flex-col w-full sm:w-[calc(50%-8px)] gap-1">
-                  <label className="text-[13px] pl-1 pb-[2px] font-medium text-secondary">
-                    Task icon url
-                  </label>
-                  <motion.input
-                    whileFocus={{ scale: 1.01 }}
-                    type="text"
-                    name="icon"
-                    value={taskData.icon}
-                    onChange={handleInputChange}
-                    placeholder="Icon"
-                    className="bg-cards3/40 w-full placeholder:text-dimtext text-cardtext placeholder:text-[12px] text-[13px] h-[55px] border border-borders2/30 outline-none rounded-lg px-6 transition-all duration-200 focus:border-accent/50 focus:bg-cards3/60"
-                  />
-                </div>
-                <div className="flex flex-col w-full sm:w-[calc(50%-8px)] gap-1">
-                  <label className="text-[13px] pl-1 pb-[2px] font-medium text-secondary">
-                    Telegram Channel/Group ID
-                  </label>
-                  <motion.input
-                    whileFocus={{ scale: 1.01 }}
-                    type="text"
-                    name="chatId"
-                    value={taskData.chatId}
-                    onChange={handleInputChange}
-                    placeholder="Chat ID"
-                    className="bg-cards3/40 w-full placeholder:text-dimtext text-cardtext placeholder:text-[12px] text-[13px] h-[55px] border border-borders2/30 outline-none rounded-lg px-6 transition-all duration-200 focus:border-accent/50 focus:bg-cards3/60"
+                    placeholder="Enter reward points"
+                    className="bg-cards3/40 w-full text-cardtext text-[13px] h-[55px] border rounded-lg px-6"
                   />
                 </div>
               </div>
@@ -255,15 +260,15 @@ const AdminPanel = () => {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={isEditing ? handleUpdateTask : handleAddTask}
-                  className="bg-accent hover:bg-accent/90 font-medium text-[15px] rounded-lg w-full sm:w-[200px] px-6 py-3 text-primary transition-all duration-200 shadow-lg"
+                  className="bg-accent hover:bg-accent/90 font-medium text-[15px] rounded-lg w-full sm:w-[200px] px-6 py-3 text-primary"
                 >
                   {isEditing ? "Update Task" : "Add Task"}
                 </motion.button>
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={cancelEdits}
-                  className="bg-cards3 hover:bg-cards3/80 font-medium text-[15px] rounded-lg w-full sm:w-[200px] px-6 py-3 text-primary transition-all duration-200 shadow-lg"
+                  onClick={() => setShowTaskInputs(false)}
+                  className="bg-cards3 hover:bg-cards3/80 font-medium text-[15px] rounded-lg w-full sm:w-[200px] px-6 py-3 text-primary"
                 >
                   Cancel
                 </motion.button>
@@ -271,65 +276,37 @@ const AdminPanel = () => {
             </motion.div>
           )}
 
+          {/* Task List */}
           <motion.div className="grid grid-cols-1 sm:grid-cols-2 gap-4" layout>
-            {tasks.map((task, index) => (
+            {tasks.map((task) => (
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ y: -5 }}
                 key={task.id}
-                className="p-6 rounded-xl bg-gradient-to-b from-cards2/50 to-cards3/30 border border-borders2/30 backdrop-blur-sm hover:border-borders2/50 transition-all duration-300 shadow-lg group"
+                className="p-6 rounded-xl bg-gradient-to-b from-cards2/50 to-cards3/30 border border-borders2/30"
               >
-                <div className="flex flex-col items-center gap-4">
-                  <motion.div
-                    whileHover={{ scale: 1.1, rotate: 5 }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                    className="w-16 h-16 rounded-2xl bg-cards3/40 p-2 flex items-center justify-center shadow-lg"
+                <div className="flex items-center gap-3 mb-4">
+                  <FaTwitter className="text-[#1DA1F2] text-2xl" />
+                  <h3 className="font-medium text-cardtext text-lg">
+                    {task.title}
+                  </h3>
+                </div>
+                <p className="text-secondary mb-2">{task.description}</p>
+                <p className="text-accent mb-2">Reward: {task.reward} points</p>
+                <p className="text-secondary mb-4">Type: {task.type}</p>
+                <div className="flex items-center gap-3">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    onClick={() => handleEditTask(task)}
+                    className="flex-1 bg-accent/10 text-accent rounded-lg px-4 py-2"
                   >
-                    <motion.img
-                      src={task.icon || "/telegram.svg"}
-                      alt={task.title}
-                      className="w-12 h-12 object-contain rounded-xl"
-                    />
-                  </motion.div>
-
-                  <div className="text-center space-y-2">
-                    <motion.h3
-                      className="font-medium text-cardtext text-lg group-hover:text-accent transition-colors duration-300"
-                      whileHover={{ scale: 1.02 }}
-                    >
-                      {task.title}
-                    </motion.h3>
-                    <motion.p
-                      className="text-secondary text-sm"
-                      initial={{ opacity: 0.8 }}
-                      whileHover={{ opacity: 1 }}
-                    >
-                      Bonus: <span className="text-accent">{task.bonus}</span>
-                    </motion.p>
-                  </div>
-
-                  <div className="flex items-center gap-3 mt-2 w-full">
-                    <motion.button
-                      whileHover={{ scale: 1.05, y: -2 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => handleEditTask(task)}
-                      className="flex items-center justify-center gap-2 bg-accent/10 hover:bg-accent/20 text-accent rounded-lg px-4 py-2.5 text-sm transition-all duration-200 flex-1 border border-accent/20 hover:border-accent/30"
-                    >
-                      <RiEditLine className="text-lg" />
-                      <span>Edit</span>
-                    </motion.button>
-                    <motion.button
-                      whileHover={{ scale: 1.05, y: -2 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => handleDeleteTask(task.id)}
-                      className="flex items-center justify-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-lg px-4 py-2.5 text-sm transition-all duration-200 flex-1 border border-red-500/20 hover:border-red-500/30"
-                    >
-                      <RiDeleteBinLine className="text-lg" />
-                      <span>Delete</span>
-                    </motion.button>
-                  </div>
+                    Edit
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    onClick={() => handleDeleteTask(task.id)}
+                    className="flex-1 bg-red-500/10 text-red-500 rounded-lg px-4 py-2"
+                  >
+                    Delete
+                  </motion.button>
                 </div>
               </motion.div>
             ))}

@@ -76,7 +76,7 @@ export function UserAuthContextProvider({ children }) {
   }
 
   async function logOut() {
-    console.log("logging out");
+    toast.success("logging out");
     setUserDetails(null);
     await signOut(auth);
   }

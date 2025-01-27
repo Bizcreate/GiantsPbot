@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^13.5.0",
     "@tonconnect/ui-react": "^2.0.6",
     "axios": "^1.7.2",
+    "concurrently": "^9.1.2",
     "cors": "^2.8.5",
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.5",
@@ -32,11 +33,14 @@
     "styled-components": "^6.1.11",
     "tailwindcss": "^3.4.3",
     "telegraf": "^4.8.1",
+    "twitter-api-v2": "^1.19.0",
     "uuid": "^9.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
+    "server": "nodemon server/index.js",
+    "dev": "concurrently \"npm run server\" \"npm run start\"",
     "build": "cross-env GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -61,5 +65,6 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.3"
-  }
+  },
+  "proxy": "http://localhost:5000"
 }
