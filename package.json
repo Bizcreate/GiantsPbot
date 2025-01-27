@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@metamask/sdk-react": "^0.31.5",
+    "@moralisweb3/common-evm-utils": "^2.27.2",
     "@tailwindcss/line-clamp": "^0.4.4",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",
@@ -14,6 +16,7 @@
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.5",
     "env": "^0.0.2",
+    "ethers": "^6.13.5",
     "express": "^4.19.2",
     "firebase": "^10.12.2",
     "framer-motion": "^11.2.10",
