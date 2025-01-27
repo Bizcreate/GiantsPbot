@@ -13,6 +13,9 @@ import {
   query,
   where,
   getDocs,
+  updateDoc,
+  arrayUnion,
+  increment,
 } from "firebase/firestore";
 import { auth, db } from "../firebase/config";
 import toast from "react-hot-toast";
@@ -39,27 +42,113 @@ export function UserAuthContextProvider({ children }) {
   }
 
   async function createUserInDb(uid, userData) {
-    if (userData.username) {
-      userData.username = userData.username.toLowerCase();
-    }
+    try {
+      if (userData.username) {
+        userData.username = userData.username.toLowerCase();
+      }
 
-    await setDoc(doc(db, "users", uid), {
-      ...userData,
-      createdAt: new Date().toISOString(),
-    });
+      // Create the user document
+      await setDoc(doc(db, "users", uid), {
+        ...userData,
+        createdAt: new Date().toISOString(),
+      });
+
+      // If user was referred, update referrer's data
+      if (userData.refBy) {
+        const referrerId = userData.refBy;
+
+        // Update referrer's balance
+        const referrerRef = doc(db, "users", referrerId);
+        const referrerDoc = await getDoc(referrerRef);
+
+        if (referrerDoc.exists()) {
+          // Add bonus to referrer
+          await updateDoc(referrerRef, {
+            balance: increment(5000),
+          });
+
+          // Create or update referral tracking document
+          const referralRef = doc(db, "referrals", referrerId);
+          const referralDoc = await getDoc(referralRef);
+
+          if (referralDoc.exists()) {
+            // Update existing referral document
+            await updateDoc(referralRef, {
+              referredUsers: arrayUnion({
+                userId: uid,
+                email: userData.email,
+                fullName: userData.fullName,
+                joinedAt: new Date().toISOString(),
+              }),
+              totalReferrals: increment(1),
+              totalEarnings: increment(5000),
+            });
+          } else {
+            // Create new referral document
+            await setDoc(referralRef, {
+              userId: referrerId,
+              referredUsers: [
+                {
+                  userId: uid,
+                  email: userData.email,
+                  fullName: userData.fullName,
+                  joinedAt: new Date().toISOString(),
+                },
+              ],
+              totalReferrals: 1,
+              totalEarnings: 5000,
+              createdAt: new Date().toISOString(),
+            });
+          }
+
+          // Notify referrer
+          toast.success(
+            `${userData.fullName} joined using your referral! You earned 5000 coins! 🎉`,
+            {
+              duration: 5000,
+            }
+          );
+        }
+      }
+    } catch (error) {
+      console.error("Error in createUserInDb:", error);
+      throw new Error("Failed to create user profile");
+    }
   }
 
   async function signUp(email, password, additionalData = {}) {
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-    await createUserInDb(userCredential.user.uid, {
-      email,
-      ...additionalData,
-    });
-    return userCredential;
+    try {
+      // Validate referral if provided
+      if (additionalData.refBy) {
+        const referrerDoc = await getDoc(
+          doc(db, "users", additionalData.refBy)
+        );
+        if (!referrerDoc.exists()) {
+          throw new Error("Invalid referral code");
+        }
+
+        // Check if referrer is not the same as new user
+        if (email.toLowerCase() === referrerDoc.data().email.toLowerCase()) {
+          throw new Error("You cannot refer yourself");
+        }
+      }
+
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      await createUserInDb(userCredential.user.uid, {
+        email,
+        ...additionalData,
+      });
+
+      return userCredential;
+    } catch (error) {
+      console.error("Error in signUp:", error);
+      throw error;
+    }
   }
 
   async function signIn(email, password) {

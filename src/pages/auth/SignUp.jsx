@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useUserAuth } from "../../context/UserAuthContext";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
@@ -14,6 +14,18 @@ const SignUp = () => {
   const [loading, setLoading] = useState(false);
   const { signUp } = useUserAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Get referral ID from URL query params
+  const [referralId, setReferralId] = useState(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const ref = params.get("ref");
+    if (ref) {
+      setReferralId(ref);
+    }
+  }, [location]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,14 +38,27 @@ const SignUp = () => {
 
     setLoading(true);
     try {
+      // Sign up with referral data
       await signUp(email, password, {
         fullName,
         role: "user",
         lastLoginAt: new Date().toISOString(),
-        balance: 0,
+        balance: referralId ? 5000 : 0, // Give 5000 coins if referred
+        refBy: referralId || null, // Store referral information
       });
+
+      // Show success message with referral bonus if applicable
+      if (referralId) {
+        toast.success(
+          "Welcome! You've received 5000 coins as a referral bonus! 🎉"
+        );
+      } else {
+        toast.success("Account created successfully!");
+      }
+
       navigate("/app");
     } catch (error) {
+      console.error("Signup error:", error);
       toast.error(
         error.code === "auth/email-already-in-use"
           ? "Email already in use"
