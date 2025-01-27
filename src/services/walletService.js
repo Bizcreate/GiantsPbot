@@ -154,4 +154,39 @@ export const walletService = {
       throw error;
     }
   },
+
+  saveAlturaWalletInfo: async (userId, walletInfo) => {
+    const userRef = doc(db, "users", userId);
+    await updateDoc(userRef, {
+      alturaWallet: walletInfo,
+    });
+  },
+
+  updateAlturaBalance: async (userId, balance) => {
+    const userRef = doc(db, "users", userId);
+    await updateDoc(userRef, {
+      "alturaWallet.balance": balance,
+    });
+  },
+
+  updateAlturaNFTs: async (userId, nfts) => {
+    const userRef = doc(db, "users", userId);
+    await updateDoc(userRef, {
+      "alturaWallet.nfts": nfts,
+    });
+  },
+
+  updateAlturaTokens: async (userId, tokens) => {
+    const userRef = doc(db, "users", userId);
+    await updateDoc(userRef, {
+      "alturaWallet.tokens": tokens,
+    });
+  },
+
+  updateAlturaConnectionStatus: async (userId, isConnected) => {
+    const userRef = doc(db, "users", userId);
+    await updateDoc(userRef, {
+      "alturaWallet.connected": isConnected,
+    });
+  },
 };

@@ -105,7 +105,8 @@ export const useMetaMask = () => {
       };
 
       const chainName = networkMap[chainId] || "eth";
-      const apiKey = process.env.REACT_APP_MORALIS_API_KEY;
+      const apiKey =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6ImFjOTI2ZjFiLTczOTctNDEyNS05MjJmLTY2ZGU4OTg0N2UwNSIsIm9yZ0lkIjoiNDI3NzE0IiwidXNlcklkIjoiNDM5OTUzIiwidHlwZUlkIjoiNzIyYWRkODYtODU2Zi00ZWQwLWEyN2ItMjA5ZDIzNzRjNzljIiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE3Mzc5NjI3NzcsImV4cCI6NDg5MzcyMjc3N30.g5Fc9NqW6Duv1M-rp7CZsXd987orD2N-SkFrq_OYexs";
       const response = await fetch(
         `https://deep-index.moralis.io/api/v2/${account}/erc20?chain=${chainName}`,
         {
