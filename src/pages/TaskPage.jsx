@@ -19,6 +19,7 @@ import {
   RiCheckboxCircleLine,
   RiLoader4Line,
 } from "react-icons/ri";
+import TwitterSetup from "./TwitterSetup";
 
 const TaskPage = () => {
   const [tasks, setTasks] = useState([]);
@@ -131,21 +132,7 @@ const TaskPage = () => {
 
   // Twitter handle warning UI
   if (!userDetails?.twitterHandle) {
-    return (
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="container mx-auto p-4"
-      >
-        <div className="bg-cards3 border-l-4 border-accent text-cardtext p-6 rounded-lg shadow-lg">
-          <p className="font-Cerebri text-xl mb-2">Twitter Account Required</p>
-          <p className="font-PublicSans text-dimtext">
-            Please add your Twitter handle in your profile settings to complete
-            tasks.
-          </p>
-        </div>
-      </motion.div>
-    );
+    return <TwitterSetup returnPath="/app/tasks" />;
   }
 
   return (

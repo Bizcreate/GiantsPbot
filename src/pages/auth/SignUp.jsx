@@ -4,6 +4,7 @@ import { useNavigate, Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { getRank } from "../../constants/ranks";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -43,8 +44,9 @@ const SignUp = () => {
         fullName,
         role: "user",
         lastLoginAt: new Date().toISOString(),
-        balance: referralId ? 5000 : 0, // Give 5000 coins if referred
+        balance: referralId ? 5000 : 1000, // Give 5000 coins if referred
         refBy: referralId || null, // Store referral information
+        rank: referralId ? getRank(5000) : getRank(1000),
       });
 
       // Show success message with referral bonus if applicable

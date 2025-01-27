@@ -179,6 +179,7 @@ export function UserAuthContextProvider({ children }) {
       username: "username",
       wallet: "walletAddress",
       avatar: "avatarUrl",
+      twitterHandle: "twitterHandle",
     };
 
     const dbField = fieldMapping[field];
@@ -197,6 +198,11 @@ export function UserAuthContextProvider({ children }) {
       if (field === "avatar" && value instanceof File) {
         const uploadResult = await uploadFile(value, `avatars/${user.uid}`);
         value = uploadResult.url;
+      }
+      console.log(field, value);
+      // handle twitter handle
+      if (field === "twitterHandle" && value) {
+        value = value.replace("@", "");
       }
 
       const userRef = doc(db, "users", user.uid);

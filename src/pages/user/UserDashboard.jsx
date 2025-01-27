@@ -6,9 +6,10 @@ import { useUserAuth } from "../../context/UserAuthContext";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase/config";
 import toast from "react-hot-toast";
-import LoadingSpinner from "../../Components/Spinner";
 import { useNavigate } from "react-router-dom";
 import { validateFile } from "../../utils/fileUpload";
+import { RANKS, getRank } from "../../constants/ranks";
+import { LoadingSpinner } from "../../Components/LoadingSpinner";
 
 const UserDashboard = () => {
   const { user, userDetails, updateUserProfile, setUserDetails, logOut } =
@@ -21,12 +22,14 @@ const UserDashboard = () => {
     fullName: false,
     username: false,
     wallet: false,
+    twitterHandle: false,
   });
 
   const [tempData, setTempData] = useState({
     fullName: userDetails?.fullName || "",
     username: userDetails?.username || "",
     wallet: userDetails?.walletAddress || "",
+    twitterHandle: userDetails?.twitterHandle || "",
     profilePicture:
       userDetails?.profilePicture || "https://via.placeholder.com/150",
   });
@@ -38,6 +41,7 @@ const UserDashboard = () => {
       fullName: userDetails?.fullName || "",
       username: userDetails?.username || "",
       wallet: userDetails?.walletAddress || "",
+      twitterHandle: userDetails?.twitterHandle || "",
       profilePicture:
         userDetails?.profilePicture || "https://via.placeholder.com/150",
     });
@@ -49,6 +53,7 @@ const UserDashboard = () => {
       fullName: userDetails?.fullName || "",
       username: userDetails?.username || "",
       wallet: userDetails?.walletAddress || "",
+      twitterHandle: userDetails?.twitterHandle || "",
       profilePicture:
         userDetails?.profilePicture || "https://via.placeholder.com/150",
     });
@@ -87,6 +92,7 @@ const UserDashboard = () => {
       fullName: userDetails?.fullName || "",
       username: userDetails?.username || "",
       wallet: userDetails?.walletAddress || "",
+      twitterHandle: userDetails?.twitterHandle || "",
       profilePicture:
         userDetails?.profilePicture || "https://via.placeholder.com/150",
     });
@@ -152,6 +158,37 @@ const UserDashboard = () => {
     }
   };
 
+  const getCurrentRankInfo = () => {
+    const currentCoins = userDetails?.balance || 0;
+    const currentRank = getRank(currentCoins);
+
+    // Find next rank
+    const currentRankIndex = RANKS.findIndex(
+      (rank) => rank.name === currentRank.name
+    );
+    const nextRank = RANKS[currentRankIndex + 1];
+
+    // Calculate progress
+    let progress = 0;
+    let coinsToNextRank = 0;
+
+    if (nextRank) {
+      const rangeSize = nextRank.minCoins - currentRank.minCoins;
+      const progressInRange = currentCoins - currentRank.minCoins;
+      progress = (progressInRange / rangeSize) * 100;
+      coinsToNextRank = nextRank.minCoins - currentCoins;
+    } else {
+      progress = 100; // Max level reached
+    }
+
+    return {
+      currentRank,
+      nextRank,
+      progress: Math.min(Math.max(progress, 0), 100), // Clamp between 0 and 100
+      coinsToNextRank,
+    };
+  };
+
   const statsCards = [
     {
       icon: RiTaskLine,
@@ -159,14 +196,9 @@ const UserDashboard = () => {
       value: userDetails?.completedTasks?.length || 0,
     },
     {
-      icon: RiWalletLine,
-      title: "Points Earned",
-      value: userDetails?.taskPoints || 0,
-    },
-    {
       icon: RiBarChartLine,
       title: "Current Rank",
-      value: `#${userDetails?.activeUserRank || "N/A"}`,
+      value: getCurrentRankInfo().currentRank.name,
     },
     {
       icon: RiWalletLine,
@@ -292,7 +324,12 @@ const UserDashboard = () => {
                 label: "Wallet",
                 value: userDetails?.walletAddress,
               },
-            ].map(({ key, label, value, validation }) => (
+              {
+                key: "twitterHandle",
+                label: "Twitter",
+                value: userDetails?.twitterHandle,
+              },
+            ].map(({ key, label, value }) => (
               <div
                 key={key}
                 className="flex flex-col sm:flex-row sm:items-center gap-2"
@@ -307,10 +344,6 @@ const UserDashboard = () => {
                         onChange={(e) => {
                           setError("");
                           setTempData({ ...tempData, [key]: e.target.value });
-                          if (validation) {
-                            const error = validation(e.target.value);
-                            if (error) setError(error);
-                          }
                         }}
                         disabled={updateLoading}
                         className={`bg-cards2 text-primary px-3 py-1 rounded-md flex-1 
@@ -358,6 +391,66 @@ const UserDashboard = () => {
                 </div>
               </div>
             ))}
+          </div>
+        </motion.div>
+
+        {/* Rank Progress Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-cards3 rounded-xl p-6 mb-8 shadow-lg"
+        >
+          <h2 className="text-xl font-semibold text-primary mb-4">
+            Rank Progress
+          </h2>
+          <div className="space-y-4">
+            {(() => {
+              const { currentRank, nextRank, progress, coinsToNextRank } =
+                getCurrentRankInfo();
+
+              return (
+                <>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <span className="text-secondary">Current Rank:</span>
+                      <span className="ml-2 text-primary font-semibold">
+                        {currentRank.name}
+                      </span>
+                    </div>
+                    {nextRank && (
+                      <div>
+                        <span className="text-secondary">Next Rank:</span>
+                        <span className="ml-2 text-primary font-semibold">
+                          {nextRank.name}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="relative w-full h-4 bg-cards2 rounded-full overflow-hidden">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: `${progress}%` }}
+                      transition={{ duration: 1 }}
+                      className="absolute h-full bg-accent rounded-full"
+                    />
+                  </div>
+
+                  {nextRank ? (
+                    <div className="text-center text-secondary">
+                      <span className="text-accent font-semibold">
+                        {coinsToNextRank.toLocaleString()}
+                      </span>
+                      {" coins needed for next rank"}
+                    </div>
+                  ) : (
+                    <div className="text-center text-accent font-semibold">
+                      Maximum Rank Achieved!
+                    </div>
+                  )}
+                </>
+              );
+            })()}
           </div>
         </motion.div>
 
