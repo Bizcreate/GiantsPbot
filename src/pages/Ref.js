@@ -1,12 +1,45 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useUserAuth } from "../context/UserAuthContext";
 import toast from "react-hot-toast";
 import { FiShare2, FiCopy, FiGift } from "react-icons/fi";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  getDoc,
+} from "firebase/firestore";
+import { db } from "../firebase/config";
 
 const Ref = () => {
   const { user, userDetails } = useUserAuth();
   const [copying, setCopying] = useState(false);
+  const [referralData, setReferralData] = useState(null);
+
+  useEffect(() => {
+    const fetchReferralData = async () => {
+      if (!user?.uid) return;
+
+      try {
+        const referralsRef = collection(db, "referrals");
+        const docRef = doc(referralsRef, user.uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setReferralData({
+            id: docSnap.id,
+            ...docSnap.data(),
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching referral data:", error);
+        toast.error("Failed to load referral data");
+      }
+    };
+
+    fetchReferralData();
+  }, [user]);
 
   const referralLink = `${window.location.origin}/signup?ref=${user?.uid}`;
 
@@ -32,6 +65,44 @@ const Ref = () => {
         >
           Referral Program
         </motion.h1>
+
+        {/* Referral Stats Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-8 bg-cards3 rounded-xl p-6 shadow-lg"
+        >
+          <div className="flex items-center gap-4 mb-6">
+            <div className="p-3 bg-accent bg-opacity-20 rounded-lg">
+              <FiGift className="text-accent text-xl" />
+            </div>
+            <h2 className="text-xl font-semibold text-primary">
+              Your Referral Stats
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-cards2 p-4 rounded-lg">
+              <div className="text-cardtext mb-2">Total Referrals</div>
+              <div className="text-2xl font-bold text-primary">
+                {referralData?.totalReferrals || 0}
+              </div>
+            </div>
+            <div className="bg-cards2 p-4 rounded-lg">
+              <div className="text-cardtext mb-2">Total Earnings</div>
+              <div className="text-2xl font-bold text-accent">
+                {referralData?.totalEarnings?.toLocaleString() || 0} coins
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-4 text-sm text-cardtext">
+            Last updated:{" "}
+            {referralData?.createdAt
+              ? new Date(referralData.createdAt).toLocaleDateString()
+              : "N/A"}
+          </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Main Referral Card */}

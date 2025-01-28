@@ -29,7 +29,6 @@ const ERC721_ABI = [
 
 export const useMetaMask = () => {
   const { sdk, connected, connecting, provider, chainId } = useSDK();
-  console.log("provider", provider);
   const [account, setAccount] = useState("");
   const [error, setError] = useState("");
   const [balance, setBalance] = useState("0");

@@ -3,7 +3,14 @@ import { motion } from "framer-motion";
 import { FiEdit2, FiCheck, FiX, FiCamera, FiLogOut } from "react-icons/fi";
 import { RiWalletLine, RiTaskLine, RiBarChartLine } from "react-icons/ri";
 import { useUserAuth } from "../../context/UserAuthContext";
-import { doc, updateDoc } from "firebase/firestore";
+import {
+  doc,
+  updateDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 import { db } from "../../firebase/config";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -17,6 +24,8 @@ const UserDashboard = () => {
   const [updateLoading, setUpdateLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const [submissions, setSubmissions] = useState([]);
+  const [isLoadingStats, setIsLoadingStats] = useState(true);
 
   const [editing, setEditing] = useState({
     fullName: false,
@@ -46,6 +55,37 @@ const UserDashboard = () => {
         userDetails?.profilePicture || "https://via.placeholder.com/150",
     });
   }, [userDetails]);
+
+  useEffect(() => {
+    const fetchSubmissions = async () => {
+      try {
+        setIsLoadingStats(true);
+        const submissionsRef = collection(db, "submissions");
+        const q = query(
+          submissionsRef,
+          where("userId", "==", user?.uid),
+          where("status", "==", "verified")
+        );
+
+        const querySnapshot = await getDocs(q);
+        const submissionsData = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        setSubmissions(submissionsData);
+      } catch (error) {
+        console.error("Error fetching submissions:", error);
+        toast.error("Failed to load statistics");
+      } finally {
+        setIsLoadingStats(false);
+      }
+    };
+
+    if (user?.uid) {
+      fetchSubmissions();
+    }
+  }, [user?.uid]);
 
   const handleEdit = (field) => {
     setEditing({ ...editing, [field]: true });
@@ -193,7 +233,11 @@ const UserDashboard = () => {
     {
       icon: RiTaskLine,
       title: "Tasks Completed",
-      value: userDetails?.completedTasks?.length || 0,
+      value: isLoadingStats ? (
+        <LoadingSpinner size="sm" />
+      ) : (
+        submissions.filter((sub) => sub.status === "verified").length
+      ),
     },
     {
       icon: RiBarChartLine,
@@ -202,8 +246,14 @@ const UserDashboard = () => {
     },
     {
       icon: RiWalletLine,
-      title: "Balance",
-      value: `${userDetails?.balance || 0} TON`,
+      title: "Total Earnings",
+      value: isLoadingStats ? (
+        <LoadingSpinner size="sm" />
+      ) : (
+        `${submissions.reduce((total, sub) => {
+          return sub.status === "verified" ? total + (sub.reward || 0) : total;
+        }, 0)} `
+      ),
     },
   ];
 
