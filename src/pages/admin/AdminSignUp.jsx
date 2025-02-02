@@ -94,7 +94,7 @@ const AdminSignUp = () => {
           <p className="text-center text-secondary mt-4">
             Already have an admin account?{" "}
             <Link
-              to="/dashboardAdx/signin"
+              to="/dashboardlogin"
               className="text-accent hover:text-accent/90"
             >
               Login

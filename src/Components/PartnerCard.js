@@ -6,7 +6,8 @@ const PartnerCard = ({ companyImage, name, description, projectLink }) => {
     <motion.div
       whileHover="hover"
       initial="initial"
-      className="relative h-[200px] w-full group"
+      className="relative h-[200px] w-full group cursor-pointer"
+      onClick={() => projectLink && window.open(projectLink, "_blank")}
     >
       {/* Background Image with Gradient Overlay */}
       <motion.div
@@ -74,12 +75,9 @@ const PartnerCard = ({ companyImage, name, description, projectLink }) => {
           {description}
         </motion.p>
 
-        {/* Link with subtle animation */}
+        {/* Updated Link - now shows as a visual indicator only */}
         {projectLink && (
-          <motion.a
-            href={projectLink}
-            target="_blank"
-            rel="noopener noreferrer"
+          <motion.div
             className="inline-flex items-center gap-2 text-accent/90 font-normal text-sm group/link"
             variants={{
               hover: { x: 0, opacity: 1 },
@@ -98,7 +96,7 @@ const PartnerCard = ({ companyImage, name, description, projectLink }) => {
             >
               →
             </motion.span>
-          </motion.a>
+          </motion.div>
         )}
       </motion.div>
     </motion.div>
