@@ -8,13 +8,13 @@ import {
 } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyARfcTqmudXQ6-PWNu9E7CBjJ6aPZSnBck",
-  authDomain: "giant-protocol-test.firebaseapp.com",
-  projectId: "giant-protocol-test",
-  storageBucket: "giant-protocol-test.appspot.com",
-  messagingSenderId: "342186452477",
-  appId: "1:342186452477:web:9c6a30bef0f0495471a594",
-  measurementId: "G-HSY32GPTKS",
+  apiKey: "AIzaSyA-9guvPoy46YADJ8Gpgj1Vs4N9CVuA5-E",
+  authDomain: "trxlabs-858e0.firebaseapp.com",
+  projectId: "trxlabs-858e0",
+  storageBucket: "trxlabs-858e0.appspot.com",
+  messagingSenderId: "6149594968",
+  appId: "1:6149594968:web:ad46051f7d8cc351a8cf2d",
+  measurementId: "G-D7YSLSRGPK",
 };
 
 let firebase_app =
