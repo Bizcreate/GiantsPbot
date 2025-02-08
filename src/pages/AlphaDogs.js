@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaUsers, FaCoins, FaRocket } from "react-icons/fa";
+import Sidebar from "../Components/sidebar";
 
 import InfoCard from "../Components/InfoCard";
-import SocialLinks from "../Components/SocialLinks";
-import Header from "../Components/Header";
 import Announcement from "../Components/Announcement";
 import Slider from "react-slick";
 import { fetchAnnouncements } from "../utils/fetchAnnouncements";
@@ -147,7 +146,7 @@ const AlphaDogs = () => {
         }}
       />
 
-      <Header />
+      {/* <Header /> */}
 
       <main className="relative z-10 pt-32 px-8 pb-20 max-w-7xl mx-auto space-y-24">
         <motion.div
@@ -237,7 +236,7 @@ const AlphaDogs = () => {
           animate={{ opacity: 1, y: 0 }}
           className="pt-12"
         >
-          <SocialLinks />
+          {/* <SocialLinks /> */}
         </motion.div>
       </main>
     </div>
