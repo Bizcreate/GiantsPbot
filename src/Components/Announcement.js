@@ -31,9 +31,9 @@ const Announcement = ({
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ scale: 1.02 }}
       transition={{ duration: 0.2 }}
-      className="bg-cards2 p-6 rounded-xl border border-borders2 hover:shadow-lg"
+      className=" p-6 rounded-xl border bg-box1 border-borders2 hover:shadow-lg"
     >
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col  gap-4">
         {image && (
           <div className="relative">
             <img
