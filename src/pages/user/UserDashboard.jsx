@@ -264,13 +264,13 @@ const UserDashboard = () => {
       <Sidebar />
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-        <Header />
+          <Header />
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-3xl font-Cerebri font-bold text-primary"
           >
-            User Dashboard
+            My Dashboard
           </motion.h1>
           <motion.button
             initial={{ opacity: 0, x: 20 }}
@@ -289,7 +289,7 @@ const UserDashboard = () => {
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="flex flex-col items-center mb-8"
+          className="flex p-5 rounded-xl bg-cards3 mb-8"
         >
           <div className="relative group">
             <img
@@ -304,13 +304,42 @@ const UserDashboard = () => {
               <FiCamera size={20} />
             </button>
           </div>
-          <h2 className="text-xl font-semibold text-primary mt-4">
-            {userDetails?.fullName || "Your Name"}
-          </h2>
-          <p className="text-secondary">
-            @{userDetails?.username || "username"}
-          </p>
-
+          <div>
+            <div className="px-6">
+              {" "}
+              <h2 className="text-xl font-semibold text-primary mt-4">
+                {userDetails?.fullName || "Your Name"}
+              </h2>
+              <p className="text-secondary">
+                @{userDetails?.username || "username"}
+              </p>
+            </div>
+            {/* Stats Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {statsCards.map((stat, index) => (
+                <motion.div
+                  key={stat.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  whileHover={{ scale: 1.02 }}
+                  className="p-6 rounded-xl "
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="p-3 bg-accent bg-opacity-20 rounded-lg">
+                      <stat.icon className="text-accent text-xl" />
+                    </div>
+                    <div>
+                      <h3 className="text-secondary text-sm">{stat.title}</h3>
+                      <p className="text-primary text-2xl font-semibold">
+                        {stat.value}
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
           {/* Profile Picture Edit Modal */}
           {isEditingPicture && (
             <motion.div
@@ -452,7 +481,7 @@ const UserDashboard = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-cards3 rounded-xl p-6 mb-8 shadow-lg"
+          className="rounded-xl p-6 mb-8 "
         >
           <h2 className="text-xl font-semibold text-primary mb-4">
             Rank Progress
@@ -507,32 +536,6 @@ const UserDashboard = () => {
             })()}
           </div>
         </motion.div>
-
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {statsCards.map((stat, index) => (
-            <motion.div
-              key={stat.title}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              whileHover={{ scale: 1.02 }}
-              className="bg-cards3 p-6 rounded-xl shadow-lg"
-            >
-              <div className="flex items-center gap-4">
-                <div className="p-3 bg-accent bg-opacity-20 rounded-lg">
-                  <stat.icon className="text-accent text-xl" />
-                </div>
-                <div>
-                  <h3 className="text-secondary text-sm">{stat.title}</h3>
-                  <p className="text-primary text-2xl font-semibold">
-                    {stat.value}
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
       </div>
     </div>
   );

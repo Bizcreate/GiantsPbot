@@ -4,6 +4,7 @@ import { collection, query, orderBy, limit, getDocs } from "firebase/firestore";
 import { db } from "../firebase/config";
 import { useUserAuth } from "../context/UserAuthContext";
 import { RANKS, getRank } from "../constants/ranks";
+import { BiLike, BiHeart, BiRepeat, BiComment } from "react-icons/bi";
 import { FaCrown, FaMedal } from "react-icons/fa";
 import { IoTrophyOutline } from "react-icons/io5";
 import PageSpinner from "../Components/Spinner";
@@ -106,42 +107,59 @@ const Leaderboard = () => {
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-3xl font-bold text-primary mb-8 text-center"
+          className="text-3xl font-bold text-primary mb-8"
         >
           Leaderboard
         </motion.h1>
 
-        {/* Top 3 Users */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          {users.slice(0, 3).map((user, index) => (
-            <TopThreeCard key={user.id} user={user} position={index + 1} />
-          ))}
-        </div>
-
         {/* Current User Status */}
+        <h2 className="text-xl font-semibold text-primary mb-4">My Position</h2>
         {userDetails && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="bg-cards3 p-6 rounded-xl mb-8"
           >
-            <h2 className="text-xl font-semibold text-primary mb-4">
-              Your Position
-            </h2>
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-secondary">
-                  Current Rank: <span className="text-accent">#{userRank}</span>
+            <div className="flex flex-col gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
+                <p className="text-secondary flex flex-col">
+                  Current Rank:
+                  <span className="text-white font-bold">#{userRank}</span>
                 </p>
-                <p className="text-secondary">
-                  Balance:{" "}
-                  <span className="text-accent">
+                <p className="text-secondary flex flex-col">
+                  Balance:
+                  <span className="text-white font-bold">
                     {userDetails.balance?.toLocaleString() || 0} coins
                   </span>
                 </p>
+                <p className="text-secondary flex flex-col">
+                  Total Airdrops Earned:
+                  <span className="text-white font-bold">
+                    {userDetails.balance?.toLocaleString() || 0} USD
+                  </span>
+                </p>
+                <div className="flex flex-col items-center">
+                  <p className="text-secondary">Unclaimed Points:</p>
+                  <span className="text-white font-bold">
+                    {userDetails.balance?.toLocaleString() || 0} PTS
+                  </span>
+                  <button className="w-24 h-10 text-white bg-red-600 rounded-xl mt-2">
+                    Claim
+                  </button>
+                </div>
+                <div className="flex flex-col items-center">
+                  <p className="text-secondary">Unclaimed Airdrops:</p>
+                  <span className="text-white font-bold">
+                    {userDetails.balance?.toLocaleString() || 0} USD
+                  </span>
+                  <button className="w-24 h-10 text-white bg-red-600 rounded-xl mt-2">
+                    Claim
+                  </button>
+                </div>
               </div>
+
               {userRank > 3 && (
-                <div className="text-right">
+                <div className="text-center md:text-right">
                   <p className="text-secondary">To reach top 3:</p>
                   <p className="text-accent font-semibold">
                     {(
@@ -152,75 +170,110 @@ const Leaderboard = () => {
                 </div>
               )}
             </div>
+
+            <div className="border-t py-5 text-white border-[#686868] mt-4">
+              <ul className="flex flex-wrap justify-evenly gap-6 text-center">
+                <li className="flex items-center gap-2">
+                  <BiLike /> 0 Likes
+                </li>
+                <li className="flex items-center gap-2">
+                  <BiHeart /> 0 Views
+                </li>
+                <li className="flex items-center gap-2">
+                  <BiRepeat /> 0 Repeats
+                </li>
+                <li className="flex items-center gap-2">
+                  <BiComment /> 0 Replies
+                </li>
+              </ul>
+            </div>
           </motion.div>
         )}
 
+        {/* Top 3 Users */}
+
         {/* Other Users List */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="bg-cards3 rounded-xl overflow-hidden"
-        >
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-cards2">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-secondary uppercase tracking-wider">
-                    Rank
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-secondary uppercase tracking-wider">
-                    User
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-secondary uppercase tracking-wider">
-                    Level
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-secondary uppercase tracking-wider">
-                    Balance
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-cards2">
-                {users.slice(3).map((user, index) => (
-                  <motion.tr
-                    key={user.id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                    className={`hover:bg-cards2 transition-colors ${
-                      user.id === userDetails?.uid
-                        ? "bg-accent bg-opacity-10"
-                        : ""
-                    }`}
-                  >
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-secondary">
-                      #{index + 4}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <img
-                          className="h-8 w-8 rounded-full"
-                          src={
-                            user.avatarUrl || "https://via.placeholder.com/32"
-                          }
-                          alt=""
-                        />
-                        <span className="ml-2 text-primary">
-                          {user.username}
-                        </span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-secondary">
-                      {getRank(user.balance).name}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-accent font-semibold">
-                      {user.balance.toLocaleString()}
-                    </td>
-                  </motion.tr>
-                ))}
-              </tbody>
-            </table>
+        <div className="p-6 rounded-xl">
+          <h2 className="text-white text-xl font-semibold mb-4">Top 10</h2>
+
+          {/* Top 3 Users Podium */}
+          <div className="relative flex items-end justify-center gap-6 mb-12 pt-16">
+            {users.slice(0, 3).map((user, index) => {
+              const position = index === 0 ? 2 : index === 1 ? 1 : 3;
+              const heightClass =
+                position === 1
+                  ? "h-[220px]"
+                  : position === 2
+                  ? "h-[180px]"
+                  : "h-[160px]";
+              const baseHeight = "h-[60px]"; // Ensures all bases align
+
+              return (
+                <div
+                  key={user.id}
+                  className={`relative flex flex-col items-center justify-end ${heightClass} w-[180px]`}
+                  style={{
+                    zIndex: position === 1 ? 2 : 1,
+                    order: position === 2 ? 0 : position === 1 ? 1 : 2,
+                  }}
+                >
+                  <TopThreeCard user={user} position={position} />
+                </div>
+              );
+            })}
           </div>
-        </motion.div>
+
+          {/* Other Users List */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className=" rounded-xl overflow-hidden"
+          >
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <tbody className="flex flex-col space-y-3 py-4">
+                  {users.slice(3).map((user, index) => (
+                    <motion.tr
+                      key={user.id}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.05 }}
+                      className={`hover:bg-gray-700 border flex flex-row justify-between items-center  border-[#484545] transition-colors ${
+                        user.id === userDetails?.uid
+                          ? "bg-red-500 bg-opacity-10"
+                          : ""
+                      }`}
+                    >
+                      <div>
+                        <td className="px-6 py-4 text-sm text-white">
+                          {index + 4}
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center">
+                            <img
+                              className="h-8 w-8 rounded-full"
+                              src={
+                                user.avatarUrl ||
+                                "https://via.placeholder.com/32"
+                              }
+                              alt=""
+                            />
+                            <span className="ml-2 text-white">
+                              {user.username}
+                            </span>
+                          </div>
+                        </td>
+                      </div>
+                      <td className="px-6 py-4 text-sm text-white font-semibold">
+                        {user.balance.toLocaleString()} PTS
+                      </td>
+                    </motion.tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </motion.div>
+        </div>
       </div>
     </div>
   );
