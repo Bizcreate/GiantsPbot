@@ -35,15 +35,13 @@ const Footer = () => {
     <>
       {/* Spacer div to prevent content from being hidden */}
       <div className="h-16" /> {/* Adjust height to match footer height */}
-      <nav className="fixed bottom-0 left-0 w-full backdrop-blur-md border-t bg-lightgray border-r border-borders2 z-50">
-        <div className="flex flex-row justify-between items-center px-7 h-16">
-          {" "}
-          {/* Added fixed height */}
-          <div className="text-sm text-[#666666]">
+      <nav className="fixed bottom-0 left-0 w-full backdrop-blur-md border-t bg-lightgray border-r border-borders2 z-50 px-4 md:px-7">
+        <div className="flex flex-col md:flex-row justify-between items-center h-16 text-center md:text-left">
+          <div className="text-sm hidden md:block text-[#666666] mb-2 md:mb-0">
             © {currentYear} 2MR Labs PTE. LTD.
           </div>
           <div className="py-2">
-            <div className="flex justify-between items-center gap-3">
+            <div className="flex justify-center md:justify-end items-center gap-3">
               {socialLinks.map((social, index) => (
                 <motion.a
                   key={index}

@@ -59,6 +59,7 @@ const Leaderboard = () => {
 
     return (
       <>
+        <Header />
         <Sidebar />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -95,26 +96,6 @@ const Leaderboard = () => {
       </>
     );
   };
-
-  // const Leaderboard = ({ users }) => (
-  //   <div className="relative flex items-end justify-center gap-6 py-10">
-  //     {users.slice(0, 3).map((user, index) => (
-  //       <div
-  //         key={user.id}
-  //         className="relative flex flex-col items-center w-1/4"
-  //         style={{
-  //           zIndex: index === 1 ? 2 : 1,
-  //           order: index === 1 ? 1 : index === 0 ? 0 : 2,
-  //         }}
-  //       >
-  //         <TopThreeCard
-  //           user={user}
-  //           position={index === 1 ? 1 : index === 0 ? 2 : 3}
-  //         />
-  //       </div>
-  //     ))}
-  //   </div>
-  // );
 
   if (loading) {
     return <PageSpinner />;
