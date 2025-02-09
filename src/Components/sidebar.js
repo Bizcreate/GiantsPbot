@@ -54,11 +54,7 @@ const Sidebar = () => {
   return (
     <div className="fixed left-0 top-0 h-full z-10000 w-64 bg-cards border-r border-borders2 p-4">
       <div className="flex flex-col h-full">
-        <div className="mb-8 px-4">
-          <h1 className="text-xl font-bold text-primary">
-            <img src="/public/stars.png" alt="logo" />
-          </h1>
-        </div>
+        <div className="mb-16 px-4"></div>
 
         {/* Navigation Links */}
         <nav className="flex-1 space-y-2">

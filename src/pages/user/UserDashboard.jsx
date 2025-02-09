@@ -4,6 +4,7 @@ import { FiEdit2, FiCheck, FiX, FiCamera, FiLogOut } from "react-icons/fi";
 import { RiWalletLine, RiTaskLine, RiBarChartLine } from "react-icons/ri";
 import { useUserAuth } from "../../context/UserAuthContext";
 import Sidebar from "../../Components/sidebar";
+import Header from "../../Components/Header";
 import {
   doc,
   updateDoc,
@@ -263,6 +264,7 @@ const UserDashboard = () => {
       <Sidebar />
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
+        <Header />
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}

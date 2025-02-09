@@ -8,6 +8,7 @@ import { FaCrown, FaMedal } from "react-icons/fa";
 import { IoTrophyOutline } from "react-icons/io5";
 import PageSpinner from "../Components/Spinner";
 import Sidebar from "../Components/sidebar";
+import Header from "../Components/Header";
 
 const Leaderboard = () => {
   const [users, setUsers] = useState([]);
@@ -68,6 +69,7 @@ const Leaderboard = () => {
             position === 1 ? "border-2 border-yellow-500" : ""
           }`}
         >
+          <Header />
           <div className="absolute top-2 right-2">
             <Icon className={`text-3xl ${color}`} />
           </div>

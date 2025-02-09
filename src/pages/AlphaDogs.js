@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaUsers, FaCoins, FaRocket } from "react-icons/fa";
 import Sidebar from "../Components/sidebar";
-
+import Header from "../Components/Header";
 import InfoCard from "../Components/InfoCard";
 import Announcement from "../Components/Announcement";
 import Slider from "react-slick";
@@ -145,8 +145,6 @@ const AlphaDogs = () => {
           backgroundRepeat: "no-repeat",
         }}
       />
-
-      {/* <Header /> */}
       <Sidebar />
 
       <main className="relative z-10 pt-32 px-8 pb-20 max-w-7xl mx-auto space-y-24">
@@ -155,6 +153,7 @@ const AlphaDogs = () => {
           animate={{ opacity: 1, y: 0 }}
           className="carousel-container py-8"
         >
+          <h2 className="text-primary text-3xl font-semibold mb-8">Home</h2>
           <Slider {...sliderSettings}>
             {infoCards.map((card, index) => (
               <div key={index} className="px-4">
@@ -169,10 +168,11 @@ const AlphaDogs = () => {
           animate={{ opacity: 1, y: 0 }}
           className="space-y-8"
         >
+          {" "}
+          <Header />
           <h2 className="text-primary text-3xl font-semibold mb-8">
             Announcements
           </h2>
-
           {loading ? (
             <div className="flex justify-center">
               <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>

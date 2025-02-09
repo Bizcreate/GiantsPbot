@@ -2,20 +2,15 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useUserAuth } from "../context/UserAuthContext";
 import toast from "react-hot-toast";
-import { FiShare2, FiCopy, FiGift } from "react-icons/fi";
+import { FiShare2, FiCopy, FiGift, FiLink, FiUserPlus } from "react-icons/fi";
 import Sidebar from "../Components/sidebar";
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  doc,
-  getDoc,
-} from "firebase/firestore";
+import Header from "../Components/Header";
+import { BsPeople } from "react-icons/bs";
+import { collection, doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase/config";
 
 const Ref = () => {
-  const { user, userDetails } = useUserAuth();
+  const { user } = useUserAuth();
   const [copying, setCopying] = useState(false);
   const [referralData, setReferralData] = useState(null);
 
@@ -24,21 +19,16 @@ const Ref = () => {
       if (!user?.uid) return;
 
       try {
-        const referralsRef = collection(db, "referrals");
-        const docRef = doc(referralsRef, user.uid);
+        const docRef = doc(collection(db, "referrals"), user.uid);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
-          setReferralData({
-            id: docSnap.id,
-            ...docSnap.data(),
-          });
+          setReferralData({ id: docSnap.id, ...docSnap.data() });
         }
       } catch (error) {
         console.error("Error fetching referral data:", error);
         toast.error("Failed to load referral data");
       }
     };
-
     fetchReferralData();
   }, [user]);
 
@@ -55,170 +45,155 @@ const Ref = () => {
       setCopying(false);
     }
   };
-
+  const steps = [
+    {
+      icon: <FiLink className="text-[#FF4D4F] text-xl" />,
+      title: "Step 1",
+      description: "Share your unique referral link with friends",
+    },
+    {
+      icon: <FiUserPlus className="text-[#FF4D4F] text-xl" />,
+      title: "Step 2",
+      description: "Friends sign up using your referral link",
+    },
+    {
+      icon: <FiGift className="text-[#FF4D4F] text-xl" />,
+      title: "Step 3",
+      description: "Both of you receive 5000 coins instantly",
+    },
+  ];
   return (
-    <div className="min-h-screen bg-cards p-4 sm:p-6 md:p-8">
+    <div className="flex h-screen bg-[#141414]">
       <Sidebar />
-      <div className="max-w-7xl mx-auto">
-        <motion.h1
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-3xl font-Cerebri font-bold text-primary mb-8"
-        >
-          Referral Program
-        </motion.h1>
-
-        {/* Referral Stats Card */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8 bg-cards3 rounded-xl p-6 shadow-lg"
-        >
-          <div className="flex items-center gap-4 mb-6">
-            <div className="p-3 bg-accent bg-opacity-20 rounded-lg">
-              <FiGift className="text-accent text-xl" />
-            </div>
-            <h2 className="text-xl font-semibold text-primary">
-              Your Referral Stats
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-cards2 p-4 rounded-lg">
-              <div className="text-cardtext mb-2">Total Referrals</div>
-              <div className="text-2xl font-bold text-primary">
-                {referralData?.totalReferrals || 0}
-              </div>
-            </div>
-            <div className="bg-cards2 p-4 rounded-lg">
-              <div className="text-cardtext mb-2">Total Earnings</div>
-              <div className="text-2xl font-bold text-accent">
-                {referralData?.totalEarnings?.toLocaleString() || 0} coins
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-4 text-sm text-cardtext">
-            Last updated:{" "}
-            {referralData?.createdAt
-              ? new Date(referralData.createdAt).toLocaleDateString()
-              : "N/A"}
-          </div>
-        </motion.div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Main Referral Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
+      <div className="flex-1 flex flex-col">
+        <Header />
+        <div className="p-6 max-w-7xl mx-auto">
+          <motion.h1
+            initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-cards3 rounded-xl p-6 shadow-lg"
+            className="text-3xl font-bold text-white mb-6"
           >
-            <div className="flex items-center gap-4 mb-6">
-              <div className="p-3 bg-accent bg-opacity-20 rounded-lg">
-                <FiShare2 className="text-accent text-xl" />
-              </div>
-              <h2 className="text-xl font-semibold text-primary">
-                Your Referral Link
+            Referral Program
+          </motion.h1>
+
+          {/* Referral Stats */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+            <div className="bg-[#25262B] p-6 rounded-xl flex flex-col">
+              <h2 className="text-white text-lg font-medium mb-4">
+                My Referral Stats
               </h2>
+              <div className="flex justify-between">
+                <div className="flex items-center gap-3">
+                  <BsPeople className="text-[#FF4D4F] text-3xl" />
+                  <div>
+                    <p className="text-gray-400 text-sm">Total Referrals</p>
+                    <p className="text-white text-2xl font-bold">
+                      {referralData?.totalReferrals || 4}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <FiGift className="text-[#FF4D4F] text-3xl" />
+                  <div>
+                    <p className="text-gray-400 text-sm">Total Earnings</p>
+                    <p className="text-white text-2xl font-bold">
+                      {referralData?.totalEarnings || 0} points
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div className="space-y-4">
+            {/* Referral Link */}
+            <div className="bg-[#25262B] p-6 rounded-xl">
+              <h2 className="text-white text-lg font-medium mb-4">
+                Share Referral Link
+              </h2>
               <div className="flex items-center gap-3">
                 <input
                   type="text"
                   value={referralLink}
                   readOnly
-                  className="flex-1 bg-cards2 text-secondary px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
+                  className="flex-1 bg-[#1E1F22] text-gray-300 px-4 py-3 rounded-lg focus:outline-none"
                 />
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                <button
                   onClick={copyToClipboard}
-                  className={`px-6 py-3 bg-accent text-white rounded-lg font-medium 
-                    flex items-center gap-2 transition-colors hover:bg-opacity-90 
-                    ${copying ? "opacity-75" : ""}`}
+                  className="px-5 py-3 bg-[#FF4D4F] text-white rounded-lg font-medium flex items-center gap-2 hover:bg-opacity-90"
                 >
-                  <FiCopy className="text-lg" />
-                  {copying ? "Copying..." : "Copy"}
-                </motion.button>
+                  <FiCopy /> {copying ? "Copying..." : "Copy"}
+                </button>
               </div>
             </div>
-          </motion.div>
 
-          {/* Rewards Info Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="bg-cards3 rounded-xl p-6 shadow-lg"
-          >
-            <div className="flex items-center gap-4 mb-6">
-              <div className="p-3 bg-accent bg-opacity-20 rounded-lg">
-                <FiGift className="text-accent text-xl" />
-              </div>
-              <h2 className="text-xl font-semibold text-primary">Rewards</h2>
+            {/* Rewards */}
+            <div className="bg-[#25262B] p-6 rounded-xl">
+              <h2 className="text-white text-lg font-medium mb-4">Rewards</h2>
+              <p className="text-gray-400 text-sm mb-2">
+                For every friend you invite:
+              </p>
+              <ul className="text-white text-sm space-y-1">
+                <li>
+                  • You receive{" "}
+                  <span className="text-[#FF4D4F] font-bold">5,000 coins</span>
+                </li>
+                <li>
+                  • Your friend receives{" "}
+                  <span className="text-[#FF4D4F] font-bold">5,000 coins</span>
+                </li>
+              </ul>
             </div>
+          </div>
 
-            <div className="space-y-4">
-              <div className="bg-cards2 p-4 rounded-lg">
-                <p className="text-cardtext leading-relaxed">
-                  For every friend you invite:
-                </p>
-                <ul className="mt-3 space-y-2">
-                  <li className="flex items-center gap-2 text-cardtext">
-                    <span className="text-accent">•</span>
-                    You receive{" "}
-                    <span className="text-accent font-semibold">
-                      5,000 coins
-                    </span>
-                  </li>
-                  <li className="flex items-center gap-2 text-cardtext">
-                    <span className="text-accent">•</span>
-                    Your friend receives{" "}
-                    <span className="text-accent font-semibold">
-                      5,000 coins
-                    </span>
-                  </li>
-                </ul>
+          {/* How It Works */}
+          <div className="bg-[#25262B] rounded-lg  p-6">
+            <h2 className="text-white text-lg font-medium mb-6">
+              How It Works
+            </h2>
+
+            <div className="relative  flex justify-between items-center">
+              {steps.map((step, index) => (
+                <div
+                  key={index}
+                  className="relative flex flex-col items-center z-10"
+                >
+                  <div className="w-10 h-10 rounded-full bg-[#FF4D4F]/10 flex items-center justify-center mb-3">
+                    {step.icon}
+                  </div>
+                  <p className="text-white text-sm font-medium mb-1">
+                    {step.title}
+                  </p>
+                  <p className="text-gray-400 text-sm text-center max-w-[150px]">
+                    {step.description}
+                  </p>
+                </div>
+              ))}
+
+              {/* Connection lines */}
+              <div className="absolute top-5 left-0 w-full h-[2px] bg-[#FF4D4F]/20 -z-0">
+                <div className="absolute top-0 left-[16.66%] right-[16.66%] h-full bg-[#FF4D4F]" />
               </div>
+            </div>
+          </div>
 
-              <p className="text-dimtext text-sm">
-                Share your referral link with friends to start earning rewards.
-                Rewards are credited when your friend signs up and completes
-                verification.
+          <div className="bg-[#25262B] p-6 rounded-xl my-6">
+            <h2 className="text-white text-lg font-medium mb-4">Activities</h2>
+            <p className="text-gray-400 text-sm mb-2">
+              Collected referral points:
+            </p>
+            <div className="text-white text-sm space-y-2">
+              <p>
+                2025-01-05 09:23:12 - Wallet:{" "}
+                <span className="text-[#FF4D4F]">ayg7f390fu3fu6</span> - Points:{" "}
+                <span className="text-[#FF4D4F]">5,000</span>
+              </p>
+              <p>
+                2025-01-05 09:23:12 - Wallet:{" "}
+                <span className="text-[#FF4D4F]">ayg7f390fu3fu6</span> - Points:{" "}
+                <span className="text-[#FF4D4F]">5,000</span>
               </p>
             </div>
-          </motion.div>
-        </div>
-
-        {/* How It Works Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="mt-8 bg-cards3 rounded-xl p-6 shadow-lg"
-        >
-          <h2 className="text-xl font-semibold text-primary mb-4">
-            How It Works
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              {
-                step: "1",
-                text: "Share your unique referral link with friends",
-              },
-              { step: "2", text: "Friends sign up using your referral link" },
-              { step: "3", text: "Both of you receive 5,000 coins instantly" },
-            ].map((item) => (
-              <div key={item.step} className="bg-cards2 p-4 rounded-lg">
-                <div className="text-accent font-bold mb-2">
-                  Step {item.step}
-                </div>
-                <p className="text-cardtext">{item.text}</p>
-              </div>
-            ))}
           </div>
-        </motion.div>
+        </div>
       </div>
     </div>
   );

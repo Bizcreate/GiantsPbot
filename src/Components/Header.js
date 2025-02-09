@@ -37,9 +37,9 @@ const Header = () => {
     <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className="fixed top-0 left-0 right-0 bg-cards/80 backdrop-blur-md z-50 px-6 py-4"
+      className="fixed top-0 left-0 right-0 z-50 px-6 py-4"
     >
-      <div className="max-w-7xl mx-auto flex justify-between items-center">
+      <div className="mx-auto flex justify-between items-center">
         <motion.div
           whileHover={{ scale: 1.05 }}
           className="text-primary text-2xl font-Syne font-bold"
@@ -52,7 +52,7 @@ const Header = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setShowWalletOptions(!showWalletOptions)}
-            className="flex items-center gap-2 border border-accent px-4 py-2 rounded-lg 
+            className="flex items-center gap-2 border border-gray-600 px-4 py-2 rounded-lg 
               text-gray-200 font-medium transition-all duration-200 hover:bg-accent/20"
           >
             <FaWallet className="text-lg" />
