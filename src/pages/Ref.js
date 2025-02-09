@@ -63,7 +63,7 @@ const Ref = () => {
     },
   ];
   return (
-    <div className="flex h-screen bg-[#141414]">
+    <div className="flex h-screen bg-lightgray">
       <Sidebar />
       <div className="flex-1 flex flex-col">
         <Header />
@@ -78,7 +78,7 @@ const Ref = () => {
 
           {/* Referral Stats */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-            <div className="bg-[#25262B] p-6 rounded-xl flex flex-col">
+            <div className="bg-box2 p-6 rounded-xl flex flex-col">
               <h2 className="text-white text-lg font-medium mb-4">
                 My Referral Stats
               </h2>
@@ -105,7 +105,7 @@ const Ref = () => {
             </div>
 
             {/* Referral Link */}
-            <div className="bg-[#25262B] p-6 rounded-xl">
+            <div className="bg-box2 p-6 rounded-xl">
               <h2 className="text-white text-lg font-medium mb-4">
                 Share Referral Link
               </h2>
@@ -126,7 +126,7 @@ const Ref = () => {
             </div>
 
             {/* Rewards */}
-            <div className="bg-[#25262B] p-6 rounded-xl">
+            <div className="bg-box2 p-6 rounded-xl">
               <h2 className="text-white text-lg font-medium mb-4">Rewards</h2>
               <p className="text-gray-400 text-sm mb-2">
                 For every friend you invite:
@@ -145,7 +145,7 @@ const Ref = () => {
           </div>
 
           {/* How It Works */}
-          <div className="bg-[#25262B] rounded-lg  p-6">
+          <div className="border border-newborder rounded-lg  p-6">
             <h2 className="text-white text-lg font-medium mb-6">
               How It Works
             </h2>
@@ -175,7 +175,7 @@ const Ref = () => {
             </div>
           </div>
 
-          <div className="bg-[#25262B] p-6 rounded-xl my-6">
+          <div className="border border-newborder p-6 rounded-xl my-6">
             <h2 className="text-white text-lg font-medium mb-4">Activities</h2>
             <p className="text-gray-400 text-sm mb-2">
               Collected referral points:

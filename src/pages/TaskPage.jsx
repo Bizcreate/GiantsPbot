@@ -138,7 +138,7 @@ const TaskPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-cards p-4 sm:p-6 md:p-8">
+    <div className="min-h-screen bg-black p-4 sm:p-6 md:p-8">
       <Sidebar />
       <div className="max-w-7xl mx-auto">
         <Header />
@@ -174,7 +174,7 @@ const TaskPage = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="bg-cards3 p-6 rounded-xl shadow-lg 
+              className="bg-cards2 p-6 rounded-xl shadow-lg 
                        hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
             >
               <div className="flex justify-between items-start mb-4 flex-wrap gap-2">

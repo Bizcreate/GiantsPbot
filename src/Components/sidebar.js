@@ -52,7 +52,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="fixed left-0 top-0 h-full z-10000 w-64 bg-cards border-r border-borders2 p-4">
+    <div className="fixed left-0 top-0 h-full z-10000 w-64 bg-lightgray border-r border-borders2 p-4">
       <div className="flex flex-col h-full">
         <div className="mb-16 px-4"></div>
 

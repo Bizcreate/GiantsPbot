@@ -4,15 +4,26 @@ const { m } = require("framer-motion");
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
+    backgroundImage: {
+      "space-mission": "url('/public/space mission.png')",
+      "solar-system": "url('/public/solarsystem.png')",
+    },
     extend: {
       colors: {
         primary: "#ffffffeb",
         secondary: "#BABABA",
         accent: "#fe2e00",
+        lightgray: "#0D0D0D",
+        newborder: "#373737",
+        newborder2: "#6D6C6C",
+        box1: "#2D2D2D",
+        box2: "#1F1F1F",
+        box3: "#3B3B3B",
         // accent: "#ff9a90",
         cards: "#1f2023",
         // cards: "#a4a4a433",
         cards2: "#a4a4a421",
+       
         cards3: "#2b2b2be2",
         hoverbg: "#8a8a8a",
         headerCard: "#1f2023",

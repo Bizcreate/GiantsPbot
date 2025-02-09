@@ -66,7 +66,7 @@ const Leaderboard = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: position * 0.2 }}
           whileHover={{ scale: 1.05 }}
-          className={`bg-cards3 rounded-xl p-6 relative overflow-hidden ${
+          className={`bg-box3 rounded-xl p-14 h-[700px] w-full  relative overflow-hidden ${
             position === 1 ? "border-2 border-yellow-500" : ""
           }`}
         >
@@ -102,7 +102,7 @@ const Leaderboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-cards p-4 sm:p-6 md:p-8">
+    <div className="min-h-screen bg-lightgray p-4 sm:p-6 md:p-8">
       <div className="max-w-7xl mx-auto">
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
@@ -118,7 +118,7 @@ const Leaderboard = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-cards3 p-6 rounded-xl mb-8"
+            className="bg-box2 p-6 rounded-xl mb-8"
           >
             <div className="flex flex-col gap-6">
               <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
@@ -192,12 +192,10 @@ const Leaderboard = () => {
 
         {/* Top 3 Users */}
 
-        {/* Other Users List */}
-        <div className="p-6 rounded-xl">
-          <h2 className="text-white text-xl font-semibold mb-4">Top 10</h2>
-
+        <h2 className="text-white text-xl font-semibold mb-4">Top 10</h2>
+        <div className="p-6 rounded-xl bg-box2">
           {/* Top 3 Users Podium */}
-          <div className="relative flex items-end justify-center gap-6 mb-12 pt-16">
+          <div className="relative flex items-end justify-center gap-6 pt-16">
             {users.slice(0, 3).map((user, index) => {
               const position = index === 0 ? 2 : index === 1 ? 1 : 3;
               const heightClass =
@@ -211,7 +209,7 @@ const Leaderboard = () => {
               return (
                 <div
                   key={user.id}
-                  className={`relative flex flex-col items-center justify-end ${heightClass} w-[180px]`}
+                  className={`relative flex flex-col items-center  justify-end ${heightClass} w-[180px]`}
                   style={{
                     zIndex: position === 1 ? 2 : 1,
                     order: position === 2 ? 0 : position === 1 ? 1 : 2,
@@ -227,18 +225,18 @@ const Leaderboard = () => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className=" rounded-xl overflow-hidden"
+            className="rounded-xl overflow-hidden "
           >
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto ">
               <table className="w-full">
-                <tbody className="flex flex-col space-y-3 py-4">
+                <tbody className="flex flex-col px-32 space-y-3 py-4">
                   {users.slice(3).map((user, index) => (
                     <motion.tr
                       key={user.id}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.05 }}
-                      className={`hover:bg-gray-700 border flex flex-row justify-between items-center  border-[#484545] transition-colors ${
+                      className={`hover:bg-gray-700 border flex flex-row justify-between items-center   border-newborder2 transition-colors ${
                         user.id === userDetails?.uid
                           ? "bg-red-500 bg-opacity-10"
                           : ""

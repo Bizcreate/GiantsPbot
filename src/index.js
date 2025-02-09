@@ -20,6 +20,7 @@ import Search from "./pages/admin/Search";
 import Statistics from "./pages/admin/Statistics";
 import AdminRanks from "./pages/admin/AdminRanks";
 import AdminYoutube from "./pages/admin/AdminYoutube";
+import LandingPage from "./Components/Landing";
 import AlphaDogs from "./pages/AlphaDogs";
 import BroadcastMessage from "./Components/BroadcastMessage";
 import SignIn from "./pages/auth/SignIn";
@@ -44,6 +45,8 @@ const router = createBrowserRouter([
     element: <Home />,
     errorElement: <ErrorCom />,
   },
+  { path: "/landing", element: <LandingPage /> },
+
   {
     path: "/signin",
     element: <SignIn />,

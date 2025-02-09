@@ -135,7 +135,7 @@ const AlphaDogs = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#121212] font-Syne">
+    <div className="min-h-screen bg-black bg-solar-system font-Syne">
       <div
         className="fixed inset-0 z-0"
         style={{
@@ -151,12 +151,12 @@ const AlphaDogs = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="carousel-container py-8"
+          className="carousel-container  py-8"
         >
           <h2 className="text-primary text-3xl font-semibold mb-8">Home</h2>
           <Slider {...sliderSettings}>
             {infoCards.map((card, index) => (
-              <div key={index} className="px-4">
+              <div key={index} className="px-4 ">
                 <InfoCard {...card} />
               </div>
             ))}

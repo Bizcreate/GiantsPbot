@@ -1,5 +1,11 @@
 import React from "react";
-import { FaTwitter, FaTelegram, FaDiscord, FaMedium, FaGithubAlt } from "react-icons/fa";
+import {
+  FaTwitter,
+  FaTelegram,
+  FaDiscord,
+  FaMedium,
+  FaGithubAlt,
+} from "react-icons/fa";
 import { motion } from "framer-motion";
 
 const Footer = () => {
@@ -8,18 +14,31 @@ const Footer = () => {
   const socialLinks = [
     { icon: FaTwitter, url: "https://x.com/giants_planet", title: "Twitter" },
     { icon: FaTelegram, url: "https://t.me/giantsplanet", title: "Telegram" },
-    { icon: FaDiscord, url: "https://discord.com/invite/giants-planet", title: "Discord" },
-    { icon: FaMedium, url: "https://medium.com/@giantsplanet", title: "Medium" },
-    { icon: FaGithubAlt, url: "https://giants-planet.gitbook.io/diary-of-an-explorer-en/introduction/giants-planet", title: "Gitbook" }
+    {
+      icon: FaDiscord,
+      url: "https://discord.com/invite/giants-planet",
+      title: "Discord",
+    },
+    {
+      icon: FaMedium,
+      url: "https://medium.com/@giantsplanet",
+      title: "Medium",
+    },
+    {
+      icon: FaGithubAlt,
+      url: "https://giants-planet.gitbook.io/diary-of-an-explorer-en/introduction/giants-planet",
+      title: "Gitbook",
+    },
   ];
 
   return (
     <>
       {/* Spacer div to prevent content from being hidden */}
       <div className="h-16" /> {/* Adjust height to match footer height */}
-      
-      <nav className="fixed bottom-0 left-0 w-full backdrop-blur-md border-t bg-cards border-r border-borders2 z-50">
-        <div className="flex flex-row justify-between items-center px-7 h-16"> {/* Added fixed height */}
+      <nav className="fixed bottom-0 left-0 w-full backdrop-blur-md border-t bg-lightgray border-r border-borders2 z-50">
+        <div className="flex flex-row justify-between items-center px-7 h-16">
+          {" "}
+          {/* Added fixed height */}
           <div className="text-sm text-[#666666]">
             © {currentYear} 2MR Labs PTE. LTD.
           </div>

@@ -260,7 +260,7 @@ const UserDashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-cards p-4 sm:p-6 md:p-8">
+    <div className="min-h-screen bg-black p-4 sm:p-6 md:p-8">
       <Sidebar />
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
@@ -289,7 +289,7 @@ const UserDashboard = () => {
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="flex p-5 rounded-xl bg-cards3 mb-8"
+          className="flex p-5 rounded-xl bg-cards2 mb-8"
         >
           <div className="relative group">
             <img
@@ -299,7 +299,7 @@ const UserDashboard = () => {
             />
             <button
               onClick={() => setIsEditingPicture(true)}
-              className="absolute bottom-0 right-0 bg-accent text-white p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+              className="absolute top-0 right-0 bg-accent text-white p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200"
             >
               <FiCamera size={20} />
             </button>
@@ -347,20 +347,36 @@ const UserDashboard = () => {
               animate={{ opacity: 1 }}
               className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
             >
-              <div className="bg-cards3 p-6 rounded-xl shadow-xl max-w-md w-full mx-4">
-                <h3 className="text-lg font-semibold text-primary mb-4">
-                  Update Profile Picture
-                </h3>
-                <div className="space-y-4">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileUpload}
-                    className="w-full bg-cards2 text-primary px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-accent"
-                  />
-                  <p className="text-sm text-secondary">
-                    Supported formats: JPG, PNG, GIF, WebP (Max size: 5MB)
-                  </p>
+              <div className="bg-cards3 w-72 p-6 rounded-xl shadow-xl max-w-md  mx-4">
+                <div className="flex flex-col justify-center items-center">
+                  <h3 className="text-lg font-semibold text-primary mb-4">
+                    Profile Picture
+                  </h3>
+                  <div className="p-5 rounded-3xl bg-[#1F1F1F]">
+                    <img
+                      src={
+                        userDetails?.avatarUrl ||
+                        "https://via.placeholder.com/150"
+                      }
+                      alt="Profile"
+                      className="w-32 h-32 rounded-full object-cover border-4 border-accent shadow-lg"
+                    />
+                  </div>
+                  <div className="space-y-4">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileUpload}
+                      className="hidden"
+                      id="fileUpload"
+                    />
+                    <label
+                      htmlFor="fileUpload"
+                      className="px-4 py-2 border border-gray-400 rounded-md text-white transition cursor-pointer inline-block"
+                    >
+                      Change Photo
+                    </label>
+                  </div>
                 </div>
                 <div className="flex justify-end gap-2 mt-4">
                   <button
@@ -380,7 +396,7 @@ const UserDashboard = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-cards3 rounded-xl p-6 mb-8 shadow-lg"
+          className="bg-cards2 rounded-xl p-6 mb-8 shadow-lg"
         >
           <h2 className="text-xl font-semibold text-primary mb-4">
             Profile Information
@@ -429,7 +445,7 @@ const UserDashboard = () => {
                           setTempData({ ...tempData, [key]: e.target.value });
                         }}
                         disabled={updateLoading}
-                        className={`bg-cards2 text-primary px-3 py-1 rounded-md flex-1 
+                        className={`bg-cards22 text-primary px-3 py-1 rounded-md flex-1 
                           focus:outline-none focus:ring-2 focus:ring-accent 
                           disabled:opacity-50 ${error ? "border-red-500" : ""}`}
                       />
@@ -510,7 +526,7 @@ const UserDashboard = () => {
                     )}
                   </div>
 
-                  <div className="relative w-full h-4 bg-cards2 rounded-full overflow-hidden">
+                  <div className="relative w-full h-4 bg-cards22 rounded-full bg-cards overflow-hidden">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${progress}%` }}
