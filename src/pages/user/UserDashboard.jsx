@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { FiEdit2, FiCheck, FiX, FiCamera, FiLogOut } from "react-icons/fi";
 import { RiWalletLine, RiTaskLine, RiBarChartLine } from "react-icons/ri";
 import { useUserAuth } from "../../context/UserAuthContext";
+import Sidebar from "../../Components/sidebar";
 import {
   doc,
   updateDoc,
@@ -259,6 +260,7 @@ const UserDashboard = () => {
 
   return (
     <div className="min-h-screen bg-cards p-4 sm:p-6 md:p-8">
+      <Sidebar />
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <motion.h1

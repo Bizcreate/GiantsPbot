@@ -8,7 +8,7 @@ const AuthLayout = () => {
     <div className="min-h-screen flex flex-col">
       <div>
         <main className="flex-1 ">
-          <Sidebar />
+          {/* <Sidebar /> */}
           <Outlet />
         </main>
       </div>

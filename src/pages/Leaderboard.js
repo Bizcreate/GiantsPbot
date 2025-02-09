@@ -7,6 +7,7 @@ import { RANKS, getRank } from "../constants/ranks";
 import { FaCrown, FaMedal } from "react-icons/fa";
 import { IoTrophyOutline } from "react-icons/io5";
 import PageSpinner from "../Components/Spinner";
+import Sidebar from "../Components/sidebar";
 
 const Leaderboard = () => {
   const [users, setUsers] = useState([]);
@@ -56,37 +57,40 @@ const Leaderboard = () => {
     const { Icon, color } = icons[position];
 
     return (
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: position * 0.2 }}
-        whileHover={{ scale: 1.05 }}
-        className={`bg-cards3 rounded-xl p-6 relative overflow-hidden ${
-          position === 1 ? "border-2 border-yellow-500" : ""
-        }`}
-      >
-        <div className="absolute top-2 right-2">
-          <Icon className={`text-3xl ${color}`} />
-        </div>
-        <div className="flex flex-col items-center gap-3">
-          <img
-            src={user.avatarUrl || "https://via.placeholder.com/100"}
-            alt={user.username}
-            className="w-20 h-20 rounded-full object-cover border-4 border-accent"
-          />
-          <div className="text-center">
-            <h3 className="text-xl font-semibold text-primary">
-              {user.username}
-            </h3>
-            <p className="text-accent font-bold">
-              {user.balance.toLocaleString()} coins
-            </p>
-            <p className="text-secondary text-sm">
-              {getRank(user.balance).name}
-            </p>
+      <>
+        <Sidebar />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: position * 0.2 }}
+          whileHover={{ scale: 1.05 }}
+          className={`bg-cards3 rounded-xl p-6 relative overflow-hidden ${
+            position === 1 ? "border-2 border-yellow-500" : ""
+          }`}
+        >
+          <div className="absolute top-2 right-2">
+            <Icon className={`text-3xl ${color}`} />
           </div>
-        </div>
-      </motion.div>
+          <div className="flex flex-col items-center gap-3">
+            <img
+              src={user.avatarUrl || "https://via.placeholder.com/100"}
+              alt={user.username}
+              className="w-20 h-20 rounded-full object-cover border-4 border-accent"
+            />
+            <div className="text-center">
+              <h3 className="text-xl font-semibold text-primary">
+                {user.username}
+              </h3>
+              <p className="text-accent font-bold">
+                {user.balance.toLocaleString()} coins
+              </p>
+              <p className="text-secondary text-sm">
+                {getRank(user.balance).name}
+              </p>
+            </div>
+          </div>
+        </motion.div>
+      </>
     );
   };
 

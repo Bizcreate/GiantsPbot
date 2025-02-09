@@ -147,6 +147,7 @@ const AlphaDogs = () => {
       />
 
       {/* <Header /> */}
+      <Sidebar />
 
       <main className="relative z-10 pt-32 px-8 pb-20 max-w-7xl mx-auto space-y-24">
         <motion.div

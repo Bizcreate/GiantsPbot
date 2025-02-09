@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useUserAuth } from "../context/UserAuthContext";
 import toast from "react-hot-toast";
 import { FiShare2, FiCopy, FiGift } from "react-icons/fi";
+import Sidebar from "../Components/sidebar";
 import {
   collection,
   query,
@@ -57,6 +58,7 @@ const Ref = () => {
 
   return (
     <div className="min-h-screen bg-cards p-4 sm:p-6 md:p-8">
+      <Sidebar />
       <div className="max-w-7xl mx-auto">
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
