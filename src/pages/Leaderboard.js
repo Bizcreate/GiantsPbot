@@ -50,53 +50,6 @@ const Leaderboard = () => {
     }
   };
 
-  // const TopThreeCard = ({ user, position }) => {
-  //   const icons = {
-  //     1: { Icon: FaCrown, color: "text-yellow-500" },
-  //     2: { Icon: FaMedal, color: "text-gray-400" },
-  //     3: { Icon: IoTrophyOutline, color: "text-amber-700" },
-  //   };
-  //   const { Icon, color } = icons[position];
-
-  //   return (
-  //     <>
-  //       <Sidebar />
-  //       <motion.div
-  //         initial={{ opacity: 0, y: 20 }}
-  //         animate={{ opacity: 1, y: 0 }}
-  //         transition={{ delay: position * 0.2 }}
-  //         whileHover={{ scale: 1.05 }}
-  //         className={`bg-box3 rounded-xl p-14 h-96 w-full  relative overflow-hidden ${
-  //           position === 1 ? "border-2 border-yellow-500" : ""
-  //         }`}
-  //       >
-  //         <Header />
-  //         <div className="absolute top-2 right-2">
-  //           <Icon className={`text-3xl ${color}`} />
-  //         </div>
-  //         <div className="flex flex-col items-center gap-3">
-  //           <img
-  //             src={user.avatarUrl || "https://via.placeholder.com/100"}
-  //             alt={user.username}
-  //             className="w-20 h-20 rounded-full object-cover border-4 border-accent"
-  //           />
-  //           <div className="text-center h-80">
-  //             <h3 className="text-xl font-semibold text-primary">
-  //               {user.username}
-  //             </h3>
-  //             <p className="text-accent font-bold">
-  //               {user.balance.toLocaleString()} coins
-  //             </p>
-  //             <p className="text-secondary text-sm">
-  //               {getRank(user.balance).name}
-  //             </p>
-  //           </div>
-  //         </div>
-  //       </motion.div>
-  //     </>
-  //   );
-  // };
-
   const TopThreeCard = ({ user, position }) => {
     const colors = {
       1: "text-yellow-500",
@@ -105,38 +58,63 @@ const Leaderboard = () => {
     };
 
     return (
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: position * 0.2 }}
-        whileHover={{ scale: 1.05 }}
-        className={`bg-box3 rounded-xl p-6 w-full h-[200px] relative overflow-hidden flex flex-col items-center justify-end`}
-      >
-        {/* Crown for position 1 */}
-        {position === 1 && (
-          <FaCrown className="absolute -top-5 text-yellow-500 text-4xl" />
-        )}
-
-        <img
-          src={user.avatarUrl || "https://via.placeholder.com/100"}
-          alt={user.username}
-          className="w-16 h-16 rounded-full object-cover border-4 border-accent"
-        />
-
-        <h3 className="text-lg font-semibold text-primary">{user.username}</h3>
-        <p className="text-accent font-bold">
-          {user.balance.toLocaleString()} coins
-        </p>
-
-        {/* Position Number */}
-        <div
-          className={`absolute top-2 right-2 text-3xl font-bold ${colors[position]}`}
+      <>
+        <Sidebar />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: position * 0.2 }}
+          whileHover={{ scale: 1.05 }}
+          className={`bg-box3 rounded-xl p-6 w-full h-[200px] relative overflow-hidden flex flex-col items-center justify-end`}
         >
-          {position}
-        </div>
-      </motion.div>
+          {/* Crown for position 1 */}
+          {position === 1 && (
+            <FaCrown className="absolute -top-5 text-yellow-500 text-4xl" />
+          )}
+
+          <img
+            src={user.avatarUrl || "https://via.placeholder.com/100"}
+            alt={user.username}
+            className="w-16 h-16 rounded-full object-cover border-4 border-accent"
+          />
+
+          <h3 className="text-lg font-semibold text-primary">
+            {user.username}
+          </h3>
+          <p className="text-accent font-bold">
+            {user.balance.toLocaleString()} coins
+          </p>
+
+          {/* Position Number */}
+          <div
+            className={`absolute top-2 right-2 text-3xl font-bold ${colors[position]}`}
+          >
+            {position}
+          </div>
+        </motion.div>
+      </>
     );
   };
+
+  // const Leaderboard = ({ users }) => (
+  //   <div className="relative flex items-end justify-center gap-6 py-10">
+  //     {users.slice(0, 3).map((user, index) => (
+  //       <div
+  //         key={user.id}
+  //         className="relative flex flex-col items-center w-1/4"
+  //         style={{
+  //           zIndex: index === 1 ? 2 : 1,
+  //           order: index === 1 ? 1 : index === 0 ? 0 : 2,
+  //         }}
+  //       >
+  //         <TopThreeCard
+  //           user={user}
+  //           position={index === 1 ? 1 : index === 0 ? 2 : 3}
+  //         />
+  //       </div>
+  //     ))}
+  //   </div>
+  // );
 
   if (loading) {
     return <PageSpinner />;

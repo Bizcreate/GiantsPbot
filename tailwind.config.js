@@ -6,6 +6,7 @@ module.exports = {
   theme: {
     backgroundImage: {
       "space-mission": "url('/public/space mission.png')",
+      "space-mission-sm": "url('/public/space-mission-sm.png')",
       "solar-system": "url('/public/solarsystem.png')",
     },
     extend: {
@@ -23,7 +24,7 @@ module.exports = {
         cards: "#1f2023",
         // cards: "#a4a4a433",
         cards2: "#a4a4a421",
-       
+
         cards3: "#2b2b2be2",
         hoverbg: "#8a8a8a",
         headerCard: "#1f2023",
