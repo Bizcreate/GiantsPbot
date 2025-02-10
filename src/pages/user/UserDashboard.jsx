@@ -29,6 +29,45 @@ const UserDashboard = () => {
   const [submissions, setSubmissions] = useState([]);
   const [isLoadingStats, setIsLoadingStats] = useState(true);
 
+  const ProfileModalContent = () => (
+    <div className="flex flex-col bg-newborder3 justify-center items-center">
+      <h3 className="text-lg font-semibold text-primary mb-4">
+        Profile Picture
+      </h3>
+      <div className="p-5 rounded-3xl bg-[#1F1F1F]">
+        <img
+          src={userDetails?.avatarUrl || "https://via.placeholder.com/150"}
+          alt="Profile"
+          className="w-32 h-32 rounded-full object-cover border-4 border-accent shadow-lg"
+        />
+      </div>
+      <div className="space-y-4">
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleFileUpload}
+          className="hidden"
+          id="fileUpload"
+        />
+        <label
+          htmlFor="fileUpload"
+          className="px-4 py-2 border border-gray-400 rounded-md text-white transition cursor-pointer inline-block"
+        >
+          Change Photo
+        </label>
+      </div>
+      <div className="flex justify-end gap-2 mt-4">
+        <button
+          onClick={() => setIsEditingPicture(false)}
+          className="px-4 py-2 text-secondary hover:text-primary transition-colors"
+          disabled={updateLoading}
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  );
+
   const [editing, setEditing] = useState({
     fullName: false,
     username: false,
@@ -294,19 +333,22 @@ const UserDashboard = () => {
           <div className="w-full">
             <div className="flex flex-row">
               <div className="relative w-36 md:w-40 group">
-                <img
-                  src={
-                    userDetails?.avatarUrl || "https://via.placeholder.com/150"
-                  }
-                  alt="Profile"
-                  className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-full object-cover border-2 sm:border-4 border-accent shadow-lg"
-                />
-                <button
-                  onClick={() => setIsEditingPicture(true)}
-                  className="absolute top-0 right-0 bg-accent text-white p-1 sm:p-2 md:p-2.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                >
-                  <FiCamera className="text-sm sm:text-base md:text-lg" />
-                </button>
+                <div className="relative inline-block group">
+                  <img
+                    src={
+                      userDetails?.avatarUrl ||
+                      "https://via.placeholder.com/150"
+                    }
+                    alt="Profile"
+                    className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-full object-cover border-2 sm:border-4 border-accent shadow-lg"
+                  />
+                  <button
+                    onClick={() => setIsEditingPicture(true)}
+                    className="absolute top-1 right-1 sm:top-1.5 sm:right-1.5 md:top-2 md:right-2 bg-accent text-white p-1 sm:p-2 md:p-2.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                  >
+                    <FiCamera className="text-sm sm:text-base md:text-lg" />
+                  </button>
+                </div>
               </div>
 
               <div className="px-6">
@@ -353,47 +395,21 @@ const UserDashboard = () => {
                 animate={{ opacity: 1 }}
                 className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
               >
-                <div className="bg-cards3 w-72 p-6 rounded-xl shadow-xl max-w-md  mx-4">
-                  <div className="flex flex-col justify-center items-center">
-                    <h3 className="text-lg font-semibold text-primary mb-4">
-                      Profile Picture
-                    </h3>
-                    <div className="p-5 rounded-3xl bg-[#1F1F1F]">
-                      <img
-                        src={
-                          userDetails?.avatarUrl ||
-                          "https://via.placeholder.com/150"
-                        }
-                        alt="Profile"
-                        className="w-32 h-32 rounded-full object-cover border-4 border-accent shadow-lg"
-                      />
-                    </div>
-                    <div className="space-y-4">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleFileUpload}
-                        className="hidden"
-                        id="fileUpload"
-                      />
-                      <label
-                        htmlFor="fileUpload"
-                        className="px-4 py-2 border border-gray-400 rounded-md text-white transition cursor-pointer inline-block"
-                      >
-                        Change Photo
-                      </label>
-                    </div>
-                  </div>
-                  <div className="flex justify-end gap-2 mt-4">
-                    <button
-                      onClick={() => setIsEditingPicture(false)}
-                      className="px-4 py-2 text-secondary hover:text-primary transition-colors"
-                      disabled={updateLoading}
-                    >
-                      Cancel
-                    </button>
-                  </div>
+                {/* Desktop View (md and larger) */}
+                <div className="hidden md:flex justify-center bg-cards3 w-72 p-6 rounded-xl shadow-xl max-w-md mx-4">
+                  <ProfileModalContent />
                 </div>
+
+                {/* Mobile View (less than md) - Slide up from bottom */}
+                <motion.div
+                  initial={{ y: "100%" }}
+                  animate={{ y: 0 }}
+                  exit={{ y: "100%" }}
+                  transition={{ type: "spring", stiffness: 100, damping: 15 }}
+                  className="md:hidden fixed bottom-0 left-0 right-0 bg-cards3 p-6 rounded-t-2xl shadow-xl w-full max-w-md mx-auto"
+                >
+                  <ProfileModalContent />
+                </motion.div>
               </motion.div>
             )}
           </div>

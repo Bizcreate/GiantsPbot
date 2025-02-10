@@ -103,7 +103,7 @@ const Leaderboard = () => {
 
   return (
     <div className="min-h-screen  bg-lightgray p-4 sm:p-6 md:p-8">
-      <div className="max-w-7xl pt-20 mx-auto">
+      <div className="xl:max-w-7xl max-w-4xl pt-20 mx-auto">
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -121,38 +121,42 @@ const Leaderboard = () => {
             className="bg-box2 p-6 rounded-xl mb-8"
           >
             <div className="flex flex-col gap-6">
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
+              <div className="grid grid-cols-1 items-start  sm:grid-cols-2 md:grid-cols-5 gap-4 text-center place-items-start md:place-items-normal">
                 <p className="text-secondary flex flex-col">
                   Current Rank:
-                  <span className="text-white font-bold">#{userRank}</span>
+                  <span className="text-white font-bold text-left md:text-center">#{userRank}</span>
                 </p>
-                <p className="text-secondary flex flex-col">
+                <p className="text-secondary text-start md:text-center flex flex-col">
                   Balance:
-                  <span className="text-white font-bold">
+                  <span className="text-white font-bold text-left md:text-center">
                     {userDetails.balance?.toLocaleString() || 0} coins
                   </span>
                 </p>
                 <p className="text-secondary flex flex-col">
                   Total Airdrops Earned:
-                  <span className="text-white font-bold">
-                    {userDetails.balance?.toLocaleString() || 0} USD
+                  <span className="text-white font-bold text-left md:text-center">
+                    {userDetails.totalAirdrops?.toLocaleString() || 0} USD
                   </span>
                 </p>
-                <div className="flex flex-col items-center">
-                  <p className="text-secondary">Unclaimed Points:</p>
-                  <span className="text-white font-bold">
-                    {userDetails.balance?.toLocaleString() || 0} PTS
-                  </span>
-                  <button className="w-24 h-10 text-white bg-red-600 rounded-xl mt-2">
+                <div className="flex flex-row md:flex-col justify-start items-center">
+                  <div className="flex flex-col justify-start">
+                    <p className="text-secondary text-start md:text-center">Unclaimed Points:</p>
+                    <span className="text-white font-bold text-start md:text-center">
+                      {userDetails.unclaimedPoints?.toLocaleString() || 0} PTS
+                    </span>
+                  </div>
+                  <button className="w-24 h-10 md:mx-0 mx-4 text-white bg-red-600 rounded-xl mt-2">
                     Claim
                   </button>
                 </div>
-                <div className="flex flex-col items-center">
-                  <p className="text-secondary">Unclaimed Airdrops:</p>
-                  <span className="text-white font-bold">
-                    {userDetails.balance?.toLocaleString() || 0} USD
-                  </span>
-                  <button className="w-24 h-10 text-white bg-red-600 rounded-xl mt-2">
+                <div className="flex flex-row md:flex-col items-center">
+                  <div className="flex flex-col justify-start">
+                    <p className="text-secondary  text-start md:text-center">Unclaimed Airdrops:</p>
+                    <span className="text-white font-bold text-left md:text-center">
+                      {userDetails.unclaimedAirdrops?.toLocaleString() || 0} USD
+                    </span>
+                  </div>
+                  <button className="w-24 h-10 md:mx-0 mx-4  text-white bg-red-600 rounded-xl mt-2">
                     Claim
                   </button>
                 </div>
@@ -172,15 +176,15 @@ const Leaderboard = () => {
             </div>
 
             <div className="border-t py-5 text-white border-[#686868] mt-4">
-              <ul className="flex flex-wrap justify-evenly gap-6 text-center">
-                <li className="flex items-center gap-2">
-                  <BiLike /> 0 Likes
-                </li>
+              <ul className="flex flex-wrap justify-between sm:justify-evenly gap-4 text-center text-sm">
                 <li className="flex items-center gap-2">
                   <BiHeart /> 0 Views
                 </li>
                 <li className="flex items-center gap-2">
-                  <BiRepeat /> 0 Repeats
+                  <BiLike /> 0 Likes
+                </li>
+                <li className="flex items-center gap-2">
+                  <BiRepeat /> 0 Reposts
                 </li>
                 <li className="flex items-center gap-2">
                   <BiComment /> 0 Replies
@@ -189,6 +193,7 @@ const Leaderboard = () => {
             </div>
           </motion.div>
         )}
+
 
         {/* Top 3 Users */}
 
@@ -237,8 +242,8 @@ const Leaderboard = () => {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.05 }}
                       className={`hover:bg-gray-700 border flex flex-row justify-between items-center   border-newborder2 transition-colors ${user.id === userDetails?.uid
-                          ? "bg-red-500 bg-opacity-10"
-                          : ""
+                        ? "bg-red-500 bg-opacity-10"
+                        : ""
                         }`}
                     >
                       <div>
