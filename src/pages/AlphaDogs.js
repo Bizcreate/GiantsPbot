@@ -16,6 +16,15 @@ const AlphaDogs = () => {
   const [partners, setPartners] = useState([]);
   const [partnersLoading, setPartnersLoading] = useState(true);
 
+  const [isMdScreen, setIsMdScreen] = useState(true);
+
+  useEffect(() => {
+    const checkScreenSize = () => setIsMdScreen(window.innerWidth >= 768);
+    checkScreenSize(); // Initial check
+    window.addEventListener("resize", checkScreenSize);
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
+
   useEffect(() => {
     const fetchAnnouncementsData = async () => {
       const { data, error } = await fetchAnnouncements();
@@ -147,21 +156,35 @@ const AlphaDogs = () => {
       />
       <Sidebar />
 
-      <main className="relative z-10 pt-32 px-8 pb-20 max-w-7xl mx-auto space-y-24">
+      <main className="relative z-10 pt-20 px-8 pb-20 xl:max-w-7xl max-w-4xl mx-auto space-y-24">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="carousel-container  py-8"
+          className="carousel-container py-8"
         >
           <h2 className="text-primary text-3xl font-semibold mb-8">Home</h2>
-          <Slider {...sliderSettings}>
-            {infoCards.map((card, index) => (
-              <div key={index} className="px-4 ">
-                <InfoCard {...card} />
-              </div>
-            ))}
-          </Slider>
+
+          {/* Conditionally render slider only on md+ screens */}
+          {isMdScreen ? (
+            <Slider {...sliderSettings}>
+              {infoCards.map((card, index) => (
+                <div key={index} className="px-4">
+                  <InfoCard {...card} />
+                </div>
+              ))}
+            </Slider>
+          ) : (
+            // Mobile layout
+            <div className="flex flex-col gap-6">
+              {infoCards.map((card, index) => (
+                <div key={index} className="px-4">
+                  <InfoCard {...card} />
+                </div>
+              ))}
+            </div>
+          )}
         </motion.div>
+
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -202,7 +225,7 @@ const AlphaDogs = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="space-y-8"
+          className="space-y-8 lg:block hidden"
         >
           <h2 className="text-primary text-3xl font-semibold mb-8">
             Our Partners
