@@ -133,7 +133,7 @@ const Header = () => {
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
             <BsWallet2 className="text-xl text-orange-500" />
-            <span className="font-medium text-sm">MetaMask</span>
+            <span className="font-medium text-white text-sm">MetaMask</span>
           </div>
           {metaMaskConnected && (
             <span className="text-xs px-2 py-1 bg-green-500/20 text-green-500 rounded-full">
@@ -157,7 +157,7 @@ const Header = () => {
           <button
             onClick={() => handleWalletConnection('metamask', 'connect')}
             disabled={metaMaskConnecting}
-            className="w-full px-3 py-1.5 text-xs bg-accent/20 rounded-lg hover:bg-accent/30 transition-colors"
+            className="w-full px-3 py-1.5 text-white text-xs bg-accent/20 rounded-lg hover:bg-accent/30 transition-colors"
           >
             {metaMaskConnecting ? (
               <div className="flex items-center justify-center gap-2">
@@ -176,7 +176,7 @@ const Header = () => {
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
             <IoWallet className="text-xl text-blue-500" />
-            <span className="font-medium text-sm">Altura</span>
+            <span className="font-medium text-white text-sm">Altura</span>
           </div>
           {alturaConnected && (
             <span className="text-xs px-2 py-1 bg-green-500/20 text-green-500 rounded-full">
@@ -200,7 +200,7 @@ const Header = () => {
           <button
             onClick={() => handleWalletConnection('altura', 'connect')}
             disabled={alturaConnecting}
-            className="w-full px-3 py-1.5 text-xs bg-accent/20 rounded-lg hover:bg-accent/30 transition-colors"
+            className="w-full px-3 py-1.5 text-xs bg-accent/20 rounded-lg text-white hover:bg-accent/30 transition-colors"
           >
             {alturaConnecting ? (
               <div className="flex items-center justify-center gap-2">
