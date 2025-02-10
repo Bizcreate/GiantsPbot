@@ -102,8 +102,8 @@ const Leaderboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-lightgray p-4 sm:p-6 md:p-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen  bg-lightgray p-4 sm:p-6 md:p-8">
+      <div className="max-w-7xl pt-20 mx-auto">
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -202,8 +202,8 @@ const Leaderboard = () => {
                 position === 1
                   ? "h-[220px]"
                   : position === 2
-                  ? "h-[180px]"
-                  : "h-[160px]";
+                    ? "h-[180px]"
+                    : "h-[160px]";
               const baseHeight = "h-[60px]"; // Ensures all bases align
 
               return (
@@ -236,11 +236,10 @@ const Leaderboard = () => {
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.05 }}
-                      className={`hover:bg-gray-700 border flex flex-row justify-between items-center   border-newborder2 transition-colors ${
-                        user.id === userDetails?.uid
+                      className={`hover:bg-gray-700 border flex flex-row justify-between items-center   border-newborder2 transition-colors ${user.id === userDetails?.uid
                           ? "bg-red-500 bg-opacity-10"
                           : ""
-                      }`}
+                        }`}
                     >
                       <div>
                         <td className="px-6 py-4 text-sm text-white">
