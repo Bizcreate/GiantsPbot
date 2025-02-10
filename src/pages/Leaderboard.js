@@ -66,7 +66,7 @@ const Leaderboard = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: position * 0.2 }}
           whileHover={{ scale: 1.05 }}
-          className={`bg-box3 rounded-xl p-6 w-full h-[200px] relative overflow-hidden flex flex-col items-center justify-end`}
+          className={`bg-box3 rounded-xl sm:p-6 p-3 w-full sm:h-52 h-48 relative overflow-hidden flex flex-col items-center justify-end`}
         >
           {/* Crown for position 1 */}
           {position === 1 && (
@@ -200,7 +200,7 @@ const Leaderboard = () => {
         <h2 className="text-white text-xl font-semibold mb-4">Top 10</h2>
         <div className="p-6 rounded-xl bg-box2">
           {/* Top 3 Users Podium */}
-          <div className="relative flex items-end justify-center gap-6 pt-16">
+          <div className="relative flex items-end justify-center md:px-32 gap-1 sm:gap-6 pt-16">
             {users.slice(0, 3).map((user, index) => {
               const position = index === 0 ? 2 : index === 1 ? 1 : 3;
               const heightClass =
@@ -214,7 +214,7 @@ const Leaderboard = () => {
               return (
                 <div
                   key={user.id}
-                  className={`relative flex flex-col items-center  justify-end ${heightClass}  w-1/4`}
+                  className={`relative flex flex-col items-center  justify-end ${heightClass}  w-1/3 `}
                   style={{
                     zIndex: position === 1 ? 2 : 1,
                     order: position === 2 ? 0 : position === 1 ? 1 : 2,
