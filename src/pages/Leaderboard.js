@@ -234,38 +234,37 @@ const Leaderboard = () => {
           >
             <div className="overflow-x-auto ">
               <table className="w-full">
-                <tbody className="flex flex-col px-32 space-y-3 py-4">
+                <tbody className="flex flex-col md:px-32 space-y-3 py-4">
                   {users.slice(3).map((user, index) => (
                     <motion.tr
                       key={user.id}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.05 }}
-                      className={`hover:bg-gray-700 border flex flex-row justify-between items-center   border-newborder2 transition-colors ${user.id === userDetails?.uid
+                      className={`hover:bg-gray-700 border flex flex-row justify-between items-center rounded-md  border-newborder2 transition-colors ${user.id === userDetails?.uid
                         ? "bg-red-500 bg-opacity-10"
                         : ""
                         }`}
                     >
-                      <div>
-                        <td className="px-6 py-4 text-sm text-white">
+                      <div className="py-2 sm:py-4 flex items-center justify-center">
+                        <td className="px-4 sm:px-6 py-2 sm:py-4 text-sm text-white text-center">
                           {index + 4}
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="px-4 sm:px-6 py-2 sm:py-4">
                           <div className="flex items-center">
                             <img
-                              className="h-8 w-8 rounded-full"
-                              src={
-                                user.avatarUrl ||
-                                "https://via.placeholder.com/32"
-                              }
+                              className="h-6 w-6 sm:h-8 sm:w-8 rounded-full"
+                              src={user.avatarUrl || "https://via.placeholder.com/32"}
                               alt=""
                             />
-                            <span className="ml-2 text-white">
+                            <span className="ml-2 text-white text-xs sm:text-sm">
                               {user.username}
                             </span>
                           </div>
                         </td>
                       </div>
+
+
                       <td className="px-6 py-4 text-sm text-white font-semibold">
                         {user.balance.toLocaleString()} PTS
                       </td>
