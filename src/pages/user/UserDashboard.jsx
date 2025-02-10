@@ -260,15 +260,15 @@ const UserDashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-black p-4 sm:p-6 md:p-8">
+    <div className="min-h-screen  bg-black p-4 sm:p-6 md:p-8">
       <Sidebar />
-      <div className="max-w-7xl mx-auto">
+      <Header />
+      <div className=" max-w-4xl pt-20 xl:lg:max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <Header />
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-3xl font-Cerebri font-bold text-primary"
+            className="md:text-3xl sm:text-2xl text-xl font-Cerebri font-bold text-primary"
           >
             My Dashboard
           </motion.h1>
@@ -278,7 +278,7 @@ const UserDashboard = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleLogout}
-            className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md transition-colors flex items-center gap-2"
+            className="px-3 py-2 sm:px-4 sm:py-2 md:px-5 md:py-3 bg-red-500 hover:bg-red-600 text-white rounded-md transition-colors flex items-center gap-1 sm:gap-2 text-sm sm:text-base md:text-lg"
           >
             <FiLogOut className="text-lg" />
             <span>Logout</span>
@@ -291,105 +291,112 @@ const UserDashboard = () => {
           animate={{ opacity: 1, scale: 1 }}
           className="flex p-5 rounded-xl bg-cards2 mb-8"
         >
-          <div className="relative group">
-            <img
-              src={userDetails?.avatarUrl || "https://via.placeholder.com/150"}
-              alt="Profile"
-              className="w-32 h-32 rounded-full object-cover border-4 border-accent shadow-lg"
-            />
-            <button
-              onClick={() => setIsEditingPicture(true)}
-              className="absolute top-0 right-0 bg-accent text-white p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-            >
-              <FiCamera size={20} />
-            </button>
-          </div>
-          <div>
-            <div className="px-6">
-              {" "}
-              <h2 className="text-xl font-semibold text-primary mt-4">
-                {userDetails?.fullName || "Your Name"}
-              </h2>
-              <p className="text-secondary">
-                @{userDetails?.username || "username"}
-              </p>
+          <div className="w-full">
+            <div className="flex flex-row">
+              <div className="relative w-36 md:w-40 group">
+                <img
+                  src={
+                    userDetails?.avatarUrl || "https://via.placeholder.com/150"
+                  }
+                  alt="Profile"
+                  className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-full object-cover border-2 sm:border-4 border-accent shadow-lg"
+                />
+                <button
+                  onClick={() => setIsEditingPicture(true)}
+                  className="absolute top-0 right-0 bg-accent text-white p-1 sm:p-2 md:p-2.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                >
+                  <FiCamera className="text-sm sm:text-base md:text-lg" />
+                </button>
+              </div>
+
+              <div className="px-6">
+                {" "}
+                <h2 className="text-xl font-semibold text-primary mt-4">
+                  {userDetails?.fullName || "Your Name"}
+                </h2>
+                <p className="text-secondary">
+                  @{userDetails?.username || "username"}
+                </p>
+              </div>
             </div>
             {/* Stats Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {statsCards.map((stat, index) => (
-                <motion.div
-                  key={stat.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  whileHover={{ scale: 1.02 }}
-                  className="p-6 rounded-xl "
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="p-3 bg-accent bg-opacity-20 rounded-lg">
-                      <stat.icon className="text-accent text-xl" />
-                    </div>
-                    <div>
-                      <h3 className="text-secondary text-sm">{stat.title}</h3>
-                      <p className="text-primary text-2xl font-semibold">
-                        {stat.value}
-                      </p>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-          {/* Profile Picture Edit Modal */}
-          {isEditingPicture && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-            >
-              <div className="bg-cards3 w-72 p-6 rounded-xl shadow-xl max-w-md  mx-4">
-                <div className="flex flex-col justify-center items-center">
-                  <h3 className="text-lg font-semibold text-primary mb-4">
-                    Profile Picture
-                  </h3>
-                  <div className="p-5 rounded-3xl bg-[#1F1F1F]">
-                    <img
-                      src={
-                        userDetails?.avatarUrl ||
-                        "https://via.placeholder.com/150"
-                      }
-                      alt="Profile"
-                      className="w-32 h-32 rounded-full object-cover border-4 border-accent shadow-lg"
-                    />
-                  </div>
-                  <div className="space-y-4">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleFileUpload}
-                      className="hidden"
-                      id="fileUpload"
-                    />
-                    <label
-                      htmlFor="fileUpload"
-                      className="px-4 py-2 border border-gray-400 rounded-md text-white transition cursor-pointer inline-block"
-                    >
-                      Change Photo
-                    </label>
-                  </div>
-                </div>
-                <div className="flex justify-end gap-2 mt-4">
-                  <button
-                    onClick={() => setIsEditingPicture(false)}
-                    className="px-4 py-2 text-secondary hover:text-primary transition-colors"
-                    disabled={updateLoading}
+            <div>
+              <div className="grid grid-cols-2 place-items-center sm:grid-cols-2 lg:grid-cols-3 sm:gap-6">
+                {statsCards.map((stat, index) => (
+                  <motion.div
+                    key={stat.title}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    whileHover={{ scale: 1.02 }}
+                    className="p-6 rounded-xl "
                   >
-                    Cancel
-                  </button>
-                </div>
+                    <div className="flex items-center gap-4">
+                      <div className="p-3 hidden sm:block bg-accent bg-opacity-20 rounded-lg">
+                        <stat.icon className="text-accent text-xl" />
+                      </div>
+                      <div>
+                        <h3 className="text-secondary text-sm">{stat.title}</h3>
+                        <p className="text-primary text-2xl font-semibold">
+                          {stat.value}
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
-            </motion.div>
-          )}
+            </div>
+            {/* Profile Picture Edit Modal */}
+            {isEditingPicture && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+              >
+                <div className="bg-cards3 w-72 p-6 rounded-xl shadow-xl max-w-md  mx-4">
+                  <div className="flex flex-col justify-center items-center">
+                    <h3 className="text-lg font-semibold text-primary mb-4">
+                      Profile Picture
+                    </h3>
+                    <div className="p-5 rounded-3xl bg-[#1F1F1F]">
+                      <img
+                        src={
+                          userDetails?.avatarUrl ||
+                          "https://via.placeholder.com/150"
+                        }
+                        alt="Profile"
+                        className="w-32 h-32 rounded-full object-cover border-4 border-accent shadow-lg"
+                      />
+                    </div>
+                    <div className="space-y-4">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileUpload}
+                        className="hidden"
+                        id="fileUpload"
+                      />
+                      <label
+                        htmlFor="fileUpload"
+                        className="px-4 py-2 border border-gray-400 rounded-md text-white transition cursor-pointer inline-block"
+                      >
+                        Change Photo
+                      </label>
+                    </div>
+                  </div>
+                  <div className="flex justify-end gap-2 mt-4">
+                    <button
+                      onClick={() => setIsEditingPicture(false)}
+                      className="px-4 py-2 text-secondary hover:text-primary transition-colors"
+                      disabled={updateLoading}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </div>
         </motion.div>
 
         {/* Profile Section */}

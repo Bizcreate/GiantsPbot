@@ -17,6 +17,7 @@ module.exports = {
         lightgray: "#0D0D0D",
         newborder: "#373737",
         newborder2: "#6D6C6C",
+        newborder3: "#272727",
         box1: "#2D2D2D",
         box2: "#1F1F1F",
         box3: "#3B3B3B",

@@ -86,7 +86,7 @@ const Ref = () => {
   ];
 
   return (
-    <div className="flex h-screen bg-lightgray overflow-hidden">
+    <div className="flex h-screen pt-20 bg-lightgray overflow-hidden">
       {/* Sidebar for larger screens */}
       <div className="hidden md:block">
         <Sidebar />
@@ -102,14 +102,7 @@ const Ref = () => {
       )}
 
       <div className="flex-1 flex flex-col w-full">
-        {/* Modified Header with menu button */}
-        <div className="flex items-center bg-box2 p-4 md:hidden">
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="text-white mr-4"
-          >
-            <FiMenu size={24} />
-          </button>
+        <div className="flex items-center md:hidden">
           <Header />
         </div>
 
@@ -120,7 +113,7 @@ const Ref = () => {
 
         {/* Main Content */}
         <div className="flex-1 overflow-y-auto">
-          <div className="p-4 md:p-6 max-w-4xl 2xl:max-w-7xl mx-auto">
+          <div className="p-4 md:p-6 max-w-4xl xl:max-w-7xl mx-auto">
             <motion.h1
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}

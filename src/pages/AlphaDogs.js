@@ -135,7 +135,7 @@ const AlphaDogs = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black bg-solar-system font-Syne">
+    <div className="min-h-screen  pt-6 bg-black bg-solar-system font-Syne">
       <div
         className="fixed inset-0 z-0"
         style={{

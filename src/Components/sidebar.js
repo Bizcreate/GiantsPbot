@@ -52,7 +52,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="fixed left-0 top-0 h-full z-10000 w-64 bg-lightgray border-r border-borders2 p-4">
+    <div className="fixed left-0 top-0 h-full z-10000 w-64 hidden lg:block bg-lightgray border-r border-borders2 p-4">
       <div className="flex flex-col h-full">
         <div className="mb-16 px-4"></div>
 
@@ -64,10 +64,9 @@ const Sidebar = () => {
               to={item.link}
               className={({ isActive }) =>
                 `flex items-center px-4 py-3 rounded-lg transition-colors duration-150
-                ${
-                  isLinkActive(item.link, item.exact)
-                    ? "bg-accent/10 text-accent"
-                    : "text-secondary hover:bg-cards2 hover:text-primary"
+                ${isLinkActive(item.link, item.exact)
+                  ? "bg-accent/10 text-accent"
+                  : "text-secondary hover:bg-cards2 hover:text-primary"
                 }`
               }
             >

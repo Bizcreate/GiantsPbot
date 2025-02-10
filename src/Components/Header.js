@@ -49,11 +49,11 @@ const Header = () => {
 
   // Menu items configuration
   const menuItems = [
-    { label: "Home", icon: <RiHome5Fill className="w-6 h-6" />, href: "/" },
-    { label: "Referral", icon: <HiUsers className="w-6 h-6" />, href: "/referral" },
-    { label: "Leaderboard", icon: <FaTrophy className="w-6 h-6" />, href: "/leaderboard" },
-    { label: "Tasks", icon: <BiTask className="w-6 h-6" />, href: "/tasks" },
-    { label: "My Dashboard", icon: <CgProfile className="w-6 h-6" />, href: "/dashboard" },
+    { label: "Home", icon: <RiHome5Fill className="w-6 h-6" />, href: "/app" },
+    { label: "Referral", icon: <HiUsers className="w-6 h-6" />, href: "/app/ref" },
+    { label: "Leaderboard", icon: <FaTrophy className="w-6 h-6" />, href: "/app/leaderboard" },
+    { label: "Tasks", icon: <BiTask className="w-6 h-6" />, href: "/app/tasks" },
+    { label: "My Dashboard", icon: <CgProfile className="w-6 h-6" />, href: "/app/dashboard" },
   ];
 
   // Social links configuration
@@ -221,7 +221,7 @@ const Header = () => {
       ref={headerRef}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+      className="fixed top-0 left-0 right-0 bg-lightgray sm:bg-transparent border-b border-newborder3 md:border-0 z-50 transition-all duration-300"
     >
       <div className=" mx-auto px-4 py-3 flex justify-between items-center">
         {/* Logo */}
