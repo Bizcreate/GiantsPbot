@@ -321,7 +321,7 @@ const UserDashboard = () => {
             </div>
             {/* Stats Grid */}
             <div>
-              <div className="grid grid-cols-2 place-items-center sm:grid-cols-2 lg:grid-cols-3 sm:gap-6">
+              <div className="grid grid-cols-2 pt-5 sm:pt-0 place-items-center sm:grid-cols-2 lg:grid-cols-3 sm:gap-6">
                 {statsCards.map((stat, index) => (
                   <motion.div
                     key={stat.title}
@@ -329,7 +329,7 @@ const UserDashboard = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
                     whileHover={{ scale: 1.02 }}
-                    className="p-6 rounded-xl "
+                    className="px-6 sm:py-6 py-2 rounded-xl "
                   >
                     <div className="flex items-center gap-4">
                       <div className="p-3 hidden sm:block bg-accent bg-opacity-20 rounded-lg">
