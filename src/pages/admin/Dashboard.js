@@ -17,13 +17,14 @@ const linksTo = [
     title: "Tasks",
   },
   {
+    link: "/dashboardAdx/externaltasks",
+    title: "Other Tasks",
+  },
+  {
     link: "/dashboardAdx/promo",
     title: "Partners",
   },
-  //   {
-  //     link: "/dashboardAdx/externaltasks",
-  //     title: "Other Tasks",
-  //   },
+
   //   {
   //     link: "/dashboardAdx/youtube",
   //     title: "Youtube Tasks",
