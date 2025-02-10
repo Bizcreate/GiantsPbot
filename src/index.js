@@ -38,6 +38,7 @@ import AdminSignUp from "./pages/admin/AdminSignUp";
 import AdminPanel from "./Components/AdminPanel";
 import TaskPage from "./pages/TaskPage";
 import { MetaMaskProvider } from "@metamask/sdk-react";
+import ExternalTasks from "./pages/admin/ExtrenalTasks";
 
 const router = createBrowserRouter([
   {
@@ -124,8 +125,9 @@ const router = createBrowserRouter([
       },
       {
         path: "/dashboardAdx/externaltasks",
-        element: <ExtrenalTasks />,
+        element: <ExternalTasks />,
       },
+
       {
         path: "/dashboardAdx/promo",
         element: <AdminAdvertTasks />,
