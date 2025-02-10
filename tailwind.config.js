@@ -11,6 +11,7 @@ module.exports = {
     },
     extend: {
       colors: {
+        iconcolor: "#25262A",
         primary: "#ffffffeb",
         secondary: "#BABABA",
         accent: "#fe2e00",
