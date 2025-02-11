@@ -113,7 +113,7 @@ const Ref = () => {
 
         {/* Main Content */}
         <div className="flex-1 overflow-y-auto">
-          <div className="p-4 md:p-6 max-w-4xl xl:max-w-7xl mx-auto">
+          <div className="p-4 md:p-6 max-w-4xl mx-auto md:ml-96 xl:max-w-7xl ">
             <motion.h1
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}

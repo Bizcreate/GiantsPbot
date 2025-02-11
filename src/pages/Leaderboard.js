@@ -253,8 +253,8 @@ const Leaderboard = () => {
                         <td className="px-4 sm:px-6 py-2 sm:py-4">
                           <div className="flex items-center">
                             <img
-                              className="h-6 w-6 sm:h-8 sm:w-8 rounded-full"
-                              src={user.avatarUrl || "https://via.placeholder.com/32"}
+                              className="h-6 w-6 sm:h-8 object-cover sm:w-8 rounded-full"
+                              src={user.avatarUrl || "https://static1.thegamerimages.com/wordpress/wp-content/uploads/2020/04/valorantomen2-gs.jpg"}
                               alt=""
                             />
                             <span className="ml-2 text-white text-xs sm:text-sm">

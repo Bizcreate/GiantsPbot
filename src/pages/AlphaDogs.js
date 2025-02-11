@@ -156,7 +156,7 @@ const AlphaDogs = () => {
       />
       <Sidebar />
 
-      <main className="relative z-10 pt-20 px-8 pb-20 xl:max-w-7xl max-w-4xl mx-auto space-y-24">
+      <main className="relative z-10 pt-20 px-8 pb-20 xl:max-w-7xl max-w-4xl mx-auto md:ml-96 space-y-24">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

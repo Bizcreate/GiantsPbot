@@ -41,7 +41,7 @@ const Footer = () => {
             © {currentYear} 2MR Labs PTE. LTD.
           </div>
           <div className="py-2">
-            <div className="flex justify-center md:justify-end items-center gap-1 md:gap-3">
+            <div className="flex justify-center md:justify-end items-center gap-2 md:gap-3">
               {socialLinks.map((social, index) => (
                 <motion.a
                   key={index}

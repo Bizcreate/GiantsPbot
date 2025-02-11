@@ -12,6 +12,7 @@ import { CgProfile } from "react-icons/cg";
 import { FaTrophy } from "react-icons/fa";
 import { RiHome5Fill } from "react-icons/ri";
 import { HiUsers } from "react-icons/hi2";
+import { NavLink } from "react-router-dom";
 
 const Header = () => {
   // State management
@@ -331,16 +332,21 @@ const Header = () => {
               {/* Menu Items */}
               <nav className="px-4 space-y-1">
                 {menuItems.map((item, index) => (
-                  <motion.a
-                    key={index}
-                    href={item.href}
-                    className="flex items-center gap-3 py-3 px-4 text-gray-400 hover:text-white transition-colors"
-                  >
-                    <span className="w-6">{item.icon}</span>
-                    <span className="text-sm">{item.label}</span>
-                  </motion.a>
+                  <motion.div key={index} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <NavLink
+                      to={item.href}
+                      className={({ isActive }) =>
+                        `flex items-center gap-3 py-3 px-4 transition-colors ${isActive ? "text-white" : "text-gray-400 hover:text-white"
+                        }`
+                      }
+                    >
+                      <span className="w-6">{item.icon}</span>
+                      <span className="text-sm">{item.label}</span>
+                    </NavLink>
+                  </motion.div>
                 ))}
               </nav>
+
 
               {/* Footer */}
               <div className="absolute bottom-4 left-0 right-0 px-4">
