@@ -27,9 +27,9 @@ const LandingPage = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-black  text-white flex flex-col items-center justify-center px-4 sm:px-6  lg:px-8 bg-space-mission-sm sm:bg-space-mission ">
+    <div className="relative min-h-screen bg-black text-white flex flex-col items-center justify-center px-4 sm:px-6  lg:px-8 bg-space-mission-sm sm:bg-space-mission ">
       {/* Background Image with Red Overlay */}
-      <div className="absolute inset-0 before:absolute before:inset-0 before:bg-[#c40003c2] before:opacity-70 before:mix-blend-multiply"></div>
+      <div className="absolute inset-0 before:absolute before:inset-0 before:bg-[#C40003] before:opacity-70 before:mix-blend-multiply"></div>
 
       {/* Header/Navbar */}
       <header className="fixed top-0 left-0 w-full py-4 flex justify-between items-center bg-black px-6 md:px-12 z-50">
@@ -48,7 +48,7 @@ const LandingPage = () => {
         </p>
 
         {/* Buttons */}
-        <div className="flex flex-col sm:flex-row justify-center gap-4 mb-6">
+        <div className="flex flex-row  justify-center gap-4 mb-6">
           {[
             { text: "Sign Up", subtext: "Connect Your X Account" },
             {
@@ -58,7 +58,7 @@ const LandingPage = () => {
           ].map((btn, index) => (
             <button
               key={index}
-              className="relative xl:w-64 justify-center lg:h-24 flex flex-col items-center bg-lightgray border border-newborder4 text-white px-6 py-3 rounded-2xl w-full sm:w-auto"
+              className="relative xl:w-64 justify-center lg:h-24 flex flex-col h-28 items-center sm:w-44 w-36 bg-lightgray border border-newborder4 text-white md:px-6 px-3 py-3 rounded-2xl "
             >
               {index == 0 ? (<div className="flex size-8 flex-row absolute -top-3 rounded-full bg-[#1e1e1e] p-1  text-red-500 text-xl justify-start items-center ">
                 <svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -100,13 +100,13 @@ const LandingPage = () => {
         </div>
 
         {/* Join Button */}
-        <button className="bg-red-600 px-8 py-3 rounded-lg text-white font-bold w-full sm:w-auto">
+        <button className="bg-red-600 px-8 py-3 w-62  rounded-lg text-white font-bold sm:w-auto">
           Join with X Account
         </button>
-        <p className="text-gray-500 text-xs sm:text-sm mt-2">
+        <p className="text-gray-300 text-xs sm:text-sm mt-2">
           By connecting X, you agree to Giants{" "}
-          <span className="text-white">Terms of Use</span> and
-          <span className="text-white"> Privacy Policy</span>
+          <span className="text-white font-semibold">Terms of Use</span> and
+          <span className="text-white font-semibold"> Privacy Policy</span>
         </p>
       </main>
 
@@ -114,7 +114,7 @@ const LandingPage = () => {
       <section className="w-full max-w-3xl p-4 relative z-10">
         <h2 className="text-2xl font-bold text-center mb-4">FAQs</h2>
         {faqs.map((faq, index) => (
-          <div key={index} className="bg-[#1e1e1e] p-4 rounded-lg mb-2">
+          <div key={index} className="bg-box2 p-4 rounded-lg mb-2">
             {/* Question - Click to Toggle */}
             <button
               onClick={() => toggleFAQ(index)}
@@ -128,7 +128,7 @@ const LandingPage = () => {
 
             {/* Answer - Show/Hide Based on State */}
             <div
-              className={`text-gray-400 overflow-hidden transition-all duration-300 ease-in-out ${openIndex === index
+              className={`text-gray-400  overflow-hidden transition-all duration-300 ease-in-out ${openIndex === index
                 ? "max-h-40 mt-2 opacity-100"
                 : "max-h-0 opacity-0"
                 }`}
