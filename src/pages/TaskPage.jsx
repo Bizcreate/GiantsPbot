@@ -286,7 +286,7 @@ const TaskPage = () => {
   return (
     <div className="min-h-screen bg-lightgray p-4 sm:p-6 md:p-8">
       <Sidebar />
-      <div className=" xl:max-w-7xl max-w-4xl mx-auto md:ml-96 pt-20">
+      <div className="xl:max-w-7xl max-w-4xl mx-auto md:ml-96 pt-20">
         <Header />
         <motion.h1
           initial={{ opacity: 0, y: -20 }}

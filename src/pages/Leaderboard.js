@@ -103,7 +103,7 @@ const Leaderboard = () => {
 
   return (
     <div className="min-h-screen  bg-lightgray p-4 sm:p-6 md:p-8">
-      <div className="xl:max-w-7xl max-w-4xl pt-20 mx-auto">
+      <div className="xl:max-w-7xl max-w-4xl mx-auto md:ml-80  pt-20 ">
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -138,25 +138,25 @@ const Leaderboard = () => {
                     {userDetails.totalAirdrops?.toLocaleString() || 0} USD
                   </span>
                 </p>
-                <div className="flex flex-row md:flex-col justify-start items-center">
+                <div className="flex flex-row h-full md:flex-col justify-between w-full  items-center">
                   <div className="flex flex-col justify-start">
                     <p className="text-secondary text-start md:text-center">Unclaimed Points:</p>
                     <span className="text-white font-bold text-start md:text-center">
                       {userDetails.unclaimedPoints?.toLocaleString() || 0} PTS
                     </span>
                   </div>
-                  <button className="w-24 h-10 md:mx-0 mx-4 text-white bg-red-600 rounded-xl mt-2">
+                  <button className="w-20 h-10 md:mx-0 mx-4 text-white bg-red-600 rounded-xl mt-2">
                     Claim
                   </button>
                 </div>
-                <div className="flex flex-row md:flex-col items-center">
+                <div className="flex flex-row md:flex-col justify-between w-full items-center">
                   <div className="flex flex-col justify-start">
                     <p className="text-secondary  text-start md:text-center">Unclaimed Airdrops:</p>
                     <span className="text-white font-bold text-left md:text-center">
                       {userDetails.unclaimedAirdrops?.toLocaleString() || 0} USD
                     </span>
                   </div>
-                  <button className="w-24 h-10 md:mx-0 mx-4  text-white bg-red-600 rounded-xl mt-2">
+                  <button className="w-20 h-10 md:mx-0 mx-4   text-white bg-red-600 rounded-xl mt-2">
                     Claim
                   </button>
                 </div>
