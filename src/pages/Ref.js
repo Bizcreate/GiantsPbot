@@ -23,6 +23,23 @@ const Ref = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
+  const getBaseUrl = () => {
+    // For local development
+    if (process.env.NODE_ENV === 'development') {
+      return window.location.origin;
+    }
+
+    // For production - replace with your actual deployed domain
+    return process.env.REACT_APP_WEBSITE_URL || window.location.origin;
+  };
+
+  // Generate referral link
+  const getReferralLink = () => {
+    if (!user?.uid) return '';
+    const baseUrl = getBaseUrl();
+    return `${baseUrl}/signup?ref=${user.uid}`;
+  };
+
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
@@ -53,14 +70,40 @@ const Ref = () => {
     fetchReferralData();
   }, [user]);
 
-  const referralLink = `${window.location.origin}/signup?ref=${user?.uid}`;
-
   const copyToClipboard = async () => {
+    const referralLink = getReferralLink();
+    if (!referralLink) {
+      toast.error("Unable to generate referral link");
+      return;
+    }
+
     try {
       setCopying(true);
-      await navigator.clipboard.writeText(referralLink);
+      // Using a more compatible approach for copying
+      if (navigator.clipboard && window.isSecureContext) {
+        // For HTTPS or localhost
+        await navigator.clipboard.writeText(referralLink);
+      } else {
+        // Fallback for HTTP
+        const textArea = document.createElement("textarea");
+        textArea.value = referralLink;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-999999px";
+        textArea.style.top = "-999999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+          document.execCommand('copy');
+          textArea.remove();
+        } catch (error) {
+          console.error("Fallback copy failed:", error);
+          throw error;
+        }
+      }
       toast.success("Referral link copied!");
     } catch (error) {
+      console.error("Copy failed:", error);
       toast.error("Failed to copy link");
     } finally {
       setCopying(false);
@@ -125,29 +168,24 @@ const Ref = () => {
             {/* Referral Stats */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-4 md:mb-6">
               {/* Stats Card */}
-              <div className="bg-box2 p-4 md:p-6 rounded-xl flex flex-col">
+              <div className="bg-box2 p-4 md:p-6 rounded-xl">
                 <h2 className="text-white text-lg font-medium mb-4">
-                  My Referral Stats
+                  Share Referral Link
                 </h2>
-                <div className="flex flex-col sm:flex-row justify-between gap-4">
-                  <div className="flex items-center gap-3">
-                    <BsPeople className="text-[#FF4D4F] text-2xl md:text-3xl" />
-                    <div>
-                      <p className="text-gray-400 text-sm">Total Referrals</p>
-                      <p className="text-white text-xl md:text-2xl font-bold">
-                        {referralData?.totalReferrals || 4}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <FiGift className="text-[#FF4D4F] text-2xl md:text-3xl" />
-                    <div>
-                      <p className="text-gray-400 text-sm">Total Earnings</p>
-                      <p className="text-white text-xl md:text-2xl font-bold">
-                        {referralData?.totalEarnings || 0} points
-                      </p>
-                    </div>
-                  </div>
+                <div className="flex flex-col sm:flex-row items-center gap-3">
+                  <input
+                    type="text"
+                    value={getReferralLink()}
+                    readOnly
+                    className="w-full bg-[#1E1F22] text-gray-300 px-4 py-3 rounded-lg focus:outline-none text-sm md:text-base"
+                  />
+                  <button
+                    onClick={copyToClipboard}
+                    disabled={copying}
+                    className="w-full sm:w-auto px-5 py-3 bg-[#FF4D4F] text-white rounded-lg font-medium flex items-center justify-center gap-2 hover:bg-opacity-90 disabled:opacity-50"
+                  >
+                    <FiCopy /> {copying ? "Copying..." : "Copy"}
+                  </button>
                 </div>
               </div>
 
