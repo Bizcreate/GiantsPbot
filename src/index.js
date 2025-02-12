@@ -13,7 +13,7 @@ import Airdrop from "./pages/Airdrop";
 import Dashboard from "./pages/admin/Dashboard";
 import Settings from "./pages/admin/Settings";
 import EditTasks from "./pages/admin/EditTasks";
-import ExtrenalTasks from "./pages/admin/ExtrenalTasks";
+import ExternalTasks from "./pages/admin/ExtrenalTasks";
 import AdminAdvertTasks from "./pages/admin/AdminAdvertTasks";
 import AirdropWallets from "./pages/admin/AdminWallets";
 import Search from "./pages/admin/Search";
@@ -30,24 +30,19 @@ import { UserAuthContextProvider } from "./context/UserAuthContext";
 import AuthLayout from "./layouts/AuthLayout";
 import UserDashboard from "./pages/user/UserDashboard";
 import { Toaster } from "react-hot-toast";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import AdminProtectedRoute from "./Components/AdminProtectedRoute";
 import NotAdmin236 from "./pages/NotAdmin236";
 import AdminSignUp from "./pages/admin/AdminSignUp";
 import AdminPanel from "./Components/AdminPanel";
 import TaskPage from "./pages/TaskPage";
 import { MetaMaskProvider } from "@metamask/sdk-react";
-import ExternalTasks from "./pages/admin/ExtrenalTasks";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: <LandingPage />,
     errorElement: <ErrorCom />,
   },
-  { path: "/landing", element: <LandingPage /> },
-
   {
     path: "/signin",
     element: <SignIn />,
@@ -66,7 +61,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/app",
-        element: <AlphaDogs />,
+        element: <Home />,
       },
       {
         path: "/app/ref",
@@ -127,7 +122,6 @@ const router = createBrowserRouter([
         path: "/dashboardAdx/externaltasks",
         element: <ExternalTasks />,
       },
-
       {
         path: "/dashboardAdx/promo",
         element: <AdminAdvertTasks />,
