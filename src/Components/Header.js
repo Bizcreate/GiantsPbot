@@ -9,10 +9,10 @@ import { useAltura } from "../hooks/useAltura";
 import { LoadingSpinner } from "./LoadingSpinner";
 import { BiTask } from "react-icons/bi";
 import { CgProfile } from "react-icons/cg";
+import { NavLink } from "react-router-dom";
 import { FaTrophy } from "react-icons/fa";
 import { RiHome5Fill } from "react-icons/ri";
 import { HiUsers } from "react-icons/hi2";
-import { NavLink } from "react-router-dom";
 
 const Header = () => {
   // State management
@@ -226,15 +226,18 @@ const Header = () => {
     >
       <div className=" mx-auto px-4 py-3 flex justify-between items-center">
         {/* Logo */}
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="text-primary text-xl font-bold z-50"
-        >
+        <NavLink to={'/'}>
           <img
             src="/company.svg"
             alt="Company Logo"
             className="w-8 h-8 sm:w-10 sm:h-10"
           />
+        </NavLink>
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          className="text-primary text-xl font-bold z-50"
+        >
+
         </motion.div>
 
         {/* Right Side Group */}
