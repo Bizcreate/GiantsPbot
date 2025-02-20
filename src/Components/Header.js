@@ -50,10 +50,26 @@ const Header = () => {
   // Menu items configuration
   const menuItems = [
     { label: "Home", icon: <RiHome5Fill className="w-6 h-6" />, href: "/app" },
-    { label: "Referral", icon: <HiUsers className="w-6 h-6" />, href: "/app/ref" },
-    { label: "Leaderboard", icon: <FaTrophy className="w-6 h-6" />, href: "/app/leaderboard" },
-    { label: "Tasks", icon: <BiTask className="w-6 h-6" />, href: "/app/tasks" },
-    { label: "My Dashboard", icon: <CgProfile className="w-6 h-6" />, href: "/app/dashboard" },
+    {
+      label: "Referral",
+      icon: <HiUsers className="w-6 h-6" />,
+      href: "/app/ref",
+    },
+    {
+      label: "Leaderboard",
+      icon: <FaTrophy className="w-6 h-6" />,
+      href: "/app/leaderboard",
+    },
+    {
+      label: "Tasks",
+      icon: <BiTask className="w-6 h-6" />,
+      href: "/app/tasks",
+    },
+    {
+      label: "My Dashboard",
+      icon: <CgProfile className="w-6 h-6" />,
+      href: "/app/dashboard",
+    },
   ];
 
   // Social links configuration
@@ -74,10 +90,10 @@ const Header = () => {
     checkMobile();
 
     // Add resize listener
-    window.addEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile);
 
     // Cleanup
-    return () => window.removeEventListener('resize', checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   // Click outside handlers
@@ -86,7 +102,10 @@ const Header = () => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setShowWalletOptions(false);
       }
-      if (mobileWalletRef.current && !mobileWalletRef.current.contains(event.target)) {
+      if (
+        mobileWalletRef.current &&
+        !mobileWalletRef.current.contains(event.target)
+      ) {
         setShowMobileWalletOptions(false);
       }
     };
@@ -98,23 +117,21 @@ const Header = () => {
   // Body scroll lock for mobile menu
   useEffect(() => {
     if (showMobileMenu) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     }
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     };
   }, [showMobileMenu]);
 
-
-
   // Wallet connection handler
   const handleWalletConnection = (type, action) => {
-    if (type === 'metamask') {
-      action === 'connect' ? connectMetaMask() : disconnectMetaMask();
+    if (type === "metamask") {
+      action === "connect" ? connectMetaMask() : disconnectMetaMask();
     } else {
-      action === 'connect' ? connectAltura() : disconnectAltura();
+      action === "connect" ? connectAltura() : disconnectAltura();
     }
 
     if (isMobile) {
@@ -126,8 +143,11 @@ const Header = () => {
 
   // Reusable wallet options component
   const WalletOptions = ({ isMobile = false }) => (
-    <div className={` rounded-lg shadow-lg overflow-hidden border border-gray-800 ${isMobile ? 'w-full mt-2' : 'w-72'
-      }`}>
+    <div
+      className={` rounded-lg shadow-lg overflow-hidden border border-gray-800 ${
+        isMobile ? "w-full mt-2" : "w-72"
+      }`}
+    >
       {/* MetaMask Option */}
       <div className="p-3 border-b border-gray-800">
         <div className="flex items-center justify-between mb-2">
@@ -147,7 +167,7 @@ const Header = () => {
               {`${metaMaskAccount.slice(0, 6)}...${metaMaskAccount.slice(-4)}`}
             </div>
             <button
-              onClick={() => handleWalletConnection('metamask', 'disconnect')}
+              onClick={() => handleWalletConnection("metamask", "disconnect")}
               className="w-full px-3 py-1.5 text-xs text-red-500 border border-red-500/20 rounded-lg hover:bg-red-500/10 transition-colors"
             >
               Disconnect
@@ -155,7 +175,7 @@ const Header = () => {
           </div>
         ) : (
           <button
-            onClick={() => handleWalletConnection('metamask', 'connect')}
+            onClick={() => handleWalletConnection("metamask", "connect")}
             disabled={metaMaskConnecting}
             className="w-full px-3 py-1.5 text-white text-xs bg-accent/20 rounded-lg hover:bg-accent/30 transition-colors"
           >
@@ -190,7 +210,7 @@ const Header = () => {
               {`${alturaAccount.slice(0, 6)}...${alturaAccount.slice(-4)}`}
             </div>
             <button
-              onClick={() => handleWalletConnection('altura', 'disconnect')}
+              onClick={() => handleWalletConnection("altura", "disconnect")}
               className="w-full px-3 py-1.5 text-xs text-red-500 border border-red-500/20 rounded-lg hover:bg-red-500/10 transition-colors"
             >
               Disconnect
@@ -198,7 +218,7 @@ const Header = () => {
           </div>
         ) : (
           <button
-            onClick={() => handleWalletConnection('altura', 'connect')}
+            onClick={() => handleWalletConnection("altura", "connect")}
             disabled={alturaConnecting}
             className="w-full px-3 py-1.5 text-xs bg-accent/20 rounded-lg text-white hover:bg-accent/30 transition-colors"
           >
@@ -254,8 +274,9 @@ const Header = () => {
                 <>
                   <span>{isAnyWalletConnected ? "Connected" : "Connect"}</span>
                   <MdKeyboardArrowDown
-                    className={`transition-transform ${showWalletOptions ? "rotate-180" : ""
-                      }`}
+                    className={`transition-transform ${
+                      showWalletOptions ? "rotate-180" : ""
+                    }`}
                   />
                 </>
               )}
@@ -304,14 +325,17 @@ const Header = () => {
               {/* Mobile Wallet Connection */}
               <div className="px-4 pt-16 pb-6" ref={mobileWalletRef}>
                 <button
-                  onClick={() => setShowMobileWalletOptions(!showMobileWalletOptions)}
+                  onClick={() =>
+                    setShowMobileWalletOptions(!showMobileWalletOptions)
+                  }
                   className="w-full py-3 px-4 rounded-lg border border-gray-800 text-gray-200 hover:bg-gray-800/50 transition-colors flex items-center justify-center gap-2"
                 >
                   <FaWallet className="text-lg" />
                   <span>Connect Wallet</span>
                   <MdKeyboardArrowDown
-                    className={`transition-transform ${showMobileWalletOptions ? "rotate-180" : ""
-                      }`}
+                    className={`transition-transform ${
+                      showMobileWalletOptions ? "rotate-180" : ""
+                    }`}
                   />
                 </button>
 

@@ -6,6 +6,7 @@ import {
   RiLoader4Line,
 } from "react-icons/ri";
 import { FiExternalLink } from "react-icons/fi";
+import { NavLink } from "react-router-dom";
 
 const OtherTaskCard = ({
   task,
@@ -14,7 +15,7 @@ const OtherTaskCard = ({
   onLinkClick,
   isLinkVisited,
 }) => {
-  const handleLinkClick = (e) => {
+  const handleLinkClick = () => {
     onLinkClick(task.id);
   };
 
@@ -47,35 +48,22 @@ const OtherTaskCard = ({
         </div>
 
         {task.link && (
-          <motion.a
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            href={task.link}
+          <NavLink
+            to={task.link}
             target="_blank"
             rel="noopener noreferrer"
             onClick={handleLinkClick}
-            className={`flex items-center space-x-1 group ${
+            className={`flex items-center space-x-1 ${
               isLinkVisited
                 ? "text-green-600 hover:text-green-700"
                 : "text-[#1D9BF0] hover:text-[#1a8cd8]"
             } transition-colors duration-200`}
           >
-            <span>{isLinkVisited ? "Task Completed" : "View Task"}</span>
-            <FiExternalLink className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-          </motion.a>
+            <span>{isLinkVisited ? "Link Visited" : "View Task"}</span>
+            <FiExternalLink className="w-4 h-4" />
+          </NavLink>
         )}
       </div>
-
-      {task.steps && (
-        <div className="mb-4 bg-gray-50 rounded-lg p-3">
-          <h3 className="font-medium text-gray-700 mb-2">Steps to complete:</h3>
-          <ol className="list-decimal list-inside text-gray-600 text-sm space-y-1">
-            {task.steps.map((step, index) => (
-              <li key={index}>{step}</li>
-            ))}
-          </ol>
-        </div>
-      )}
 
       <motion.button
         whileHover={{ scale: 1.02 }}
