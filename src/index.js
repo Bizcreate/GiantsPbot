@@ -37,8 +37,9 @@ import NotAdmin236 from "./pages/NotAdmin236";
 import AdminSignUp from "./pages/admin/AdminSignUp";
 import AdminPanel from "./Components/AdminPanel";
 import TaskPage from "./pages/TaskPage";
-import { MetaMaskProvider } from "@metamask/sdk-react";
 import ExternalTasks from "./pages/admin/ExtrenalTasks";
+import { ThirdwebProvider } from "thirdweb/react";
+import { TonConnectUIProvider } from "@tonconnect/ui-react";
 
 const router = createBrowserRouter([
   {
@@ -164,26 +165,19 @@ const router = createBrowserRouter([
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
+// TODO : change client id
 root.render(
-  <AuthContextProvider>
-    <UserAuthContextProvider>
-      <MetaMaskProvider
-        sdkOptions={{
-          dappMetadata: {
-            name: "Your App Name",
-            url: window.location.href,
-          },
-          checkInstallationImmediately: false,
-          connectFirstChainId: true,
-          defaultNetwork: "etherium",
-          infuraAPIKey: "0172cf3cfab54f05b2ad8a6bd21b79ac",
-        }}
-      >
-        <React.StrictMode>
-          <RouterProvider router={router} />
-          <Toaster position="top-right" reverseOrder={false} />
-        </React.StrictMode>
-      </MetaMaskProvider>
-    </UserAuthContextProvider>
-  </AuthContextProvider>
+  <ThirdwebProvider clientId={"30b0a2d7a206d41a5bfc150d57f5bee0"}>
+    <TonConnectUIProvider manifestUrl="https://44kf4g-5173.csb.app/tonconnect-manifest.json">
+      <AuthContextProvider>
+        <UserAuthContextProvider>
+          <React.StrictMode>
+            <RouterProvider router={router} />
+            <Toaster position="top-right" reverseOrder={false} />
+          </React.StrictMode>
+        </UserAuthContextProvider>
+      </AuthContextProvider>
+    </TonConnectUIProvider>
+  </ThirdwebProvider>
 );

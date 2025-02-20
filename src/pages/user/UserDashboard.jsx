@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import { validateFile } from "../../utils/fileUpload";
 import { RANKS, getRank } from "../../constants/ranks";
 import { LoadingSpinner } from "../../Components/LoadingSpinner";
+import getAvatarUrl from "../../utils/getDefaultAvatarUrl";
 
 const UserDashboard = () => {
   const { user, userDetails, updateUserProfile, setUserDetails, logOut } =
@@ -36,7 +37,7 @@ const UserDashboard = () => {
       </h3>
       <div className="p-5 rounded-3xl bg-[#1F1F1F]">
         <img
-          src={userDetails?.avatarUrl || "https://via.placeholder.com/150"}
+          src={getAvatarUrl(userDetails?.username)}
           alt="Profile"
           className="w-32 h-32 rounded-full object-cover border-4 border-accent shadow-lg"
         />
@@ -335,10 +336,7 @@ const UserDashboard = () => {
               <div className="relative w-36 md:w-40 group">
                 <div className="relative inline-block group">
                   <img
-                    src={
-                      userDetails?.avatarUrl ||
-                      "https://via.placeholder.com/150"
-                    }
+                    src={getAvatarUrl(userDetails?.username)}
                     alt="Profile"
                     className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-full object-cover border-2 sm:border-4 border-accent shadow-lg"
                   />

@@ -25,7 +25,7 @@ const Ref = () => {
 
   const getBaseUrl = () => {
     // For local development
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === "development") {
       return window.location.origin;
     }
 
@@ -35,7 +35,7 @@ const Ref = () => {
 
   // Generate referral link
   const getReferralLink = () => {
-    if (!user?.uid) return '';
+    if (!user?.uid) return "";
     const baseUrl = getBaseUrl();
     return `${baseUrl}/signup?ref=${user.uid}`;
   };
@@ -94,7 +94,7 @@ const Ref = () => {
         textArea.focus();
         textArea.select();
         try {
-          document.execCommand('copy');
+          document.execCommand("copy");
           textArea.remove();
         } catch (error) {
           console.error("Fallback copy failed:", error);
@@ -197,7 +197,7 @@ const Ref = () => {
                 <div className="flex flex-col sm:flex-row items-center gap-3">
                   <input
                     type="text"
-                    value={referralLink}
+                    value={getReferralLink()}
                     readOnly
                     className="w-full bg-[#1E1F22] text-gray-300 px-4 py-3 rounded-lg focus:outline-none text-sm md:text-base"
                   />
