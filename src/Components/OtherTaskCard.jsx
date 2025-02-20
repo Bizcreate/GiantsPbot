@@ -53,7 +53,7 @@ const OtherTaskCard = ({
             target="_blank"
             rel="noopener noreferrer"
             onClick={handleLinkClick}
-            className={`flex items-center space-x-1 ${
+            className={`flex items-center qspace-x-1 ${
               isLinkVisited
                 ? "text-green-600 hover:text-green-700"
                 : "text-[#1D9BF0] hover:text-[#1a8cd8]"

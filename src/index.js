@@ -43,11 +43,14 @@ import ExternalTasks from "./pages/admin/ExtrenalTasks";
 const router = createBrowserRouter([
   {
     path: "/",
+    element: <LandingPage />,
+    errorElement: <ErrorCom />,
+  },
+  {
+    path: "/home",
     element: <Home />,
     errorElement: <ErrorCom />,
   },
-  { path: "/landing", element: <LandingPage /> },
-
   {
     path: "/signin",
     element: <SignIn />,

@@ -302,7 +302,7 @@ const UserDashboard = () => {
     <div className="min-h-screen  bg-lightgray p-4 sm:p-6 md:p-8">
       <Sidebar />
       <Header />
-      <div className=" max-w-4xl pt-20 xl:lg:max-w-7xl mx-auto">
+      <div className="max-w-4xl xl:max-w-7xl md:ml-80  pt-20  mx-auto">
         <div className="flex justify-between items-center mb-8">
           <motion.h1
             initial={{ opacity: 0, y: -20 }}

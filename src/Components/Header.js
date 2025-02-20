@@ -9,6 +9,7 @@ import { useAltura } from "../hooks/useAltura";
 import { LoadingSpinner } from "./LoadingSpinner";
 import { BiTask } from "react-icons/bi";
 import { CgProfile } from "react-icons/cg";
+import { NavLink } from "react-router-dom";
 import { FaTrophy } from "react-icons/fa";
 import { RiHome5Fill } from "react-icons/ri";
 import { HiUsers } from "react-icons/hi2";
@@ -245,15 +246,18 @@ const Header = () => {
     >
       <div className=" mx-auto px-4 py-3 flex justify-between items-center">
         {/* Logo */}
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="text-primary text-xl font-bold z-50"
-        >
+        <NavLink to={'/'}>
           <img
             src="/company.svg"
             alt="Company Logo"
             className="w-8 h-8 sm:w-10 sm:h-10"
           />
+        </NavLink>
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          className="text-primary text-xl font-bold z-50"
+        >
+
         </motion.div>
 
         {/* Right Side Group */}
@@ -355,16 +359,21 @@ const Header = () => {
               {/* Menu Items */}
               <nav className="px-4 space-y-1">
                 {menuItems.map((item, index) => (
-                  <motion.a
-                    key={index}
-                    href={item.href}
-                    className="flex items-center gap-3 py-3 px-4 text-gray-400 hover:text-white transition-colors"
-                  >
-                    <span className="w-6">{item.icon}</span>
-                    <span className="text-sm">{item.label}</span>
-                  </motion.a>
+                  <motion.div key={index} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <NavLink
+                      to={item.href}
+                      className={({ isActive }) =>
+                        `flex items-center gap-3 py-3 px-4 transition-colors ${isActive ? "text-white" : "text-gray-400 hover:text-white"
+                        }`
+                      }
+                    >
+                      <span className="w-6">{item.icon}</span>
+                      <span className="text-sm">{item.label}</span>
+                    </NavLink>
+                  </motion.div>
                 ))}
               </nav>
+
 
               {/* Footer */}
               <div className="absolute bottom-4 left-0 right-0 px-4">
