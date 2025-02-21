@@ -197,7 +197,7 @@ const Ref = () => {
                 <div className="flex flex-col sm:flex-row items-center gap-3">
                   <input
                     type="text"
-                    value={referralLink}
+                    value={getReferralLink()}
                     readOnly
                     className="w-full bg-[#1E1F22] text-gray-300 px-4 py-3 rounded-lg focus:outline-none text-sm md:text-base"
                   />
