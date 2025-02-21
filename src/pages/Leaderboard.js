@@ -3,10 +3,9 @@ import { motion } from "framer-motion";
 import { collection, query, orderBy, limit, getDocs } from "firebase/firestore";
 import { db } from "../firebase/config";
 import { useUserAuth } from "../context/UserAuthContext";
-import { RANKS, getRank } from "../constants/ranks";
 import { BiLike, BiHeart, BiRepeat, BiComment } from "react-icons/bi";
-import { FaCrown, FaMedal } from "react-icons/fa";
-import { IoTrophyOutline } from "react-icons/io5";
+import { FaCrown } from "react-icons/fa";
+import getAvatarUrl from "../utils/getDefaultAvatarUrl";
 import PageSpinner from "../Components/Spinner";
 import Sidebar from "../Components/sidebar";
 import Header from "../Components/Header";
@@ -74,7 +73,7 @@ const Leaderboard = () => {
           )}
 
           <img
-            src={user.avatarUrl || "https://via.placeholder.com/100"}
+            src={getAvatarUrl(user.username, 100)}
             alt={user.username}
             className="w-16 h-16 rounded-full object-cover border-4 border-accent"
           />
@@ -103,7 +102,7 @@ const Leaderboard = () => {
 
   return (
     <div className="min-h-screen  bg-lightgray p-4 sm:p-6 md:p-8">
-      <div className="xl:max-w-7xl max-w-4xl pt-20 mx-auto">
+      <div className="xl:max-w-7xl max-w-4xl mx-auto md:ml-80  pt-20 ">
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -124,7 +123,9 @@ const Leaderboard = () => {
               <div className="grid grid-cols-1 items-start  sm:grid-cols-2 md:grid-cols-5 gap-4 text-center place-items-start md:place-items-normal">
                 <p className="text-secondary flex flex-col">
                   Current Rank:
-                  <span className="text-white font-bold text-left md:text-center">#{userRank}</span>
+                  <span className="text-white font-bold text-left md:text-center">
+                    #{userRank}
+                  </span>
                 </p>
                 <p className="text-secondary text-start md:text-center flex flex-col">
                   Balance:
@@ -138,25 +139,29 @@ const Leaderboard = () => {
                     {userDetails.totalAirdrops?.toLocaleString() || 0} USD
                   </span>
                 </p>
-                <div className="flex flex-row md:flex-col justify-start items-center">
+                <div className="flex flex-row h-full md:flex-col justify-between w-full  items-center">
                   <div className="flex flex-col justify-start">
-                    <p className="text-secondary text-start md:text-center">Unclaimed Points:</p>
+                    <p className="text-secondary text-start md:text-center">
+                      Unclaimed Points:
+                    </p>
                     <span className="text-white font-bold text-start md:text-center">
                       {userDetails.unclaimedPoints?.toLocaleString() || 0} PTS
                     </span>
                   </div>
-                  <button className="w-24 h-10 md:mx-0 mx-4 text-white bg-red-600 rounded-xl mt-2">
+                  <button className="w-20 h-10 md:mx-0 mx-4 text-white bg-red-600 rounded-xl mt-2">
                     Claim
                   </button>
                 </div>
-                <div className="flex flex-row md:flex-col items-center">
+                <div className="flex flex-row md:flex-col justify-between w-full items-center">
                   <div className="flex flex-col justify-start">
-                    <p className="text-secondary  text-start md:text-center">Unclaimed Airdrops:</p>
+                    <p className="text-secondary  text-start md:text-center">
+                      Unclaimed Airdrops:
+                    </p>
                     <span className="text-white font-bold text-left md:text-center">
                       {userDetails.unclaimedAirdrops?.toLocaleString() || 0} USD
                     </span>
                   </div>
-                  <button className="w-24 h-10 md:mx-0 mx-4  text-white bg-red-600 rounded-xl mt-2">
+                  <button className="w-20 h-10 md:mx-0 mx-4   text-white bg-red-600 rounded-xl mt-2">
                     Claim
                   </button>
                 </div>
@@ -194,7 +199,6 @@ const Leaderboard = () => {
           </motion.div>
         )}
 
-
         {/* Top 3 Users */}
 
         <h2 className="text-white text-xl font-semibold mb-4">Top 10</h2>
@@ -207,8 +211,8 @@ const Leaderboard = () => {
                 position === 1
                   ? "h-[220px]"
                   : position === 2
-                    ? "h-[180px]"
-                    : "h-[160px]";
+                  ? "h-[180px]"
+                  : "h-[160px]";
               const baseHeight = "h-[60px]"; // Ensures all bases align
 
               return (
@@ -227,12 +231,8 @@ const Leaderboard = () => {
           </div>
 
           {/* Other Users List */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="rounded-xl overflow-hidden "
-          >
-            <div className="overflow-x-auto ">
+          <motion.div className="rounded-xl overflow-hidden">
+            <div className="overflow-x-auto">
               <table className="w-full">
                 <tbody className="flex flex-col md:px-32 space-y-3 py-4">
                   {users.slice(3).map((user, index) => (
@@ -241,10 +241,11 @@ const Leaderboard = () => {
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.05 }}
-                      className={`hover:bg-gray-700 border flex flex-row justify-between items-center rounded-md  border-newborder2 transition-colors ${user.id === userDetails?.uid
-                        ? "bg-red-500 bg-opacity-10"
-                        : ""
-                        }`}
+                      className={`hover:bg-gray-700 border flex flex-row justify-between items-center rounded-md  border-newborder2 transition-colors ${
+                        user.id === userDetails?.uid
+                          ? "bg-red-500 bg-opacity-10"
+                          : ""
+                      }`}
                     >
                       <div className="py-2 sm:py-4 flex items-center justify-center">
                         <td className="px-4 sm:px-6 py-2 sm:py-4 text-sm text-white text-center">
@@ -253,17 +254,16 @@ const Leaderboard = () => {
                         <td className="px-4 sm:px-6 py-2 sm:py-4">
                           <div className="flex items-center">
                             <img
-                              className="h-6 w-6 sm:h-8 sm:w-8 rounded-full"
-                              src={user.avatarUrl || "https://via.placeholder.com/32"}
-                              alt=""
+                              className="h-6 w-6 sm:h-8 object-cover sm:w-8 rounded-full"
+                              src={getAvatarUrl(user.username, 80)}
+                              alt={user.username || "User"}
                             />
                             <span className="ml-2 text-white text-xs sm:text-sm">
-                              {user.username}
+                              {user.username || "Anonymous"}
                             </span>
                           </div>
                         </td>
                       </div>
-
 
                       <td className="px-6 py-4 text-sm text-white font-semibold">
                         {user.balance.toLocaleString()} PTS

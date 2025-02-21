@@ -8,10 +8,10 @@ app.use(cors());
 app.use(express.json());
 
 const client = new TwitterApi({
-  appKey: "HaYwHxrPAJ7x6PGn5IqB4iZ9s",
-  appSecret: "XQojinWY1S1HwpvrsF0nvxYYoNYWHx1FlEYJV17AsHxIsce5E2",
-  accessToken: "1859991371257450496-rWPshznzgep2BA8JlyzoNG3cmKIH2C",
-  accessSecret: "ZNgbrPgOub7KIV3GpMKieC2kKvsb98qqsj3zLuLoHXkhc",
+  appKey: "1MJM6tuh83gXKJD6kKBcYysAJ",
+  appSecret: "LZpHvnvEAwwb8BY2v0gnEBLicq3k0UlIgj5zx1ohmMerB87JDo",
+  accessToken: "1643909888349978624-z9AY7kunOyL8OlaLBme9y8E00woxTK",
+  accessSecret: "OgMtvRNKelYVtWnpoG0koUv74co3lvcWl0HRecNh0rvZf",
 });
 
 app.post("/api/verify-twitter-action", async (req, res) => {

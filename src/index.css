@@ -97,3 +97,46 @@ code {
     @apply text-sm;
   }
 }
+
+/* Updated wallet styles for consistency */
+.wallet-wrapper,
+.ton-wrapper {
+  position: relative;
+}
+
+.wallet-wrapper button,
+.ton-wrapper button {
+  @apply !bg-box2 !border !border-newborder3 !rounded-lg !h-[40px] !text-sm !font-medium !text-primary hover:!bg-accent/20 transition-colors duration-200;
+}
+
+.wallet-wrapper button {
+  @apply !pl-9 !pr-4;
+}
+
+.ton-wrapper button {
+  @apply !px-4;
+  height: 40px !important; /* Force consistent height for TON button */
+  min-height: 40px !important;
+  max-height: 40px !important;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 640px) {
+  .wallet-wrapper button,
+  .ton-wrapper button {
+    @apply !h-[36px] !text-xs;
+  }
+
+  .ton-wrapper button {
+    height: 36px !important;
+    min-height: 36px !important;
+    max-height: 36px !important;
+  }
+}
+
+/* Hide TON button on mobile if needed */
+@media (max-width: 480px) {
+  .ton-wrapper {
+    display: none;
+  }
+}
